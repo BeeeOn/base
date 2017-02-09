@@ -57,13 +57,18 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
 )
 
+file(GLOB WORK_SOURCES
+	${PROJECT_SOURCE_DIR}/work/Work.cpp
+)
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 )
 
 add_library(BeeeOnBase SHARED ${SOURCES})
+add_library(BeeeOnWork SHARED ${WORK_SOURCES})
 
-install(TARGETS BeeeOnBase
+install(TARGETS BeeeOnBase BeeeOnWork
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
