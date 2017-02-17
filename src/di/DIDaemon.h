@@ -27,10 +27,12 @@ public:
 		const About &about = About());
 
 protected:
+	void initialize(Poco::Util::Application &self) override;
 	int main(const std::vector<std::string> &args) override;
 	void defineOptions(Poco::Util::OptionSet &options) override;
 	void handleHelp(const std::string &name, const std::string &value);
 	void handleVersion(const std::string &name, const std::string &value);
+	void handleDebugStartup(const std::string &name, const std::string &value);
 	void handleDefine(const std::string &name, const std::string &value);
 	void handleConfig(const std::string &name, const std::string &value);
 	void startRunner(const std::string &name);
@@ -51,6 +53,7 @@ private:
 	About m_about;
 	Poco::Util::Option m_helpOption;
 	Poco::Util::Option m_versionOption;
+	Poco::Util::Option m_debugStartupOption;
 	Poco::Util::Option m_defineOption;
 	Poco::Util::Option m_configOption;
 	Poco::Util::Option m_notifyStartedOption;

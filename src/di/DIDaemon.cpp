@@ -3,6 +3,7 @@
 #include <Poco/Environment.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/Message.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/Version.h>
 #include <Poco/Util/OptionSet.h>
@@ -12,6 +13,8 @@
 #include "di/DependencyInjector.h"
 #include "di/DIDaemon.h"
 #include "loop/LoopRunner.h"
+#include "util/ApplicationConfigurationLoader.h"
+#include "util/AutoConfigurationExplorer.h"
 #include "util/PosixSignal.h"
 
 using namespace std;
@@ -40,6 +43,13 @@ DIDaemon::DIDaemon(const About &about):
 	m_versionOption.callback(OptionCallback<DIDaemon>(
 			this, &DIDaemon::handleVersion));
 
+	m_debugStartupOption.fullName("debug-startup");
+	m_debugStartupOption.required(false);
+	m_debugStartupOption.repeatable(false);
+	m_debugStartupOption.noArgument();
+	m_debugStartupOption.callback(OptionCallback<DIDaemon>(
+			this, &DIDaemon::handleDebugStartup));
+
 	m_defineOption.shortName("D");
 	m_defineOption.fullName("define");
 	m_defineOption.required(false);
@@ -51,7 +61,7 @@ DIDaemon::DIDaemon(const About &about):
 	m_configOption.shortName("c");
 	m_configOption.fullName("config");
 	m_configOption.required(false);
-	m_configOption.repeatable(true);
+	m_configOption.repeatable(false);
 	m_configOption.argument("<file>", true);
 	m_configOption.callback(OptionCallback<DIDaemon>(
 			this, &DIDaemon::handleConfig));
@@ -95,6 +105,15 @@ int DIDaemon::up(int argc, char **argv, const About &about)
 	}
 
 	return EXIT_SOFTWARE;
+}
+
+void DIDaemon::initialize(Application &self)
+{
+	AutoConfigurationExplorer configExplorer(config());
+	ApplicationConfigurationLoader configLoader(*this);
+	configExplorer.explore(configLoader);
+
+	Application::initialize(self);
 }
 
 int DIDaemon::main(const std::vector<std::string> &args)
@@ -163,6 +182,7 @@ void DIDaemon::defineOptions(OptionSet &options)
 {
 	options.addOption(m_helpOption);
 	options.addOption(m_versionOption);
+	options.addOption(m_debugStartupOption);
 	options.addOption(m_defineOption);
 	options.addOption(m_configOption);
 	options.addOption(m_notifyStartedOption);
@@ -199,6 +219,11 @@ void DIDaemon::printVersion() const
 	cout << version() << endl;
 }
 
+void DIDaemon::handleDebugStartup(const string &name, const string &value)
+{
+	Logger::root().setLevel(Message::PRIO_DEBUG);
+}
+
 void DIDaemon::handleDefine(const string &name, const string &value)
 {
 	StringTokenizer tokenizer(value, "=", StringTokenizer::TOK_TRIM);
@@ -222,6 +247,12 @@ void DIDaemon::handleConfig(const string &name, const string &value)
 			__FILE__, __LINE__);
 
 	loadConfiguration(value);
+
+	Path configDir(value);
+	if (configDir.isAbsolute())
+		config().setString("application.configDir", configDir.parent().toString());
+	else
+		config().setString("application.configDir", configDir.absolute().parent().toString());
 }
 
 bool DIDaemon::isUnix() const
