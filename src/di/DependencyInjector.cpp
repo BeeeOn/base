@@ -100,10 +100,13 @@ DependencyInjector::~DependencyInjector()
 {
 	m_set.clear();
 
-	while (!m_free.empty()) {
-		delete m_free.back();
-		m_free.pop_back();
+	WrapperVector::iterator it;
+	for (it = m_free.begin(); it != m_free.end(); ++it) {
+		auto wrapper = *it;
+		delete wrapper;
 	}
+
+	m_free.clear();
 }
 
 void DependencyInjector::createEarly()
