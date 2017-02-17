@@ -61,7 +61,7 @@ DIDaemon::DIDaemon(const About &about):
 	m_configOption.shortName("c");
 	m_configOption.fullName("config");
 	m_configOption.required(false);
-	m_configOption.repeatable(true);
+	m_configOption.repeatable(false);
 	m_configOption.argument("<file>", true);
 	m_configOption.callback(OptionCallback<DIDaemon>(
 			this, &DIDaemon::handleConfig));
