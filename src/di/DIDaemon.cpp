@@ -247,6 +247,12 @@ void DIDaemon::handleConfig(const string &name, const string &value)
 			__FILE__, __LINE__);
 
 	loadConfiguration(value);
+
+	Path configDir(value);
+	if (configDir.isAbsolute())
+		config().setString("application.configDir", configDir.parent().toString());
+	else
+		config().setString("application.configDir", configDir.absolute().parent().toString());
 }
 
 bool DIDaemon::isUnix() const
