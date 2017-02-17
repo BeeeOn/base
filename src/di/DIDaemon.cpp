@@ -3,6 +3,7 @@
 #include <Poco/Environment.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/Message.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/Version.h>
 #include <Poco/Util/OptionSet.h>
@@ -41,6 +42,13 @@ DIDaemon::DIDaemon(const About &about):
 	m_versionOption.noArgument();
 	m_versionOption.callback(OptionCallback<DIDaemon>(
 			this, &DIDaemon::handleVersion));
+
+	m_debugStartupOption.fullName("debug-startup");
+	m_debugStartupOption.required(false);
+	m_debugStartupOption.repeatable(false);
+	m_debugStartupOption.noArgument();
+	m_debugStartupOption.callback(OptionCallback<DIDaemon>(
+			this, &DIDaemon::handleDebugStartup));
 
 	m_defineOption.shortName("D");
 	m_defineOption.fullName("define");
@@ -174,6 +182,7 @@ void DIDaemon::defineOptions(OptionSet &options)
 {
 	options.addOption(m_helpOption);
 	options.addOption(m_versionOption);
+	options.addOption(m_debugStartupOption);
 	options.addOption(m_defineOption);
 	options.addOption(m_configOption);
 	options.addOption(m_notifyStartedOption);
@@ -208,6 +217,11 @@ void DIDaemon::handleVersion(const string &name, const string &value)
 void DIDaemon::printVersion() const
 {
 	cout << version() << endl;
+}
+
+void DIDaemon::handleDebugStartup(const string &name, const string &value)
+{
+	Logger::root().setLevel(Message::PRIO_DEBUG);
 }
 
 void DIDaemon::handleDefine(const string &name, const string &value)
