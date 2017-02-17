@@ -12,6 +12,8 @@
 #include "di/DependencyInjector.h"
 #include "di/DIDaemon.h"
 #include "loop/LoopRunner.h"
+#include "util/ApplicationConfigurationLoader.h"
+#include "util/AutoConfigurationExplorer.h"
 #include "util/PosixSignal.h"
 
 using namespace std;
@@ -95,6 +97,15 @@ int DIDaemon::up(int argc, char **argv, const About &about)
 	}
 
 	return EXIT_SOFTWARE;
+}
+
+void DIDaemon::initialize(Application &self)
+{
+	AutoConfigurationExplorer configExplorer(config());
+	ApplicationConfigurationLoader configLoader(*this);
+	configExplorer.explore(configLoader);
+
+	Application::initialize(self);
 }
 
 int DIDaemon::main(const std::vector<std::string> &args)

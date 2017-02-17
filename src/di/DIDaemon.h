@@ -27,6 +27,7 @@ public:
 		const About &about = About());
 
 protected:
+	void initialize(Poco::Util::Application &self) override;
 	int main(const std::vector<std::string> &args) override;
 	void defineOptions(Poco::Util::OptionSet &options) override;
 	void handleHelp(const std::string &name, const std::string &value);
