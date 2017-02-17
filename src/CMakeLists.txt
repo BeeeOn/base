@@ -53,6 +53,6 @@ include_directories(
 add_library(BeeeOnBase SHARED ${SOURCES})
 
 install(TARGETS BeeeOnBase
-	LIBRARY DESTINATION usr/lib
-	ARCHIVE DESTINATION usr/lib
+	LIBRARY DESTINATION lib
+	ARCHIVE DESTINATION lib
 )

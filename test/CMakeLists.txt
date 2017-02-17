@@ -67,8 +67,8 @@ else()
 endif()
 
 install(TARGETS test-suite-base BeeeOnBaseTest
-	RUNTIME DESTINATION usr/share/beeeon/test-suite
-	ARCHIVE DESTINATION usr/lib
-	LIBRARY DESTINATION usr/lib
+	RUNTIME DESTINATION share/beeeon/test-suite
+	ARCHIVE DESTINATION lib
+	LIBRARY DESTINATION lib
 	CONFIGURATIONS Debug
 )
