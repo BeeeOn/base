@@ -138,4 +138,6 @@ void AutoConfigurationExplorer::explore(FileLoader &loader)
 	if (!pocoDir.empty()) {
 		exploreDirectory(Path(pocoDir).pushDirectory("config.d"), loader);
 	}
+
+	loader.finished();
 }

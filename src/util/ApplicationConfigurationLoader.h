@@ -16,12 +16,16 @@ namespace BeeeOn {
 
 class ApplicationConfigurationLoader :
 		public FileLoader,
-		Loggable {
+		public Loggable {
 public:
 	ApplicationConfigurationLoader(Poco::Util::Application &app);
 	virtual ~ApplicationConfigurationLoader();
 
 	void load(const Poco::File &file) override;
+	void finished() override;
+
+protected:
+	Poco::Util::Application &application();
 
 private:
 	Poco::Util::Application &m_app;

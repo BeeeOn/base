@@ -1,6 +1,7 @@
 #include <set>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include "cppunit/BetterAssert.h"
 #include "model/GatewayID.h"
 
 using namespace std;

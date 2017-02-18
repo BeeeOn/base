@@ -6,14 +6,17 @@
 #include <Poco/Message.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/Version.h>
+#include <Poco/PatternFormatter.h>
+#include <Poco/FormattingChannel.h>
+#include <Poco/ConsoleChannel.h>
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/OptionCallback.h>
 #include <Poco/Util/HelpFormatter.h>
 
 #include "di/DependencyInjector.h"
+#include "di/DIApplicationConfigurationLoader.h"
 #include "di/DIDaemon.h"
 #include "loop/LoopRunner.h"
-#include "util/ApplicationConfigurationLoader.h"
 #include "util/AutoConfigurationExplorer.h"
 #include "util/PosixSignal.h"
 
@@ -110,7 +113,7 @@ int DIDaemon::up(int argc, char **argv, const About &about)
 void DIDaemon::initialize(Application &self)
 {
 	AutoConfigurationExplorer configExplorer(config());
-	ApplicationConfigurationLoader configLoader(*this);
+	DIApplicationConfigurationLoader configLoader(*this);
 	configExplorer.explore(configLoader);
 
 	Application::initialize(self);
@@ -222,6 +225,9 @@ void DIDaemon::printVersion() const
 void DIDaemon::handleDebugStartup(const string &name, const string &value)
 {
 	Logger::root().setLevel(Message::PRIO_DEBUG);
+	PatternFormatter *formatter = new PatternFormatter();
+	formatter->setProperty(PatternFormatter::PROP_PATTERN, "%q %t (%U:%u)");
+	Logger::root().setChannel(new FormattingChannel(formatter, new ConsoleChannel));
 }
 
 void DIDaemon::handleDefine(const string &name, const string &value)
