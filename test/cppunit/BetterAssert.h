@@ -91,6 +91,16 @@ static inline void assertEquals(
 	}
 }
 
+static inline void assertEquals(
+		unsigned long long expected,
+		unsigned long actual,
+		SourceLine sourceLine,
+		const std::string &message)
+{
+	assertEquals(expected, (unsigned long long) expected,
+			sourceLine, message);
+}
+
 CPPUNIT_NS_END
 
 #endif
