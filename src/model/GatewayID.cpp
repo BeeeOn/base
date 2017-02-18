@@ -2,6 +2,7 @@
 #include <Poco/Random.h>
 #include <Poco/Exception.h>
 #include <Poco/Format.h>
+#include <Poco/NumberParser.h>
 
 #include "util/DAMM.h"
 #include "model/GatewayID.h"
@@ -27,6 +28,11 @@ GatewayID::GatewayID(int version, uint64_t data)
 	} catch(exception &e) {
 		throw SyntaxException("failed to stol: " + tmp);
 	}
+}
+
+uint64_t GatewayID::parse64(const std::string &s)
+{
+	return NumberParser::parseUnsigned64(s);
 }
 
 GatewayID GatewayID::parse(const string &s)

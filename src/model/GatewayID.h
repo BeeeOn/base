@@ -99,6 +99,9 @@ public:
 	 */
 	static GatewayID random(int version = 1, uint32_t seed = 0);
 
+protected:
+	static uint64_t parse64(const std::string &s);
+
 private:
 	uint64_t m_value;
 };
