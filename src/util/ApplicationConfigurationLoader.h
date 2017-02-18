@@ -23,6 +23,9 @@ public:
 
 	void load(const Poco::File &file) override;
 
+protected:
+	Poco::Util::Application &application();
+
 private:
 	Poco::Util::Application &m_app;
 };

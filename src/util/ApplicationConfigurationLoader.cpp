@@ -19,6 +19,11 @@ ApplicationConfigurationLoader::~ApplicationConfigurationLoader()
 {
 }
 
+Application &ApplicationConfigurationLoader::application()
+{
+	return m_app;
+}
+
 void ApplicationConfigurationLoader::load(const Poco::File &file)
 {
 	if (logger().debug()) {
