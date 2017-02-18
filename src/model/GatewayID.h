@@ -42,7 +42,7 @@ public:
 
 	unsigned long data() const
 	{
-		return std::stol(std::to_string(m_value / 10).substr(1));
+		return parse64(std::to_string(m_value / 10).substr(1));
 	}
 
 	static GatewayID parse(const std::string &s);

@@ -23,11 +23,7 @@ GatewayID::GatewayID(int version, uint64_t data)
 	tmp.append(format("%014Lu", (Poco::UInt64) data));
 	tmp.append(to_string(DAMM::compute(tmp)));
 
-	try {
-		m_value = stol(tmp);
-	} catch(exception &e) {
-		throw SyntaxException("failed to stol: " + tmp);
-	}
+	m_value = parse64(tmp);
 }
 
 uint64_t GatewayID::parse64(const std::string &s)
@@ -55,11 +51,7 @@ GatewayID GatewayID::parse(const string &s)
 			"invalid version, must be: 1 < version < 10");
 	}
 
-	const long data = stol(s.substr(1, s.size() - 2));
-	if (data < 0) {
-		throw InvalidArgumentException(
-			"invalid data, must not be negative");
-	}
+	const uint64_t data = parse64(s.substr(1, s.size() - 2));
 
 	if (!Ascii::isDigit(s.at(s.size() - 1))) {
 		throw InvalidArgumentException(
