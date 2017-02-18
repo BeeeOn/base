@@ -22,6 +22,7 @@ public:
 	virtual ~ApplicationConfigurationLoader();
 
 	void load(const Poco::File &file) override;
+	void finished() override;
 
 protected:
 	Poco::Util::Application &application();

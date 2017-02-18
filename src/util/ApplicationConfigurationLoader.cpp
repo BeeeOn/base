@@ -40,3 +40,7 @@ void ApplicationConfigurationLoader::load(const Poco::File &file)
 		logger().log(e, __FILE__, __LINE__);
 	}
 }
+
+void ApplicationConfigurationLoader::finished()
+{
+}
