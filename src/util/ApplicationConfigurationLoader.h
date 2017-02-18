@@ -16,7 +16,7 @@ namespace BeeeOn {
 
 class ApplicationConfigurationLoader :
 		public FileLoader,
-		Loggable {
+		public Loggable {
 public:
 	ApplicationConfigurationLoader(Poco::Util::Application &app);
 	virtual ~ApplicationConfigurationLoader();

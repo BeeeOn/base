@@ -15,6 +15,7 @@
 
 #include "di/DependencyInjector.h"
 #include "di/DIDaemon.h"
+#include "di/DIXmlLoader.h"
 #include "loop/LoopRunner.h"
 #include "util/ApplicationConfigurationLoader.h"
 #include "util/AutoConfigurationExplorer.h"
