@@ -14,6 +14,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
 	${PROJECT_SOURCE_DIR}/di/DIDaemon.cpp
+	${PROJECT_SOURCE_DIR}/di/DIXmlLoader.cpp
 	${PROJECT_SOURCE_DIR}/loop/StoppableRunnable.cpp
 	${PROJECT_SOURCE_DIR}/loop/StoppableLoop.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunner.cpp
