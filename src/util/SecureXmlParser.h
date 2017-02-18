@@ -1,11 +1,23 @@
 #ifndef BEEEON_UTIL_SECURE_XML_PARSER_H
 #define BEEEON_UTIL_SECURE_XML_PARSER_H
 
+#include <istream>
+
 #include <Poco/SAX/SAXParser.h>
 #include <Poco/XML/NamePool.h>
 #include <Poco/DOM/Document.h>
 
+namespace Poco {
+namespace XML {
+
+class XMLReader;
+
+}
+}
+
 namespace BeeeOn {
+
+class DenyDTDHandler;
 
 /**
  * The parser prevents parsing documents containing DTD definitions.
@@ -28,6 +40,10 @@ public:
 
 	Poco::XML::Document *parse(const char *input, std::size_t length);
 	Poco::XML::Document *parse(const std::string &input);
+	Poco::XML::Document *parse(std::istream &in);
+
+private:
+	void secure(Poco::XML::XMLReader &reader, DenyDTDHandler &handler);
 };
 
 }
