@@ -14,10 +14,9 @@
 #include <Poco/Util/HelpFormatter.h>
 
 #include "di/DependencyInjector.h"
+#include "di/DIApplicationConfigurationLoader.h"
 #include "di/DIDaemon.h"
-#include "di/DIXmlLoader.h"
 #include "loop/LoopRunner.h"
-#include "util/ApplicationConfigurationLoader.h"
 #include "util/AutoConfigurationExplorer.h"
 #include "util/PosixSignal.h"
 
@@ -114,7 +113,7 @@ int DIDaemon::up(int argc, char **argv, const About &about)
 void DIDaemon::initialize(Application &self)
 {
 	AutoConfigurationExplorer configExplorer(config());
-	ApplicationConfigurationLoader configLoader(*this);
+	DIApplicationConfigurationLoader configLoader(*this);
 	configExplorer.explore(configLoader);
 
 	Application::initialize(self);
