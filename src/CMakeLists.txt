@@ -31,6 +31,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
+	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
@@ -46,6 +47,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/ApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/ConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
+	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 )
 
 include_directories(
