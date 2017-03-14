@@ -7,6 +7,7 @@ find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_UTIL PocoUtil)
 find_library (POCO_NET PocoNet)
 find_library (POCO_XML PocoXML)
+find_library (POCO_JSON PocoJSON)
 
 add_definitions(-std=c++11)
 
@@ -48,6 +49,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/ConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
+	${PROJECT_SOURCE_DIR}/util/JsonUtil.cpp
 )
 
 include_directories(

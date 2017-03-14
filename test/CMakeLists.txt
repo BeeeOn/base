@@ -8,6 +8,7 @@ find_library (POCO_SSL PocoNetSSL)
 find_library (POCO_CRYPTO PocoCrypto)
 find_library (POCO_NET PocoNet)
 find_library (POCO_XML PocoXML)
+find_library (POCO_JSON PocoJSON)
 
 add_definitions(-std=c++11)
 
@@ -29,6 +30,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTraceTest.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp
+	${PROJECT_SOURCE_DIR}/util/JsonUtilTest.cpp
 )
 
 include_directories(
@@ -47,6 +49,7 @@ set(LIBS
 	${POCO_UTIL}
 	${POCO_NET}
 	${POCO_XML}
+	${POCO_JSON}
 	${CPP_UNIT}
 )
 
