@@ -5,6 +5,7 @@
 #include <Poco/Util/Application.h>
 #include <Poco/Util/XMLConfiguration.h>
 #include <Poco/Util/LayeredConfiguration.h>
+#include <Poco/DOM/Document.h>
 
 #include "di/DIApplicationConfigurationLoader.h"
 #include "di/DIXmlLoader.h"
@@ -12,6 +13,7 @@
 using namespace std;
 using namespace Poco;
 using namespace Poco::Util;
+using namespace Poco::XML;
 using namespace BeeeOn;
 
 DIApplicationConfigurationLoader::DIApplicationConfigurationLoader(Application &app):
@@ -55,11 +57,14 @@ void DIApplicationConfigurationLoader::finished()
 	LayeredConfiguration &config = application().config();
 	AutoPtr<XMLConfiguration> xml(new XMLConfiguration);
 
-	if (logger().debug()) {
-		logger().debug("loading merged XML configuration",
-				__FILE__, __LINE__);
-	}
+	const Document *doc = m_loader.document();
+	if (doc != NULL) {
+		if (logger().debug()) {
+			logger().debug("loading merged XML configuration",
+					__FILE__, __LINE__);
+		}
 
-	xml->load(m_loader.document());
-	config.add(xml);
+		xml->load(m_loader.document());
+		config.add(xml);
+	}
 }
