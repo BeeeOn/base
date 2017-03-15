@@ -36,6 +36,7 @@ file(GLOB TEST_SOURCES
 )
 
 file(GLOB TEST_WORK_SOURCES
+	${PROJECT_SOURCE_DIR}/work/BasicProcessorTest.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicQueueTest.cpp
 	${PROJECT_SOURCE_DIR}/work/GenericWorkRunnerTest.cpp
 )
