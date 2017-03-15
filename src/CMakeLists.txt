@@ -58,6 +58,7 @@ file(GLOB SOURCES
 )
 
 file(GLOB WORK_SOURCES
+	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
 	${PROJECT_SOURCE_DIR}/work/Work.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkAccess.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkExecutor.cpp
