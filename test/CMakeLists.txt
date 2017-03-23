@@ -24,6 +24,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
+	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
