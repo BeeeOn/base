@@ -47,6 +47,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/FileLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/ApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/ConfigurationExplorer.cpp
+	${PROJECT_SOURCE_DIR}/util/ConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 	${PROJECT_SOURCE_DIR}/util/JsonUtil.cpp
