@@ -50,6 +50,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 	${PROJECT_SOURCE_DIR}/util/JsonUtil.cpp
+	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
 )
 
 include_directories(
