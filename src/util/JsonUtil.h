@@ -1,6 +1,7 @@
 #ifndef BEEEON_JSON_UTIL_H
 #define BEEEON_JSON_UTIL_H
 
+#include <cmath>
 #include <string>
 
 #include <Poco/JSON/JSON.h>
@@ -33,6 +34,16 @@ public:
 	 */
 	static Poco::JSON::Object::Ptr parse(const std::string &data);
 };
+
+template <>
+inline double JsonUtil::extract<double>(
+	Poco::JSON::Object::Ptr jsonObject, const std::string &key)
+{
+	if (jsonObject->isNull(key))
+		return std::nan("");
+
+	return jsonObject->get(key).convert<double>();
+}
 
 }
 
