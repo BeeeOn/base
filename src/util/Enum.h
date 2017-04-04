@@ -3,6 +3,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/Random.h>
 
 #include <map>
 #include <string>
@@ -148,6 +149,14 @@ public:
 		}
 
 		return Enum<Base, Raw>(it->second);
+	}
+
+	static Enum<Base, Raw> random()
+	{
+		Poco::Random rnd;
+		rnd.seed();
+
+		return fromRaw(rnd.next(rawMap().size()));
 	}
 
 	static Enum<Base, Raw> fromRaw(const unsigned int raw)

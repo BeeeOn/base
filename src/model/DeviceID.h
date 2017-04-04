@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <string>
 
+#include "model/DevicePrefix.h"
+
 namespace BeeeOn {
 
 /**
@@ -32,7 +34,7 @@ public:
 	/**
 	 * Construct 64-bit ID only.
 	 */
-	DeviceID(uint8_t prefix, uint64_t ident);
+	DeviceID(const DevicePrefix &prefix, uint64_t ident);
 
 	bool isNull() const
 	{
@@ -44,9 +46,9 @@ public:
 		return (unsigned long long) m_value;
 	}
 
-	uint8_t prefix() const
+	DevicePrefix prefix() const
 	{
-		return (uint8_t) (m_value >> (is32bit()? 24 : 56));
+		return DevicePrefix::fromRaw((uint8_t) (m_value >> (is32bit()? 24 : 56)));
 	}
 
 	uint64_t ident() const
@@ -98,7 +100,8 @@ public:
 	 * Generate a random ID. If the prefix is zero a new one is
 	 * generated randomly.
 	 */
-	static DeviceID random(uint8_t prefix = 0);
+	static DeviceID random(const DevicePrefix &prefix
+		= DevicePrefix::fromRaw(DevicePrefix::PREFIX_INVALID));
 
 private:
 	uint64_t m_value;

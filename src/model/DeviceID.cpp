@@ -26,7 +26,7 @@ DeviceID::DeviceID(uint64_t value):
 	}
 }
 
-DeviceID::DeviceID(uint8_t prefix, uint64_t ident)
+DeviceID::DeviceID(const DevicePrefix &prefix, uint64_t ident)
 {
 	if (ident & 0xff00000000000000UL) {
 		throw InvalidArgumentException(
@@ -70,16 +70,17 @@ string DeviceID::toString() const
 	return ss.str();
 }
 
-DeviceID DeviceID::random(uint8_t prefix)
+DeviceID DeviceID::random(const DevicePrefix &prefix)
 {
 	Random rnd;
 	rnd.seed();
 
-	prefix = prefix? prefix : rnd.next(256);
-
 	uint64_t ident = rnd.next();
 	ident <<= 24;
 	ident |= rnd.next(1 << 24);
+
+	if (prefix == DevicePrefix::PREFIX_INVALID)
+		return DeviceID(DevicePrefix::random(), ident);
 
 	return DeviceID(prefix, ident);
 }
