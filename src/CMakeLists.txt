@@ -25,6 +25,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/DevicePrefix.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp

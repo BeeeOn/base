@@ -39,12 +39,13 @@ void DeviceIDTest::tearDown()
 
 void DeviceIDTest::testCreate()
 {
-	const DeviceID id(0xfe01020304050607UL);
+	const DeviceID id(0xa201020304050607UL);
 
 	CPPUNIT_ASSERT(!id.is32bit());
-	CPPUNIT_ASSERT_EQUAL((uint8_t) 0xfe, id.prefix());
+	CPPUNIT_ASSERT_EQUAL(
+		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR), id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0x01020304050607UL, id.ident());
-	CPPUNIT_ASSERT(id.toString().compare("0xfe01020304050607") == 0);
+	CPPUNIT_ASSERT(id.toString().compare("0xa201020304050607") == 0);
 }
 
 /**
@@ -52,30 +53,35 @@ void DeviceIDTest::testCreate()
  */
 void DeviceIDTest::testCreate32()
 {
-	const DeviceID id(0x00000000fe010203UL);
+	const DeviceID id(0x00000000a2010203UL);
 
 	CPPUNIT_ASSERT(id.is32bit());
-	CPPUNIT_ASSERT_EQUAL((uint8_t) 0xfe, id.prefix());
+	CPPUNIT_ASSERT_EQUAL(
+		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR), id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0x00010203, id.ident());
-	CPPUNIT_ASSERT(id.toString().compare("0xfe010203") == 0);
+	CPPUNIT_ASSERT(id.toString().compare("0xa2010203") == 0);
 }
 
 void DeviceIDTest::testCreateFromParts()
 {
-	const DeviceID id(0xa0, 0xabcdef01234567UL);
+	const DeviceID id(
+		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR),
+		0xabcdef01234567UL);
 
 	CPPUNIT_ASSERT(!id.is32bit());
-	CPPUNIT_ASSERT_EQUAL((uint8_t) 0xa0, id.prefix());
+	CPPUNIT_ASSERT_EQUAL(
+		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR), id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0xabcdef01234567UL, id.ident());
-	CPPUNIT_ASSERT(id.toString().compare("0xa0abcdef01234567") == 0);
+	CPPUNIT_ASSERT(id.toString().compare("0xa2abcdef01234567") == 0);
 }
 
 void DeviceIDTest::testParse()
 {
-	const DeviceID &id = DeviceID::parse("0xac11223344556677");
+	const DeviceID &id = DeviceID::parse("0xa211223344556677");
 
 	CPPUNIT_ASSERT(!id.is32bit());
-	CPPUNIT_ASSERT_EQUAL((uint8_t) 0xac, id.prefix());
+	CPPUNIT_ASSERT_EQUAL(
+		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR), id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0x11223344556677UL, id.ident());
 }
 
@@ -84,10 +90,11 @@ void DeviceIDTest::testParse()
  */
 void DeviceIDTest::testParse32()
 {
-	const DeviceID &id = DeviceID::parse("0xac112233");
+	const DeviceID &id = DeviceID::parse("0xa2112233");
 
 	CPPUNIT_ASSERT(id.is32bit());
-	CPPUNIT_ASSERT_EQUAL((uint8_t) 0xac, id.prefix());
+	CPPUNIT_ASSERT_EQUAL(
+		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR), id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0x112233UL, id.ident());
 }
 
@@ -96,7 +103,7 @@ void DeviceIDTest::testRandom()
 	set<DeviceID> generated;
 
 	for (unsigned int i = 0; i < 1000; ++i) {
-		const DeviceID id(DeviceID::random(0x10));
+		const DeviceID id(DeviceID::random(DevicePrefix::fromRaw(0xa2)));
 		const set<DeviceID>::size_type count = generated.size();
 
 		CPPUNIT_ASSERT(generated.find(id) == generated.end());
