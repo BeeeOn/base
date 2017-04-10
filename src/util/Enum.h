@@ -97,8 +97,6 @@ private:
 	{
 	}
 
-	Enum &operator =(const Enum &) = delete;
-
 protected:
 	static typename EnumHelper<Raw>::RawMap &rawMap()
 	{
