@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 2.8.11)
 project (base-test CXX)
 
 find_library (CPP_UNIT cppunit)
+find_library (PTHREAD pthread)
 find_library (POCO_FOUNDATION PocoFoundation)
 find_library (POCO_UTIL PocoUtil)
 find_library (POCO_SSL PocoNetSSL)
@@ -52,6 +53,7 @@ set(LIBS
 	${POCO_XML}
 	${POCO_JSON}
 	${CPP_UNIT}
+	${PTHREAD}
 )
 
 # Apple's linker doesn't support --whole-archive. Instead it uses -all_load.
