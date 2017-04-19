@@ -57,13 +57,29 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
 )
 
+file(GLOB WORK_SOURCES
+	${PROJECT_SOURCE_DIR}/work/AbstractWorkRepository.cpp
+	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
+	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
+	${PROJECT_SOURCE_DIR}/work/GenericWorkRunner.cpp
+	${PROJECT_SOURCE_DIR}/work/Work.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkAccess.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkExecutor.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkFactory.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkRepository.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkRunner.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkScheduler.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkSuspendThrowable.cpp
+)
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 )
 
 add_library(BeeeOnBase SHARED ${SOURCES})
+add_library(BeeeOnWork SHARED ${WORK_SOURCES})
 
-install(TARGETS BeeeOnBase
+install(TARGETS BeeeOnBase BeeeOnWork
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
