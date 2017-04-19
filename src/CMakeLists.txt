@@ -34,6 +34,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
+	${PROJECT_SOURCE_DIR}/util/CryptoConfig.cpp
+	${PROJECT_SOURCE_DIR}/util/CryptoParams.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
