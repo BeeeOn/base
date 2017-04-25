@@ -4,7 +4,6 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include <Poco/Message.h>
-#include <Poco/StringTokenizer.h>
 #include <Poco/Version.h>
 #include <Poco/PatternFormatter.h>
 #include <Poco/FormattingChannel.h>
@@ -232,19 +231,20 @@ void DIDaemon::handleDebugStartup(const string &name, const string &value)
 
 void DIDaemon::handleDefine(const string &name, const string &value)
 {
-	StringTokenizer tokenizer(value, "=", StringTokenizer::TOK_TRIM);
-	if (tokenizer.count() != 2) {
-		throw InvalidArgumentException(
-			"option "
-			+ name
-			+ " requires an argument in format: "
-			+ m_defineOption.argumentName());
+	size_t off = value.find("=");
+	if (off == string::npos) {
+		logger().debug("overriding " + value + " as empty",
+				__FILE__, __LINE__);
+		config().setString(value, "");
 	}
+	else {
+		const string key = value.substr(0, off);
+		const string val = value.substr(off + 1);
 
-	logger().debug("overriding " + tokenizer[0] + " = " + tokenizer[1],
-			__FILE__, __LINE__);
-
-	config().setString(tokenizer[0], tokenizer[1]);
+		logger().debug("overriding " + key + " = " + val,
+				__FILE__, __LINE__);
+		config().setString(key, val);
+	}
 }
 
 void DIDaemon::handleConfig(const string &name, const string &value)
