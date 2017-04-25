@@ -21,6 +21,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/DebugTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapperTest.cpp
+	${PROJECT_SOURCE_DIR}/di/DIDaemonTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
