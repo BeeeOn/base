@@ -27,12 +27,14 @@ class DIDaemonTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testHandleHelp);
 	CPPUNIT_TEST(testDefineKeyValue);
 	CPPUNIT_TEST(testDefineKeyWithoutValue);
+	CPPUNIT_TEST(testDefineKeyValueWithEqualsSign);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testHandleVersion();
 	void testHandleHelp();
 	void testDefineKeyValue();
 	void testDefineKeyWithoutValue();
+	void testDefineKeyValueWithEqualsSign();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DIDaemonTest);
@@ -77,6 +79,20 @@ void DIDaemonTest::testDefineKeyWithoutValue()
 	daemon.handleDefine("define", "name=");
 	CPPUNIT_ASSERT(daemon.config().has("name"));
 	CPPUNIT_ASSERT(daemon.config().getString("name").empty());
+
+	CPPUNIT_ASSERT(!daemon.config().has("name2"));
+	daemon.handleDefine("define", "name2");
+	CPPUNIT_ASSERT(daemon.config().has("name2"));
+	CPPUNIT_ASSERT(daemon.config().getString("name2").empty());
+}
+
+void DIDaemonTest::testDefineKeyValueWithEqualsSign()
+{
+	TestableDIDaemon daemon;
+
+	CPPUNIT_ASSERT(!daemon.config().has("name"));
+	daemon.handleDefine("define", "name=xxx=value");
+	CPPUNIT_ASSERT_EQUAL("xxx=value", daemon.config().getString("name"));
 }
 
 }
