@@ -53,10 +53,11 @@ void StoppableLoopAdapter::stop()
 
 void StoppableLoopAdapter::doStop()
 {
-	if (m_thread == NULL || !m_thread->isRunning())
+	if (m_thread == NULL)
 		return;
 
-	m_runnable->stop();
+	if (m_thread->isRunning())
+		m_runnable->stop();
 
 	try {
 		m_thread->join(m_stopTimeout);
