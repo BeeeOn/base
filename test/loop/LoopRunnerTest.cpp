@@ -94,33 +94,33 @@ public:
 void LoopRunnerTest::testAddLoop()
 {
 	LoopRunner runner;
-	LoopWorks works;
+	SharedPtr<LoopWorks> works(new LoopWorks);
 
-	runner.addLoop(&works);
+	runner.addLoop(works);
 
-	CPPUNIT_ASSERT(!works.m_works);
+	CPPUNIT_ASSERT(!works->m_works);
 
 	runner.start();
-	CPPUNIT_ASSERT(works.m_finished.tryWait(1000));
+	CPPUNIT_ASSERT(works->m_finished.tryWait(1000));
 	runner.stop();
 
-	CPPUNIT_ASSERT(works.m_works);
+	CPPUNIT_ASSERT(works->m_works);
 }
 
 void LoopRunnerTest::testAddRunnable()
 {
 	LoopRunner runner;
-	RunnableWorks works;
+	SharedPtr<RunnableWorks> works(new RunnableWorks);
 
-	runner.addRunnable(&works);
+	runner.addRunnable(works);
 
-	CPPUNIT_ASSERT(!works.m_works);
+	CPPUNIT_ASSERT(!works->m_works);
 
 	runner.start();
-	CPPUNIT_ASSERT(works.m_finished.tryWait(1000));
+	CPPUNIT_ASSERT(works->m_finished.tryWait(1000));
 	runner.stop();
 
-	CPPUNIT_ASSERT(works.m_works);
+	CPPUNIT_ASSERT(works->m_works);
 }
 
 void LoopRunnerTest::testAutoStart()
@@ -128,19 +128,19 @@ void LoopRunnerTest::testAutoStart()
 	LoopRunner runner;
 	runner.setAutoStart(false);
 
-	LoopWorks works;
+	SharedPtr<LoopWorks> works(new LoopWorks);
 
-	runner.addLoop(&works);
+	runner.addLoop(works);
 
-	CPPUNIT_ASSERT(!works.m_works);
+	CPPUNIT_ASSERT(!works->m_works);
 
 	runner.autoStart();
-	CPPUNIT_ASSERT(!works.m_finished.tryWait(100));
-	CPPUNIT_ASSERT(!works.m_works);
+	CPPUNIT_ASSERT(!works->m_finished.tryWait(100));
+	CPPUNIT_ASSERT(!works->m_works);
 
 	runner.stop();
-	CPPUNIT_ASSERT(!works.m_finished.tryWait(100));
-	CPPUNIT_ASSERT(!works.m_works);
+	CPPUNIT_ASSERT(!works->m_finished.tryWait(100));
+	CPPUNIT_ASSERT(!works->m_works);
 }
 
 }
