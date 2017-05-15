@@ -42,3 +42,13 @@ Logger &Loggable::forMethod(const char *name)
 {
 	return Logger::get(name);
 }
+
+Logger &Loggable::forClass(const ClassInfo &info)
+{
+	return Logger::get(info.name());
+}
+
+Poco::Logger &Loggable::forClass(const type_info &info)
+{
+	return forClass(ClassInfo(info));
+}

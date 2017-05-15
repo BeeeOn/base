@@ -22,6 +22,8 @@ public:
 	virtual ~Loggable();
 
 	static Poco::Logger &forMethod(const char *name);
+	static Poco::Logger &forClass(const ClassInfo &info);
+	static Poco::Logger &forClass(const std::type_info &info);
 
 protected:
 	void setupLogger(Poco::Logger *logger = 0) const;
