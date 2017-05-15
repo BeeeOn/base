@@ -37,3 +37,8 @@ void Loggable::setupLogger(Logger *logger) const
 			&Poco::Logger::get(name.c_str()) : logger;
 	}
 }
+
+Logger &Loggable::forMethod(const char *name)
+{
+	return Logger::get(name);
+}
