@@ -26,6 +26,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
+	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
