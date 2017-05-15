@@ -12,9 +12,12 @@ class Logger;
 
 namespace BeeeOn {
 
+class ClassInfo;
+
 class Loggable {
 public:
 	Loggable();
+	Loggable(const ClassInfo &info);
 	Loggable(const std::type_info &info);
 	virtual ~Loggable();
 
