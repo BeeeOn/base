@@ -12,12 +12,14 @@ class ClassInfoTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testEmptyConstructor);
 	CPPUNIT_TEST(testConstruct);
 	CPPUNIT_TEST(testId);
+	CPPUNIT_TEST(testName);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
 	void testEmptyConstructor();
 	void testConstruct();
 	void testId();
+	void testName();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClassInfoTest);
@@ -79,6 +81,20 @@ void ClassInfoTest::testId()
 	CPPUNIT_ASSERT_EQUAL("N6BeeeOn11TestObject0E", info1.id());
 	CPPUNIT_ASSERT_EQUAL("N6BeeeOn11TestObject0E", info2.id());
 	CPPUNIT_ASSERT_EQUAL("N6BeeeOn11TestObject0E", info3.id());
+}
+
+void ClassInfoTest::testName()
+{
+	TestObject0 o;
+	ClassInfo info0(typeid(o));
+	ClassInfo info1(typeid(TestObject0));
+	ClassInfo info2(o);
+	ClassInfo info3 = ClassInfo::forPointer(&o);
+
+	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info0.name());
+	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info1.name());
+	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info2.name());
+	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info3.name());
 }
 
 }
