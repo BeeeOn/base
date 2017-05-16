@@ -13,6 +13,7 @@ class ClassInfoTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testConstruct);
 	CPPUNIT_TEST(testId);
 	CPPUNIT_TEST(testName);
+	CPPUNIT_TEST(testNameWithInheritance);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -20,6 +21,7 @@ public:
 	void testConstruct();
 	void testId();
 	void testName();
+	void testNameWithInheritance();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClassInfoTest);
@@ -95,6 +97,61 @@ void ClassInfoTest::testName()
 	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info1.name());
 	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info2.name());
 	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info3.name());
+}
+
+class A {
+public:
+	virtual ~A() {}
+};
+
+class B {
+public:
+};
+
+class C : public A {
+public:
+};
+
+class D : public B {
+public:
+};
+
+class E : public A, public B {
+public:
+};
+
+void ClassInfoTest::testNameWithInheritance()
+{
+	A a;
+	B b;
+	C c;
+	D d;
+	E e;
+
+	A &cAsA = c;
+	B &dAsB = d;
+	A &eAsA = e;
+	B &eAsB = e;
+
+	CPPUNIT_ASSERT("BeeeOn::A" == ClassInfo(typeid(a)).name());
+	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(b)).name());
+	CPPUNIT_ASSERT("BeeeOn::C" == ClassInfo(typeid(c)).name());
+	CPPUNIT_ASSERT("BeeeOn::D" == ClassInfo(typeid(d)).name());
+	CPPUNIT_ASSERT("BeeeOn::E" == ClassInfo(typeid(e)).name());
+	CPPUNIT_ASSERT("BeeeOn::C" == ClassInfo(typeid(cAsA)).name());
+	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(dAsB)).name());
+	CPPUNIT_ASSERT("BeeeOn::E" == ClassInfo(typeid(eAsA)).name());
+	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(eAsB)).name());
+
+	CPPUNIT_ASSERT("BeeeOn::A" == ClassInfo(typeid(&a)).name());
+	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(&b)).name());
+	CPPUNIT_ASSERT("BeeeOn::C" == ClassInfo(typeid(&c)).name());
+	CPPUNIT_ASSERT("BeeeOn::D" == ClassInfo(typeid(&d)).name());
+	CPPUNIT_ASSERT("BeeeOn::E" == ClassInfo(typeid(&e)).name());
+	CPPUNIT_ASSERT("BeeeOn::A" == ClassInfo(typeid(&cAsA)).name());
+	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(&dAsB)).name());
+	CPPUNIT_ASSERT("BeeeOn::A" == ClassInfo(typeid(&eAsA)).name());
+	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(&eAsB)).name());
 }
 
 }
