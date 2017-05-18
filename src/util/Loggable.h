@@ -25,6 +25,12 @@ public:
 	static Poco::Logger &forClass(const ClassInfo &info);
 	static Poco::Logger &forClass(const std::type_info &info);
 
+	template <typename T>
+	static Poco::Logger &forInstance(const T *i)
+	{
+		return forClass(typeid(*i));
+	}
+
 protected:
 	void setupLogger(Poco::Logger *logger = 0) const;
 
