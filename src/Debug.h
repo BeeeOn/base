@@ -8,9 +8,12 @@
 #include <typeinfo>
 #include <cstring>
 #include <cstdlib>
+#include <cstdio>
 #include <unistd.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+
+#include "util/Backtrace.h"
 
 namespace BeeeOn {
 
@@ -163,10 +166,6 @@ private:
 
 }
 
-#ifdef __GLIBC__
-#include <execinfo.h>
-#include <cstdio>
-
 namespace BeeeOn {
 
 /**
@@ -176,10 +175,15 @@ namespace BeeeOn {
  */
 inline void stdout_backtrace()
 {
-	void *addr[128];
-	size_t count = backtrace(addr, 128);
+	if (!Backtrace::supported) {
+		const char *msg = "no backtrace available\n";
+		write(STDOUT_FILENO, msg, sizeof(msg));
+		return;
+	}
 
-	backtrace_symbols_fd(addr, count, STDOUT_FILENO);
+	Backtrace trace;
+	std::string msg(trace.toString());
+	write(STDOUT_FILENO, msg.c_str(), msg.size());
 }
 
 /**
@@ -189,50 +193,16 @@ inline void stdout_backtrace()
  */
 inline void __log_backtrace(Poco::Logger &l, const char *file, size_t line)
 {
-	void *addr[128];
-	size_t count = backtrace(addr, 128);
-	char **strings = backtrace_symbols(addr, count);
-	size_t i;
-
-	l.critical(
-		Poco::Logger::format("Backtrace: size $0", std::to_string(count)),
-		file, line);
-
-	for (i = 0; i < count; ++i) {
-		l.critical(Poco::Logger::format(
-				"Backtrace: > $0", std::string(strings[i])),
-			file, line);
+	if (!Backtrace::supported) {
+		l.critical("Backtrace: not available", file, line);
+		return;
 	}
 
-	free(strings);
+	Backtrace trace;
+	l.critical(trace.toString("Backtrace: > "), file, line);
 }
 
 }
-
-#else // unknown libc/c++ library
-
-namespace BeeeOn {
-
-/**
- * No idea how to support backtracing for an unknown libc/c++ library.
- */
-inline void stdout_backtrace()
-{
-	const char *msg = "no backtrace available\n";
-	write(STDOUT_FILENO, msg, sizeof(msg));
-}
-
-/**
- * No idea how to support backtracing for an unknown libc/c++ library.
- */
-inline void __log_backtrace(Poco::Logger &l, const char *file, size_t line)
-{
-	l.critical("Backtrace: not available", file, line);
-}
-
-}
-
-#endif
 
 /**
  * Log backtrace to the given logger with level critical.
