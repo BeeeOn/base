@@ -26,7 +26,7 @@ AutoConfigurationExplorer::~AutoConfigurationExplorer()
 
 void AutoConfigurationExplorer::handleLink(
 		const Poco::File &file,
-		FileLoader &loader)
+		FileLoader &)
 {
 	if (logger().debug()) {
 		logger().debug("skipping link " + file.path(),
@@ -36,7 +36,7 @@ void AutoConfigurationExplorer::handleLink(
 
 void AutoConfigurationExplorer::handleSubDirectory(
 		const Poco::File &file,
-		FileLoader &loader)
+		FileLoader &)
 {
 	if (logger().debug()) {
 		logger().debug("skipping sub-directory " + file.path(),
