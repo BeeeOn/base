@@ -80,12 +80,12 @@ private:
 	void reportSuite();
 
 public:
-	void startSuite(CppUnit::Test *suite)
+	void startSuite(CppUnit::Test *)
 	{
 		m_stackDepth += 1;
 	}
 
-	void endSuite(CppUnit::Test *suite)
+	void endSuite(CppUnit::Test *)
 	{
 		m_stackDepth -= 1;
 
@@ -100,7 +100,7 @@ public:
 		m_name[m_current] = test->getName();
 	}
 
-	void endTest(CppUnit::Test *test)
+	void endTest(CppUnit::Test *)
 	{
 		m_current += 1;
 	}
