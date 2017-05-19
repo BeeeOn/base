@@ -61,12 +61,12 @@ public:
 
 class NotAcceptingExecutor : public WorkExecutor {
 public:
-	bool accepts(const Work::Ptr work) const override
+	bool accepts(const Work::Ptr) const override
 	{
 		return false;
 	}
 
-	void execute(Work::Ptr work) override
+	void execute(Work::Ptr) override
 	{
 		throw Poco::AssertionViolationException("this must never be called");
 	}

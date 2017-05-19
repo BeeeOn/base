@@ -12,13 +12,13 @@ WorkExecutor::~WorkExecutor()
 {
 }
 
-void WorkExecutor::suspend(Work::Ptr work)
+void WorkExecutor::suspend(Work::Ptr)
 {
 	throw WorkSuspendForEventThrowable();
 }
 
 void WorkExecutor::suspend(
-		Work::Ptr work,
+		Work::Ptr,
 		const Timespan &duration)
 {
 	throw WorkSuspendThrowable(duration);
@@ -28,12 +28,12 @@ NullWorkExecutor::NullWorkExecutor()
 {
 }
 
-bool NullWorkExecutor::accepts(const Work::Ptr work) const
+bool NullWorkExecutor::accepts(const Work::Ptr) const
 {
 	throw NotImplementedException(__func__);
 }
 
-void NullWorkExecutor::execute(Work::Ptr work)
+void NullWorkExecutor::execute(Work::Ptr)
 {
 	throw NotImplementedException(__func__);
 }
