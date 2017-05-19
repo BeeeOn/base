@@ -97,7 +97,7 @@ static inline void assertEquals(
 		SourceLine sourceLine,
 		const std::string &message)
 {
-	assertEquals(expected, (unsigned long long) expected,
+	assertEquals(expected, (unsigned long long) actual,
 			sourceLine, message);
 }
 

@@ -40,7 +40,7 @@ public:
 		return std::to_string(m_value).at(0) - '0';
 	}
 
-	unsigned long data() const
+	uint64_t data() const
 	{
 		return parse64(std::to_string(m_value / 10).substr(1));
 	}
