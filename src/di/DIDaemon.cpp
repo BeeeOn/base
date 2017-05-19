@@ -118,7 +118,7 @@ void DIDaemon::initialize(Application &self)
 	Application::initialize(self);
 }
 
-int DIDaemon::main(const std::vector<std::string> &args)
+int DIDaemon::main(const std::vector<std::string> &)
 {
 	if (helpRequested()) {
 		printHelp();
@@ -190,7 +190,7 @@ void DIDaemon::defineOptions(OptionSet &options)
 	options.addOption(m_notifyStartedOption);
 }
 
-void DIDaemon::handleHelp(const string &name, const string &value)
+void DIDaemon::handleHelp(const string &, const string &)
 {
 	stopOptionsProcessing();
 	m_helpRequested = true;
@@ -210,7 +210,7 @@ void DIDaemon::printHelp() const
 	formatter.format(cout);
 }
 
-void DIDaemon::handleVersion(const string &name, const string &value)
+void DIDaemon::handleVersion(const string &, const string &)
 {
 	stopOptionsProcessing();
 	m_versionRequested = true;
@@ -221,7 +221,7 @@ void DIDaemon::printVersion() const
 	cout << version() << endl;
 }
 
-void DIDaemon::handleDebugStartup(const string &name, const string &value)
+void DIDaemon::handleDebugStartup(const string &, const string &)
 {
 	Logger::root().setLevel(Message::PRIO_DEBUG);
 	PatternFormatter *formatter = new PatternFormatter();
@@ -229,7 +229,7 @@ void DIDaemon::handleDebugStartup(const string &name, const string &value)
 	Logger::root().setChannel(new FormattingChannel(formatter, new ConsoleChannel));
 }
 
-void DIDaemon::handleDefine(const string &name, const string &value)
+void DIDaemon::handleDefine(const string &, const string &value)
 {
 	size_t off = value.find("=");
 	if (off == string::npos) {
@@ -247,7 +247,7 @@ void DIDaemon::handleDefine(const string &name, const string &value)
 	}
 }
 
-void DIDaemon::handleConfig(const string &name, const string &value)
+void DIDaemon::handleConfig(const string &, const string &value)
 {
 	logger().debug("loading configuration: " + value,
 			__FILE__, __LINE__);
