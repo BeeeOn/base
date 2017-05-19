@@ -16,7 +16,7 @@ namespace BeeeOn {
 
 class DenyDTDHandler : public LexicalHandler {
 public:
-	void comment(const XMLChar c[], int start, int length)
+	void comment(const XMLChar[], int, int)
 	{
 	}
 
@@ -32,9 +32,9 @@ public:
 	 * Throws InvalidArgumentException when called.
 	 */
 	void startDTD(
-		const XMLString &name,
-		const XMLString &publicId,
-		const XMLString &systemId)
+		const XMLString &,
+		const XMLString &,
+		const XMLString &)
 	{
 		throw InvalidArgumentException(
 				"DTD is forbidden for this parser");
@@ -44,11 +44,11 @@ public:
 	{
 	}
 
-	void startEntity(const XMLString &name)
+	void startEntity(const XMLString &)
 	{
 	}
 
-	void endEntity(const XMLString &name)
+	void endEntity(const XMLString &)
 	{
 	}
 };
