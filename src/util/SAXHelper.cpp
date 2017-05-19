@@ -111,7 +111,7 @@ void SAXHelper::processingInstruction(
 	}
 }
 
-void SAXHelper::skippedEntity(const XMLString &name)
+void SAXHelper::skippedEntity(const XMLString &)
 {
 }
 
@@ -213,13 +213,13 @@ void SAXHelper::startElement(const XMLString &uri,
 	startElement(m_path.back(), attrList);
 }
 
-bool SAXHelper::expectElement(const SAXElement &element) const
+bool SAXHelper::expectElement(const SAXElement &) const
 {
 	return true;
 }
 
-void SAXHelper::startElement(const SAXElement &element,
-		const Poco::XML::Attributes &attrList)
+void SAXHelper::startElement(const SAXElement &,
+		const Poco::XML::Attributes &)
 {
 }
 
@@ -247,12 +247,12 @@ void SAXHelper::endElement(const XMLString &uri,
 	m_path.pop_back();
 }
 
-void SAXHelper::endElement(const SAXElement &element)
+void SAXHelper::endElement(const SAXElement &)
 {
 }
 
 void SAXHelper::ignorableWhitespace(
-		const XMLChar c[], int start, int length)
+		const XMLChar[], int, int)
 {
 }
 
@@ -274,13 +274,13 @@ void SAXHelper::characters(const XMLChar c[], int start, int length)
 	appendContent(c, modifiedStart, modifiedLength);
 }
 
-bool SAXHelper::expectContent(int length) const
+bool SAXHelper::expectContent(int) const
 {
 	return true;
 }
 
-void SAXHelper::preprocessContent(const XMLChar c[],
-			int &start, int &length)
+void SAXHelper::preprocessContent(const XMLChar[],
+			int &, int &)
 {
 }
 
@@ -347,24 +347,24 @@ bool SAXHelper::getAndTrimAttribute(const Attributes &attrList,
 }
 
 void SAXHelper::startPrefixMapping(
-		const XMLString &prefix, const XMLString &uri)
+		const XMLString &, const XMLString &)
 {
 }
 
-void SAXHelper::endPrefixMapping(const XMLString &prefix)
+void SAXHelper::endPrefixMapping(const XMLString &)
 {
 }
 
-void SAXHelper::notationDecl(const XMLString &name,
-		const XMLString *publicId,
-		const XMLString *systemId)
+void SAXHelper::notationDecl(const XMLString &,
+		const XMLString *,
+		const XMLString *)
 {
 }
 
-void SAXHelper::unparsedEntityDecl(const XMLString &name,
-		const XMLString *publicId,
-		const XMLString &systemId,
-		const XMLString &notationName)
+void SAXHelper::unparsedEntityDecl(const XMLString &,
+		const XMLString *,
+		const XMLString &,
+		const XMLString &)
 {
 }
 
