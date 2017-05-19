@@ -17,7 +17,7 @@ BetterRejectCertificateHandler::BetterRejectCertificateHandler(bool server):
 }
 
 void BetterRejectCertificateHandler::onInvalidCertificate(
-		const void *sender,
+		const void *,
 		VerificationErrorArgs &error)
 {
 	const X509Certificate &cert = error.certificate();
