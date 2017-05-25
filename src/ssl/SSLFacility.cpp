@@ -59,7 +59,7 @@ PrivateKeyPassphraseProvider::~PrivateKeyPassphraseProvider()
 }
 
 void PrivateKeyPassphraseProvider::onRequest(
-		const void *sender, string &passphrase)
+		const void *, string &passphrase)
 {
 	passphrase = m_passphrase;
 }

@@ -43,7 +43,7 @@ WorkRunnerFactory::~WorkRunnerFactory()
 {
 }
 
-WorkRunner *NullWorkRunnerFactory::create(WorkScheduler &scheduler)
+WorkRunner *NullWorkRunnerFactory::create(WorkScheduler &)
 {
 	throw NotImplementedException(__func__);
 }

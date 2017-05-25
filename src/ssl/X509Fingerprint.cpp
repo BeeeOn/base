@@ -121,7 +121,7 @@ bool PEMMarkerToken::start(char c, std::istream &in)
 	return true;
 }
 
-bool PEMMarkerToken::finish(const string &expect, istream &in)
+bool PEMMarkerToken::finish(const string &, istream &in)
 {
 	int c = in.peek();
 

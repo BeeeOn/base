@@ -378,7 +378,7 @@ public:
 	}
 
 protected:
-	void fire(Timer &t)
+	void fire(Timer &)
 	{
 		fireImpl();
 	}

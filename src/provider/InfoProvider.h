@@ -104,8 +104,8 @@ public:
 	static InfoProvider<T> &instance();
 
 protected:
-	void parseFile(const std::string &path,
-			const std::string &infoLabel) override
+	void parseFile(const std::string &,
+			const std::string &) override
 	{
 		throw Poco::NotImplementedException(__func__);
 	}

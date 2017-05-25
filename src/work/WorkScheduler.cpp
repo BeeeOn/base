@@ -10,17 +10,17 @@ WorkScheduler::~WorkScheduler()
 {
 }
 
-void NullWorkScheduler::schedule(Work::Ptr work)
+void NullWorkScheduler::schedule(Work::Ptr)
 {
 	throw NotImplementedException(__func__);
 }
 
-void NullWorkScheduler::wakeup(Work::Ptr work)
+void NullWorkScheduler::wakeup(Work::Ptr)
 {
 	throw NotImplementedException(__func__);
 }
 
-void NullWorkScheduler::cancel(Work::Ptr work)
+void NullWorkScheduler::cancel(Work::Ptr)
 {
 	throw NotImplementedException(__func__);
 }

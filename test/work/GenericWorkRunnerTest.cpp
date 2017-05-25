@@ -36,12 +36,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(GenericWorkRunnerTest);
  */
 class SuspendingWorkExecutor : public WorkExecutor {
 public:
-	bool accepts(const Work::Ptr work) const override
+	bool accepts(const Work::Ptr) const override
 	{
 		return true;
 	}
 
-	void execute(Work::Ptr work) override
+	void execute(Work::Ptr) override
 	{
 		throw WorkSuspendThrowable(10);
 	}
@@ -52,12 +52,12 @@ public:
  */
 class EventSuspendingWorkExecutor : public WorkExecutor {
 public:
-	bool accepts(const Work::Ptr work) const override
+	bool accepts(const Work::Ptr) const override
 	{
 		return true;
 	}
 
-	void execute(Work::Ptr work) override
+	void execute(Work::Ptr) override
 	{
 		throw WorkSuspendForEventThrowable();
 	}
@@ -68,12 +68,12 @@ public:
  */
 class FinishingWorkExecutor : public WorkExecutor {
 public:
-	bool accepts(const Work::Ptr work) const override
+	bool accepts(const Work::Ptr) const override
 	{
 		return true;
 	}
 
-	void execute(Work::Ptr work) override
+	void execute(Work::Ptr) override
 	{
 	}
 };
@@ -83,12 +83,12 @@ public:
  */
 class FailingWorkExecutor : public WorkExecutor {
 public:
-	bool accepts(const Work::Ptr work) const override
+	bool accepts(const Work::Ptr) const override
 	{
 		return true;
 	}
 
-	void execute(Work::Ptr work) override
+	void execute(Work::Ptr) override
 	{
 		throw Poco::RuntimeException("failed");
 	}
@@ -96,17 +96,17 @@ public:
 
 class TestWorkScheduler : public WorkScheduler {
 public:
-	void schedule(Work::Ptr work) override
+	void schedule(Work::Ptr) override
 	{
 		m_schedule += 1;
 	}
 
-	void wakeup(Work::Ptr work) override
+	void wakeup(Work::Ptr) override
 	{
 		m_wakeup += 1;
 	}
 
-	void cancel(Work::Ptr work) override
+	void cancel(Work::Ptr) override
 	{
 		m_cancel += 1;
 	}
@@ -124,7 +124,7 @@ public:
 
 class TestWorkRepository : public WorkRepository {
 public:
-	void store(Work::Ptr work, bool) override
+	void store(Work::Ptr, bool) override
 	{
 		m_store += 1;
 	}
@@ -294,7 +294,7 @@ public:
 		m_runner->run();
 	}
 
-	bool accepts(const Work::Ptr work) const override
+	bool accepts(const Work::Ptr) const override
 	{
 		return true;
 	}
