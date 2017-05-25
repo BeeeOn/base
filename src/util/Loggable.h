@@ -31,6 +31,9 @@ public:
 		return forClass(typeid(*i));
 	}
 
+	static void configureSimple(
+			Poco::Logger &logger, const std::string &level);
+
 protected:
 	void setupLogger(Poco::Logger *logger = 0) const;
 

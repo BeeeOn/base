@@ -3,11 +3,7 @@
 #include <Poco/Environment.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
-#include <Poco/Message.h>
 #include <Poco/Version.h>
-#include <Poco/PatternFormatter.h>
-#include <Poco/FormattingChannel.h>
-#include <Poco/ConsoleChannel.h>
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/OptionCallback.h>
 #include <Poco/Util/HelpFormatter.h>
@@ -17,6 +13,7 @@
 #include "di/DIDaemon.h"
 #include "loop/LoopRunner.h"
 #include "util/AutoConfigurationExplorer.h"
+#include "util/Loggable.h"
 #include "util/PosixSignal.h"
 
 using namespace std;
@@ -223,10 +220,7 @@ void DIDaemon::printVersion() const
 
 void DIDaemon::handleDebugStartup(const string &, const string &)
 {
-	Logger::root().setLevel(Message::PRIO_DEBUG);
-	PatternFormatter *formatter = new PatternFormatter();
-	formatter->setProperty(PatternFormatter::PROP_PATTERN, "%q %t (%U:%u)");
-	Logger::root().setChannel(new FormattingChannel(formatter, new ConsoleChannel));
+	Loggable::configureSimple(Logger::root(), "debug");
 }
 
 void DIDaemon::handleDefine(const string &, const string &value)

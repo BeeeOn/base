@@ -1,4 +1,8 @@
 #include <Poco/Logger.h>
+#include <Poco/Message.h>
+#include <Poco/PatternFormatter.h>
+#include <Poco/FormattingChannel.h>
+#include <Poco/ConsoleChannel.h>
 
 #include "util/ClassInfo.h"
 #include "util/Loggable.h"
@@ -51,4 +55,13 @@ Logger &Loggable::forClass(const ClassInfo &info)
 Poco::Logger &Loggable::forClass(const type_info &info)
 {
 	return forClass(ClassInfo(info));
+}
+
+void Loggable::configureSimple(
+		Logger &logger, const string &level)
+{
+	logger.setLevel(Logger::parseLevel(level));
+	PatternFormatter *formatter = new PatternFormatter;
+	formatter->setProperty(PatternFormatter::PROP_PATTERN, "%q %t (%U:%u)");
+	logger.setChannel(new FormattingChannel(formatter, new ConsoleChannel));
 }
