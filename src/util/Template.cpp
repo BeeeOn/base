@@ -1,8 +1,10 @@
+#include <Poco/Logger.h>
 #include <Poco/String.h>
 #include <Poco/StreamCopier.h>
 
+#include "util/ClassInfo.h"
+#include "util/Loggable.h"
 #include "util/Template.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -28,7 +30,7 @@ void Template::subst(string &s, const string &key, const string &value)
 
 string Template::apply(const map<string, string> &context)
 {
-	Logger &logger = LOGGER_CLASS(this);
+	Logger &logger = Loggable::forInstance(this);
 	std::string text(m_content);
 
 	for (auto pair : context) {

@@ -1,7 +1,7 @@
 #include <Poco/Logger.h>
 
+#include "util/ClassInfo.h"
 #include "util/Loggable.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -12,9 +12,14 @@ Loggable::Loggable():
 {
 }
 
-Loggable::Loggable(const std::type_info &info):
-	m_name(BeeeOn::classDemangle(info.name())),
+Loggable::Loggable(const ClassInfo &info):
+	m_name(info.name()),
 	m_logger(NULL)
+{
+}
+
+Loggable::Loggable(const std::type_info &info):
+	Loggable(ClassInfo(info))
 {
 }
 
@@ -26,9 +31,24 @@ void Loggable::setupLogger(Logger *logger) const
 {
 	if (m_logger == NULL) {
 		const string name = m_name.empty()?
-			classDemangle(typeid(*this).name()) : m_name;
+			ClassInfo::forPointer(this).name() : m_name;
 
 		m_logger = logger == NULL?
 			&Poco::Logger::get(name.c_str()) : logger;
 	}
+}
+
+Logger &Loggable::forMethod(const char *name)
+{
+	return Logger::get(name);
+}
+
+Logger &Loggable::forClass(const ClassInfo &info)
+{
+	return Logger::get(info.name());
+}
+
+Poco::Logger &Loggable::forClass(const type_info &info)
+{
+	return forClass(ClassInfo(info));
 }

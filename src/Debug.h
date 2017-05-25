@@ -14,19 +14,19 @@
 #include <Poco/Logger.h>
 
 #include "util/Backtrace.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
 /**
  * Return the appropriate logger for the given class instance.
  */
-#define LOGGER_CLASS(this) \
-	(Poco::Logger::get(BeeeOn::classDemangle(typeid((*this)).name())))
+#define LOGGER_CLASS(this) (Loggable::forInstance(this))
 
 /**
  * Return the appropriate logger for the given function name.
  */
-#define LOGGER_FUNC(name)  (Poco::Logger::get((name)))
+#define LOGGER_FUNC(name)  (Loggable::forMethod(name))
 
 #if defined(__clang__) || defined(__GLIBCXX__)
 /**

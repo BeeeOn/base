@@ -2,6 +2,7 @@
 #include <Poco/SingletonHolder.h>
 #include <Poco/Ascii.h>
 #include <Poco/String.h>
+#include <Poco/Logger.h>
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 #include <Poco/SAX/Locator.h>
@@ -10,8 +11,8 @@
 #include <Poco/SAX/InputSource.h>
 #include <Poco/XML/XMLException.h>
 
+#include "util/Loggable.h"
 #include "util/SAXHelper.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -378,7 +379,7 @@ void SAXHelper::parse(const Path &path, SAXHelper &helper)
 		parser.parse(&source);
 	}
 	catch (const Exception &e) {
-		LOGGER_FUNC(__func__).log(e, __FILE__, __LINE__);
+		Loggable::forMethod(__func__).log(e, __FILE__, __LINE__);
 		e.rethrow();
 	}
 }
