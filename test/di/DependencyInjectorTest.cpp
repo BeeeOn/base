@@ -15,7 +15,6 @@ namespace BeeeOn {
 
 class DependencyInjectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DependencyInjectorTest);
-	CPPUNIT_TEST(testDemangle);
 	CPPUNIT_TEST(testSimple);
 	CPPUNIT_TEST(testAlias);
 	CPPUNIT_TEST(testAliasLoop);
@@ -32,7 +31,6 @@ public:
 
 	void setUp();
 	void tearDown();
-	void testDemangle();
 	void testSimple();
 	void testAlias();
 	void testAliasLoop();
@@ -135,22 +133,6 @@ void DependencyInjectorTest::setUp()
 
 void DependencyInjectorTest::tearDown()
 {
-}
-
-/**
- * Make sure that classDemangle function works as expected and so
- * we are able to perform dependency injection correctly.
- */
-void DependencyInjectorTest::testDemangle()
-{
-	DependencyInjector injector(m_config);
-	const string diname(classDemangle(typeid(injector).name()));
-
-	CPPUNIT_ASSERT(diname.compare("BeeeOn::DependencyInjector") == 0);
-
-	FakeObject *fake;
-	const string fakename(classDemangle(typeid(fake).name()));
-	CPPUNIT_ASSERT(fakename.compare("BeeeOn::FakeObject") == 0);
 }
 
 /**
