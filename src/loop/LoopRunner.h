@@ -16,8 +16,8 @@ public:
 	LoopRunner();
 	~LoopRunner();
 
-	void addRunnable(StoppableRunnable *runnable);
-	void addLoop(StoppableLoop *loop);
+	void addRunnable(Poco::SharedPtr<StoppableRunnable> runnable);
+	void addLoop(Poco::SharedPtr<StoppableLoop> loop);
 	void setAutoStart(bool enable);
 
 	void start();
@@ -25,13 +25,13 @@ public:
 	void autoStart();
 
 protected:
-	void stopAll(std::list<StoppableLoop *> &list);
+	void stopAll(std::list<Poco::SharedPtr<StoppableLoop>> &list);
 
 private:
 	bool m_autoStart;
 	Poco::FastMutex m_lock;
-	std::list<StoppableLoop *> m_loops;
-	std::list<StoppableLoop *> m_started;
+	std::list<Poco::SharedPtr<StoppableLoop>> m_loops;
+	std::list<Poco::SharedPtr<StoppableLoop>> m_started;
 };
 
 }

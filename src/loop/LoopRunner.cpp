@@ -24,12 +24,12 @@ LoopRunner::~LoopRunner()
 	stop();
 }
 
-void LoopRunner::addRunnable(StoppableRunnable *runnable)
+void LoopRunner::addRunnable(SharedPtr<StoppableRunnable> runnable)
 {
 	addLoop(new StoppableLoopAdapter(runnable));
 }
 
-void LoopRunner::addLoop(StoppableLoop *loop)
+void LoopRunner::addLoop(SharedPtr<StoppableLoop> loop)
 {
 	FastMutex::ScopedLock guard(m_lock);
 
@@ -57,7 +57,7 @@ void LoopRunner::stop()
 	m_started.clear();
 }
 
-void LoopRunner::stopAll(list<StoppableLoop *> &list)
+void LoopRunner::stopAll(list<SharedPtr<StoppableLoop>> &list)
 {
 	for (auto loop : list)
 		loop->stop();
