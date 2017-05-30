@@ -46,6 +46,16 @@ private:
 	std::string m_text;
 };
 
+class DIWWrongInputException final : public std::exception {
+public:
+	DIWWrongInputException(const std::string &text);
+
+	const char *what() const noexcept override;
+
+private:
+	std::string m_text;
+};
+
 /**
  * Common class to be inherited by all setters helpers.
  * The purpose is to be able to have all setters in a single map.
@@ -74,6 +84,21 @@ public:
 	typedef void (B::*Setter)(const std::string &);
 
 	DIWStringSetter(Setter setter):
+		m_setter(setter)
+	{
+	}
+
+	void call(DIWrapper &b, const std::string &text) override;
+private:
+	Setter m_setter;
+};
+
+template <typename T, typename B>
+class DIWCharSetter final : public DIWTextSetter {
+public:
+	typedef void (B::*Setter)(const char);
+
+	DIWCharSetter(Setter setter):
 		m_setter(setter)
 	{
 	}
@@ -295,6 +320,9 @@ protected:
 	void textSetter(const std::string &name, void (B::*setter)(const char *));
 
 	template <typename B>
+	void textSetter(const std::string &name, void (B::*setter)(const char));
+
+	template <typename B>
 	void hookHandler(const std::string &name, void (B::*hook)());
 
 	/**
@@ -333,6 +361,16 @@ void DIWStringSetter<T, B>::call(DIWrapper &b, const std::string &text)
 {
 	B &base = extractInstance<T, B>(b);
 	(base.*m_setter)(text);
+}
+
+template <typename T, typename B>
+void DIWCharSetter<T, B>::call(DIWrapper &b, const std::string &text)
+{
+	if (text.size() != 1)
+		throw DIWWrongInputException("expected a single character: " + text);
+
+	B &base = extractInstance<T, B>(b);
+	(base.*m_setter)(text.at(0));
 }
 
 template <typename T, typename B>
@@ -573,6 +611,14 @@ void AbstractDIWrapper<T>::textSetter(
 		void (B::*setter)(const std::string &))
 {
 	installMethod(name, new DIWStringSetter<T, B>(setter));
+}
+
+template <typename T> template <typename B>
+void AbstractDIWrapper<T>::textSetter(
+		const std::string &name,
+		void (B::*setter)(const char))
+{
+	installMethod(name, new DIWCharSetter<T, B>(setter));
 }
 
 template <typename T> template <typename B>
