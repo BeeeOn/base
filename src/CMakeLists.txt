@@ -19,6 +19,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DIXmlLoader.cpp
 	${PROJECT_SOURCE_DIR}/di/DIApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp
+	${PROJECT_SOURCE_DIR}/io/SimpleConsole.cpp
 	${PROJECT_SOURCE_DIR}/io/StdConsole.cpp
 	${PROJECT_SOURCE_DIR}/io/TCPConsole.cpp
 	${PROJECT_SOURCE_DIR}/loop/StoppableRunnable.cpp
