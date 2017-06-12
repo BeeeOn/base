@@ -6,6 +6,7 @@
 #include <Poco/SharedPtr.h>
 
 #include "io/Console.h"
+#include "io/Printable.h"
 
 namespace BeeeOn {
 
@@ -14,7 +15,7 @@ namespace BeeeOn {
  * It manages a single session inside. Note that this class is not
  * thread-safe as it is intended for very simple scenarios.
  */
-class SimpleConsole {
+class SimpleConsole : public Printable {
 public:
 	SimpleConsole();
 	SimpleConsole(Poco::SharedPtr<Console> console);
@@ -35,7 +36,7 @@ public:
 	 * Print text and an optional new line to the console.
 	 * Open a session if necessary.
 	 */
-	void print(const std::string &text, bool newline = true);
+	void print(const std::string &text, bool newline = true) override;
 
 	/**
 	 * Test whether the current session says End-of-File.

@@ -5,6 +5,8 @@
 
 #include <Poco/SharedPtr.h>
 
+#include "io/Printable.h"
+
 namespace BeeeOn {
 
 /**
@@ -66,7 +68,7 @@ class Console;
  * This class is a universal wrapper around the implementation
  * and provides a public API to be widely used.
  */
-class ConsoleSession {
+class ConsoleSession : public Printable {
 public:
 	ConsoleSession(Console &console);
 
@@ -86,7 +88,7 @@ public:
 	 * Print the given text to the output. The newline
 	 * can be optionally appended.
 	 */
-	void print(const std::string &text, bool newline = true);
+	void print(const std::string &text, bool newline = true) override;
 
 	/**
 	 * Return true if there will be no input from the console.
