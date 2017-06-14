@@ -12,6 +12,7 @@ find_library (POCO_XML PocoXML)
 find_library (POCO_JSON PocoJSON)
 
 add_definitions(-std=c++11)
+add_definitions(-Wall -pedantic -Wextra)
 
 file(GLOB TEST_LIBRARY_SOURCES
 	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp

@@ -10,6 +10,7 @@ find_library (POCO_XML PocoXML)
 find_library (POCO_JSON PocoJSON)
 
 add_definitions(-std=c++11)
+add_definitions(-Wall -pedantic -Wextra)
 
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
