@@ -29,7 +29,7 @@ public:
 	{
 	}
 
-	void isolate(Transaction::Isolation mask)
+	void isolate(Transaction::Isolation)
 	{
 	}
 };
