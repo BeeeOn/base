@@ -16,7 +16,7 @@ const string TransactionImpl::name() const
 	return to_string((unsigned long) ((void *) this));
 }
 
-void Transaction::isolate(Transaction::Isolation mask)
+void Transaction::isolate(Transaction::Isolation)
 {
 	throw NotImplementedException("isolate()");
 }
