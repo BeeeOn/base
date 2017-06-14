@@ -73,14 +73,23 @@ file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/WorkSuspendThrowable.cpp
 )
 
+file(GLOB TRANSACTION_SOURCES
+	${PROJECT_SOURCE_DIR}/transaction/NoTransactionFactory.cpp
+	${PROJECT_SOURCE_DIR}/transaction/NullTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/transaction/ThreadLocalTransactionManager.cpp
+	${PROJECT_SOURCE_DIR}/transaction/Transactional.cpp
+	${PROJECT_SOURCE_DIR}/transaction/TransactionManager.cpp
+)
+
 include_directories(
 	${PROJECT_SOURCE_DIR}
 )
 
 add_library(BeeeOnBase SHARED ${SOURCES})
 add_library(BeeeOnWork SHARED ${WORK_SOURCES})
+add_library(BeeeOnTransaction SHARED ${TRANSACTION_SOURCES})
 
-install(TARGETS BeeeOnBase BeeeOnWork
+install(TARGETS BeeeOnBase BeeeOnWork BeeeOnTransaction
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
