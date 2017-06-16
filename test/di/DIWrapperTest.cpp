@@ -13,12 +13,14 @@ namespace BeeeOn {
 class DIWrapperTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DIWrapperTest);
 	CPPUNIT_TEST(testCreate);
+	CPPUNIT_TEST(testInjectTooLongChar);
 	CPPUNIT_TEST(testPolymorphicBehaviour);
 	CPPUNIT_TEST(testInheritanceOfTarget);
 	CPPUNIT_TEST(testSetSharedPtr);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testCreate();
+	void testInjectTooLongChar();
 	void testPolymorphicBehaviour();
 	void testInheritanceOfTarget();
 	void testSetSharedPtr();
@@ -31,6 +33,11 @@ public:
 	void setName(const std::string &name)
 	{
 		m_name = name;
+	}
+
+	void setChar(char c)
+	{
+		m_char = c;
 	}
 
 	void setOffset(int v)
@@ -49,6 +56,7 @@ public:
 	}
 
 	std::string m_name;
+	char m_char = '0';
 	int m_offset = 0;
 	DITest *m_self = NULL;
 	bool m_called = false;
@@ -61,6 +69,7 @@ struct DITestChild : public DITest {
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DITest)
 BEEEON_OBJECT_TEXT("name", &DITest::setName)
+BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITest::setOffset)
 BEEEON_OBJECT_REF("self", &DITest::setSelf)
 BEEEON_OBJECT_HOOK("call", &DITest::call)
@@ -69,6 +78,7 @@ BEEEON_OBJECT_END(BeeeOn, DITest)
 BEEEON_OBJECT_BEGIN(BeeeOn, DITestChild)
 BEEEON_OBJECT_CASTABLE(DITest)
 BEEEON_OBJECT_TEXT("name", &DITestChild::setName)
+BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITestChild::setOffset)
 BEEEON_OBJECT_REF("self", &DITestChild::setSelf)
 BEEEON_OBJECT_HOOK("call", &DITestChild::call)
@@ -93,19 +103,43 @@ void DIWrapperTest::testCreate()
 	SharedPtr<DITest> test = wrapper.instance();
 
 	CPPUNIT_ASSERT(test->m_name.empty());
+	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 	CPPUNIT_ASSERT(test->m_self == NULL);
 	CPPUNIT_ASSERT(!test->m_called);
 
 	ACCESS_CALL(wrapper, injectText)("name", "TEST NAME");
+	ACCESS_CALL(wrapper, injectText)("char", "X");
 	ACCESS_CALL(wrapper, injectNumber)("offset", 16);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
 	ACCESS_CALL(wrapper, callHook)("call");
 
 	CPPUNIT_ASSERT_EQUAL("TEST NAME", test->m_name);
+	CPPUNIT_ASSERT_EQUAL('X', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(16, test->m_offset);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
 	CPPUNIT_ASSERT(test->m_called);
+}
+
+void DIWrapperTest::testInjectTooLongChar()
+{
+	DITestDIW wrapper;
+
+	SharedPtr<DITest> test = wrapper.instance();
+
+	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
+
+	CPPUNIT_ASSERT_THROW(
+		ACCESS_CALL(wrapper, injectText)("char", "XX"),
+		DIWWrongInputException
+	);
+	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
+
+	CPPUNIT_ASSERT_THROW(
+		ACCESS_CALL(wrapper, injectText)("char", "long text"),
+		DIWWrongInputException
+	);
+	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 }
 
 void DIWrapperTest::testPolymorphicBehaviour()
@@ -119,16 +153,19 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	SharedPtr<DITest> test = wrapper->instance();
 
 	CPPUNIT_ASSERT(test->m_name.empty());
+	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 	CPPUNIT_ASSERT(test->m_self == NULL);
 	CPPUNIT_ASSERT(!test->m_called);
 
 	ACCESS_CALL(*wrapper, injectText)("name", "TEST NAME2");
+	ACCESS_CALL(*wrapper, injectText)("char", "Z");
 	ACCESS_CALL(*wrapper, injectNumber)("offset", 18);
 	ACCESS_CALL(*wrapper, injectRef)("self", *w);
 	ACCESS_CALL(*wrapper, callHook)("call");
 
 	CPPUNIT_ASSERT_EQUAL("TEST NAME2", test->m_name);
+	CPPUNIT_ASSERT_EQUAL('Z', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(18, test->m_offset);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
 	CPPUNIT_ASSERT(test->m_called);
@@ -144,15 +181,18 @@ void DIWrapperTest::testInheritanceOfTarget()
 
 	CPPUNIT_ASSERT(test->m_name.empty());
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT(test->m_self == NULL);
 	CPPUNIT_ASSERT(!test->m_called);
 
 	ACCESS_CALL(wrapper, injectText)("name", "TEST NAME3");
+	ACCESS_CALL(wrapper, injectText)("char", "Y");
 	ACCESS_CALL(wrapper, injectNumber)("offset", 19);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
 	ACCESS_CALL(wrapper, callHook)("call");
 
 	CPPUNIT_ASSERT_EQUAL("TEST NAME3", test->m_name);
+	CPPUNIT_ASSERT_EQUAL('Y', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(19, test->m_offset);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
 	CPPUNIT_ASSERT(test->m_called);

@@ -32,6 +32,16 @@ const char *DIWCastException::what() const noexcept
 	return m_text.c_str();
 }
 
+DIWWrongInputException::DIWWrongInputException(const string &text):
+	m_text(text)
+{
+}
+
+const char *DIWWrongInputException::what() const noexcept
+{
+	return m_text.c_str();
+}
+
 DIWMethodHelper::~DIWMethodHelper()
 {
 }
