@@ -49,6 +49,16 @@ public:
 	std::string name() const;
 	std::type_index index() const;
 
+	/**
+	 * Test whether the ClassInfo represents the given type T.
+	 * It does not work for inheritance.
+	 */
+	template <typename T>
+	bool is() const
+	{
+		return ClassInfo(typeid(T)) == *this;
+	}
+
 	bool operator <(const ClassInfo &info) const
 	{
 		return info.index() < m_index;

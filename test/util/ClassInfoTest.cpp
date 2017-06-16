@@ -15,6 +15,7 @@ class ClassInfoTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testId);
 	CPPUNIT_TEST(testName);
 	CPPUNIT_TEST(testNameWithInheritance);
+	CPPUNIT_TEST(testIs);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -24,6 +25,7 @@ public:
 	void testId();
 	void testName();
 	void testNameWithInheritance();
+	void testIs();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClassInfoTest);
@@ -160,6 +162,24 @@ void ClassInfoTest::testNameWithInheritance()
 	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(&dAsB)).name());
 	CPPUNIT_ASSERT("BeeeOn::A" == ClassInfo(typeid(&eAsA)).name());
 	CPPUNIT_ASSERT("BeeeOn::B" == ClassInfo(typeid(&eAsB)).name());
+}
+
+void ClassInfoTest::testIs()
+{
+	ClassInfo info(typeid(A));
+
+	CPPUNIT_ASSERT(info.is<A>());
+	CPPUNIT_ASSERT(!info.is<B>());
+	CPPUNIT_ASSERT(!info.is<C>());
+
+	A a;
+	CPPUNIT_ASSERT(ClassInfo::forPointer(&a).is<A>());
+	CPPUNIT_ASSERT(!ClassInfo::forPointer(&a).is<B>());
+	CPPUNIT_ASSERT(!ClassInfo::forPointer(&a).is<C>());
+
+	CPPUNIT_ASSERT(ClassInfo::forClass<A>().is<A>());
+	CPPUNIT_ASSERT(!ClassInfo::forClass<A>().is<B>());
+	CPPUNIT_ASSERT(!ClassInfo::forClass<A>().is<C>());
 }
 
 }
