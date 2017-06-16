@@ -8,7 +8,13 @@
 namespace BeeeOn {
 
 class ClassInfo {
+private:
+	class NoneType {
+		NoneType() = delete;
+	};
+
 public:
+	ClassInfo();
 	ClassInfo(const std::type_index &index);
 	ClassInfo(const std::type_info &info);
 
