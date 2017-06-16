@@ -1,5 +1,5 @@
-#ifndef BEEEON_TYPE_UTIL_H
-#define BEEEON_TYPE_UTIL_H
+#ifndef BEEEON_TYPE_CASTABLE_H
+#define BEEEON_TYPE_CASTABLE_H
 
 #include <typeinfo>
 
