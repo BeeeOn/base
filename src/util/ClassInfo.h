@@ -25,9 +25,17 @@ public:
 			"for pointers use forPointer() method");
 	}
 
+	/**
+	 * Determine class type info for the value of the given
+	 * pointer. If the pointer is NULL, it returns ClassInfo(),
+	 * i.e. type info of ClassInfo::NoneType.
+	 */
 	template <typename T>
 	static ClassInfo forPointer(const T *t)
 	{
+		if (t == NULL)
+			return ClassInfo();
+
 		return ClassInfo(*t);
 	}
 

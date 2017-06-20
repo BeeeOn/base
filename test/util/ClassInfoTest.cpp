@@ -11,6 +11,7 @@ class ClassInfoTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(ClassInfoTest);
 	CPPUNIT_TEST(testEmptyConstructor);
 	CPPUNIT_TEST(testConstruct);
+	CPPUNIT_TEST(testForPointerNull);
 	CPPUNIT_TEST(testId);
 	CPPUNIT_TEST(testName);
 	CPPUNIT_TEST(testNameWithInheritance);
@@ -19,6 +20,7 @@ class ClassInfoTest : public CppUnit::TestFixture {
 public:
 	void testEmptyConstructor();
 	void testConstruct();
+	void testForPointerNull();
 	void testId();
 	void testName();
 	void testNameWithInheritance();
@@ -69,6 +71,12 @@ void ClassInfoTest::testConstruct()
 	CPPUNIT_ASSERT(info2 != info3);
 	CPPUNIT_ASSERT(info4 != info5);
 	CPPUNIT_ASSERT(info6 != info7);
+}
+
+void ClassInfoTest::testForPointerNull()
+{
+	TestObject0 *o = NULL;
+	CPPUNIT_ASSERT(ClassInfo::forPointer(o) == ClassInfo());
 }
 
 void ClassInfoTest::testId()
