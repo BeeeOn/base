@@ -8,6 +8,11 @@
 using namespace std;
 using namespace BeeeOn;
 
+ClassInfo::ClassInfo():
+	m_index(typeid(NoneType))
+{
+}
+
 ClassInfo::ClassInfo(const type_index &index):
 	m_index(index)
 {
