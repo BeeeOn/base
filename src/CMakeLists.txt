@@ -40,6 +40,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
+	${PROJECT_SOURCE_DIR}/util/ArgsParser.cpp
 	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfo.cpp
 	${PROJECT_SOURCE_DIR}/util/CryptoConfig.cpp
