@@ -28,6 +28,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
+	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
