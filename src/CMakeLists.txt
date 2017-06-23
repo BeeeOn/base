@@ -44,6 +44,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/ArgsParser.cpp
 	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfo.cpp
+	${PROJECT_SOURCE_DIR}/util/ConfigurationSaver.cpp
 	${PROJECT_SOURCE_DIR}/util/CryptoConfig.cpp
 	${PROJECT_SOURCE_DIR}/util/CryptoParams.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
