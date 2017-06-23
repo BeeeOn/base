@@ -116,24 +116,6 @@ DIWCast *DIWCast::find(const type_info &info, DIWrapper &wrapper)
 	return NULL;
 }
 
-ManifestSingleton *ManifestSingleton::singleton = NULL;
-
-static void __attribute__((destructor,used)) ManifestSingleton_destroy()
-{
-	ManifestSingleton::destroy();
-}
-
-void ManifestSingleton::reportInfo(Logger &logger)
-{
-	logger.debug("managing " + to_string(manifest().size()) + " classes in " + manifest().className());
-	Manifest<DIWrapper>::Iterator it = manifest().begin();
-
-	for (; it != manifest().end(); ++it) {
-		string msg("registered class ");
-		logger.debug(msg + it->name(), __FILE__, __LINE__);
-	}
-}
-
 static map<string, DIWrapperFactory *> &factories()
 {
 	static map<string, DIWrapperFactory *> registry;
