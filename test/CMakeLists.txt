@@ -16,6 +16,7 @@ add_definitions(-Wall -pedantic -Wextra)
 
 file(GLOB TEST_LIBRARY_SOURCES
 	${PROJECT_SOURCE_DIR}/cppunit/TapTestProducer.cpp
+	${PROJECT_SOURCE_DIR}/cppunit/TapOutputter.cpp
 )
 
 file(GLOB TEST_SOURCES
