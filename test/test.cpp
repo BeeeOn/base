@@ -77,6 +77,6 @@ int main(int argc, char **argv)
 
 	Test *suite = TestFactoryRegistry::getRegistry().makeTest();
 
-	const string &format = Environment::get("TEST_OUTPUT_FORMAT", "tap");
+	const string &format = Environment::get("TEST_OUTPUT_FORMAT", "human");
 	return runStandard(suite, format);
 }
