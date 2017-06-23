@@ -14,7 +14,7 @@
 #include <Poco/Util/MapConfiguration.h>
 #include <Poco/Util/LoggingConfigurator.h>
 
-#include "cppunit/TapTestProducer.h"
+#include "cppunit/TapOutputter.h"
 
 using namespace std;
 using namespace CppUnit;
@@ -41,19 +41,6 @@ void setupLogger(const std::string &path)
 	}
 }
 
-static int runWithTapOutput(Test *suite)
-{
-	TestResult controller;
-	BeeeOn::TapTestProducer tapProducer;
-	controller.addListener(&tapProducer);
-
-	TestRunner runner;
-	runner.addTest(suite);
-	runner.run(controller);
-
-	return tapProducer.wasSuccessful()? 0 : 1;
-}
-
 static int runStandard(Test *suite, const string &format)
 {
 	TestRunner runner;
@@ -72,6 +59,10 @@ static int runStandard(Test *suite, const string &format)
 		XmlOutputter outputter(&collector, cout);
 		outputter.write();
 	}
+	else if (format == "tap") {
+		BeeeOn::TapOutputter outputter(&collector, cout);
+		outputter.write();
+	}
 	else {
 		cerr << "unsupported output format: " << format << endl;
 		return -1;
@@ -87,8 +78,5 @@ int main(int argc, char **argv)
 	Test *suite = TestFactoryRegistry::getRegistry().makeTest();
 
 	const string &format = Environment::get("TEST_OUTPUT_FORMAT", "tap");
-	if (format == "tap")
-		return runWithTapOutput(suite);
-
 	return runStandard(suite, format);
 }
