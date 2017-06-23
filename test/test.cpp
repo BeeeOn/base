@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 #include <cppunit/CompilerOutputter.h>
+#include <cppunit/XmlOutputter.h>
 #include <cppunit/TestRunner.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestResultCollector.h>
@@ -65,6 +66,10 @@ static int runStandard(Test *suite, const string &format)
 
 	if (format == "human") {
 		CompilerOutputter outputter(&collector, cout);
+		outputter.write();
+	}
+	else if (format == "xml") {
+		XmlOutputter outputter(&collector, cout);
 		outputter.write();
 	}
 	else {
