@@ -1,10 +1,15 @@
+#include <list>
+
 #include <Poco/Exception.h>
+#include <Poco/StringTokenizer.h>
+#include <Poco/Dynamic/Var.h>
 
 #include "di/DependencyInjector.h"
 #include "Debug.h"
 
 using namespace std;
 using namespace Poco;
+using namespace Poco::Dynamic;
 using namespace Poco::Util;
 using namespace BeeeOn;
 
@@ -268,6 +273,31 @@ bool DependencyInjector::tryInjectText(
 	return false;
 }
 
+bool DependencyInjector::tryInjectList(
+		const InstanceInfo &info,
+		DIWrapper *target,
+		const string &key,
+		const string &name)
+{
+	if (m_conf->has(key + "[@list]")) {
+		const string value = m_conf->getString(key + "[@list]");
+
+		logger().debug("injecting " + value + " as " + name
+				+ " into " + info.name());
+
+		StringTokenizer tokenizer(value, ",;",
+				StringTokenizer::TOK_TRIM);
+		list<Var> tmp;
+		for (const auto &s : tokenizer)
+			tmp.push_back(s);
+
+		target->injectList(name, tmp);
+		return true;
+	}
+
+	return false;
+}
+
 void DependencyInjector::injectValue(
 		const InstanceInfo &info,
 		DIWrapper *target,
@@ -281,6 +311,9 @@ void DependencyInjector::injectValue(
 		return;
 
 	if (tryInjectText(info, target, key, name))
+		return;
+
+	if (tryInjectList(info, target, key, name))
 		return;
 
 	logger().error("malformed configuration entry "
