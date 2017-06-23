@@ -38,20 +38,23 @@ void setupLogger(const std::string &path)
 	}
 }
 
+static int runWithTapOutput(Test *suite)
+{
+	TestResult controller;
+	BeeeOn::TapTestProducer tapProducer;
+	controller.addListener(&tapProducer);
+
+	TestRunner runner;
+	runner.addTest(suite);
+	runner.run(controller);
+
+	return tapProducer.wasSuccessful()? 0 : 1;
+}
+
 int main(int argc, char **argv)
 {
 	setupLogger(argc > 1? argv[1] : "logging.ini");
 
-	TestResult controller;
-	BeeeOn::TapTestProducer tapProducer;
-	TestRunner runner;
-
-	controller.addListener(&tapProducer);
-
 	Test *suite = TestFactoryRegistry::getRegistry().makeTest();
-	runner.addTest(suite);
-
-	runner.run(controller);
-
-	return tapProducer.wasSuccessful()? 0 : 1;
+	return runWithTapOutput(suite);
 }
