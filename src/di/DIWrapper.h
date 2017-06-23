@@ -3,6 +3,7 @@
 
 #include <string>
 #include <typeinfo>
+#include <list>
 #include <map>
 
 #include <Poco/SharedPtr.h>
@@ -659,6 +660,21 @@ public:
 private:
 	Poco::Manifest<DIWrapper> m_manifest;
 	static ManifestSingleton *singleton;
+};
+
+/**
+ * Factory to create DIWrapper instances. The class manages a global
+ * registry of DIWrapperFactory instances usually created via the
+ * BEEEON_OBJECT_IMPL macro.
+ */
+class DIWrapperFactory {
+public:
+	virtual DIWrapper *create() const = 0;
+
+	static void registerFactory(
+		const std::string &name, DIWrapperFactory &factory);
+	static DIWrapperFactory &lookupFactory(const std::string &name);
+	static void listFactories(std::list<std::string> &names);
 };
 
 #define _BEEEON_VA_EXPAND(x) x

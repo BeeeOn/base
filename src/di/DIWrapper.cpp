@@ -1,5 +1,7 @@
 #include <set>
 
+#include <Poco/Exception.h>
+
 #include "di/DIWrapper.h"
 
 using namespace std;
@@ -130,4 +132,31 @@ void ManifestSingleton::reportInfo(Logger &logger)
 		string msg("registered class ");
 		logger.debug(msg + it->name(), __FILE__, __LINE__);
 	}
+}
+
+static map<string, DIWrapperFactory *> &factories()
+{
+	static map<string, DIWrapperFactory *> registry;
+	return registry;
+}
+
+void DIWrapperFactory::registerFactory(
+		const string &name, DIWrapperFactory &factory)
+{
+	factories().emplace(name, &factory);
+}
+
+DIWrapperFactory &DIWrapperFactory::lookupFactory(const string &name)
+{
+	auto it = factories().find(name);
+	if (it == factories().end())
+		throw NotFoundException("factory for class " + name + " is missing");
+
+	return *it->second;
+}
+
+void DIWrapperFactory::listFactories(list<string> &names)
+{
+	for (auto &pair : factories())
+		names.push_back(pair.first);
 }
