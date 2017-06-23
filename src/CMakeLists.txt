@@ -32,6 +32,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePrefix.cpp
+	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRange.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
