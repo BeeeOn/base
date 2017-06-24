@@ -216,6 +216,28 @@ private:
 	Setter m_setter;
 };
 
+struct DIWMapSetter : public DIWMethodHelper {
+	virtual ~DIWMapSetter();
+	virtual void call(DIWrapper &b,
+			  const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) = 0;
+};
+
+template <typename T, typename B>
+class DIWStringStringMapSetter final : public DIWMapSetter {
+public:
+	typedef void (B::*Setter)(const std::map<std::string, std::string> &);
+
+	DIWStringStringMapSetter(Setter setter):
+		m_setter(setter)
+	{
+	}
+
+	void call(DIWrapper &b,
+		  const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) override;
+private:
+	Setter m_setter;
+};
+
 /**
  * Interface to a casting implementation. There is also a static
  * registry of possible casts so anybody can access it.
@@ -297,6 +319,8 @@ protected:
 			const std::string &value) = 0;
 	virtual void injectList(const std::string &name,
 			const std::list<Poco::Dynamic::Var> &l) = 0;
+	virtual void injectMap(const std::string &name,
+			const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &l) = 0;
 	virtual void callHook(const std::string &name) = 0;
 };
 
@@ -325,6 +349,8 @@ protected:
 	void injectText(const std::string &name, const std::string &value) override;
 	void injectList(const std::string &name,
 			const std::list<Poco::Dynamic::Var> &l) override;
+	void injectMap(const std::string &name,
+		       const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) override;
 	void callHook(const std::string &name) override;
 
 	template <typename B, typename I>
@@ -351,6 +377,10 @@ protected:
 	template <typename B>
 	void listSetter(const std::string &name,
 		void (B::*setter)(const std::list<std::string> &));
+
+	template <typename B>
+	void mapSetter(const std::string &name,
+		void (B::*setter)(const std::map<std::string, std::string> &));
 
 	template <typename B>
 	void hookHandler(const std::string &name, void (B::*hook)());
@@ -452,6 +482,18 @@ void DIWStringListSetter<T, B>::call(DIWrapper &b, const std::list<Poco::Dynamic
 	std::list<std::string> value;
 	for (auto &v : l)
 		value.push_back(v.toString());
+
+	B &base = extractInstance<T, B>(b);
+	(base.*m_setter)(value);
+}
+
+template <typename T, typename B>
+void DIWStringStringMapSetter<T, B>::call(DIWrapper &b,
+			const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m)
+{
+	std::map<std::string, std::string> value;
+	for (auto &pair : m)
+		value.emplace(pair.first.toString(), pair.second.toString());
 
 	B &base = extractInstance<T, B>(b);
 	(base.*m_setter)(value);
@@ -603,6 +645,22 @@ void AbstractDIWrapper<T>::injectList(
 }
 
 template <typename T>
+void AbstractDIWrapper<T>::injectMap(
+		const std::string &name,
+		const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &value)
+{
+	auto entry = m_method.find(name);
+	if (entry == m_method.end()) {
+		throw Poco::NotFoundException("missing map property "
+				+ name + " for type "
+				+ typeid(T).name());
+	}
+
+	DIWMapSetter &setter = dynamic_cast<DIWMapSetter &>(*(entry->second));
+	setter.call(*this, value);
+}
+
+template <typename T>
 void AbstractDIWrapper<T>::callHook(const std::string &name)
 {
 	auto entry = m_method.find(name);
@@ -684,6 +742,14 @@ void AbstractDIWrapper<T>::listSetter(
 		void (B::*setter)(const std::list<std::string> &))
 {
 	installMethod(name, new DIWStringListSetter<T, B>(setter));
+}
+
+template <typename T> template <typename B>
+void AbstractDIWrapper<T>::mapSetter(
+		const std::string &name,
+		void (B::*setter)(const std::map<std::string, std::string> &))
+{
+	installMethod(name, new DIWStringStringMapSetter<T, B>(setter));
 }
 
 template <typename T> template <typename B>
@@ -771,6 +837,8 @@ BEEEON_WRAPPER(cls, cls##DIW)
 	textSetter(name, method);
 #define BEEEON_OBJECT_LIST(name, method) \
 	listSetter(name, method);
+#define BEEEON_OBJECT_MAP(name, method) \
+	mapSetter(name, method);
 #define BEEEON_OBJECT_HOOK(name, method) \
 	hookHandler(name, method);
 

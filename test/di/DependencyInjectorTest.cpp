@@ -79,12 +79,18 @@ public:
 		for (auto &s : l)
 			m_list.push_back(s);
 	}
+
+	void setMap(const map<string, string> &m)
+	{
+		m_map = m;
+	}
 public:
 	FakeObject *m_self;
 	string m_name;
 	string m_other;
 	int m_index;
 	vector<string> m_list;
+	map<string, string> m_map;
 };
 
 }
@@ -95,6 +101,7 @@ BEEEON_OBJECT_TEXT("name", &FakeObject::setName)
 BEEEON_OBJECT_NUMBER("index", &FakeObject::setIndex)
 BEEEON_OBJECT_TEXT("other", &FakeObject::setOther)
 BEEEON_OBJECT_LIST("list", &FakeObject::setList)
+BEEEON_OBJECT_MAP("map", &FakeObject::setMap)
 BEEEON_OBJECT_END(BeeeOn, FakeObject)
 
 namespace BeeeOn {
@@ -118,6 +125,13 @@ void DependencyInjectorTest::setUp()
 	m_config->setString("instance[1].set[3][@number]", "5");
 	m_config->setString("instance[1].set[4][@name]", "list");
 	m_config->setString("instance[1].set[4][@list]", "a,b,c");
+	m_config->setString("instance[1].set[5][@name]", "map");
+	m_config->setString("instance[1].set[5].pair[1][@key]",  "a");
+	m_config->setString("instance[1].set[5].pair[1][@text]", "1");
+	m_config->setString("instance[1].set[5].pair[2][@key]",  "b");
+	m_config->setString("instance[1].set[5].pair[2][@text]", "2");
+	m_config->setString("instance[1].set[5].pair[3][@key]",  "c");
+	m_config->setString("instance[1].set[5].pair[3][@text]", "3");
 	m_config->setString("instance[2][@name]", "variable");
 	m_config->setString("instance[2][@class]", "BeeeOn::FakeObject");
 	m_config->setString("instance[2].set[1][@name]", "name");
@@ -169,6 +183,9 @@ void DependencyInjectorTest::testSimple()
 	CPPUNIT_ASSERT_EQUAL("a", fake->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", fake->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", fake->m_list[2]);
+	CPPUNIT_ASSERT_EQUAL("1", fake->m_map["a"]);
+	CPPUNIT_ASSERT_EQUAL("2", fake->m_map["b"]);
+	CPPUNIT_ASSERT_EQUAL("3", fake->m_map["c"]);
 }
 
 /**

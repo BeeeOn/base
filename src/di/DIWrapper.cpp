@@ -64,6 +64,10 @@ DIWListSetter::~DIWListSetter()
 {
 }
 
+DIWMapSetter::~DIWMapSetter()
+{
+}
+
 DIWHook::~DIWHook()
 {
 }

@@ -58,6 +58,11 @@ public:
 			m_list.push_back(e);
 	}
 
+	void setMap(const map<string, string> &m)
+	{
+		m_map = m;
+	}
+
 	void call()
 	{
 		m_called = true;
@@ -68,6 +73,7 @@ public:
 	int m_offset = 0;
 	DITest *m_self = NULL;
 	vector<string> m_list;
+	map<string, string> m_map;
 	bool m_called = false;
 };
 
@@ -82,6 +88,7 @@ BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITest::setOffset)
 BEEEON_OBJECT_REF("self", &DITest::setSelf)
 BEEEON_OBJECT_LIST("list", &DITest::setList)
+BEEEON_OBJECT_MAP("map", &DITest::setMap)
 BEEEON_OBJECT_HOOK("call", &DITest::call)
 BEEEON_OBJECT_END(BeeeOn, DITest)
 
@@ -92,6 +99,7 @@ BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITestChild::setOffset)
 BEEEON_OBJECT_REF("self", &DITestChild::setSelf)
 BEEEON_OBJECT_LIST("list", &DITestChild::setList)
+BEEEON_OBJECT_MAP("map", &DITestChild::setMap)
 BEEEON_OBJECT_HOOK("call", &DITestChild::call)
 BEEEON_OBJECT_END(BeeeOn, DITestChild)
 
@@ -102,6 +110,7 @@ struct ProtectedAccess : DIWrapper {
 	using DIWrapper::injectNumber;
 	using DIWrapper::injectText;
 	using DIWrapper::injectList;
+	using DIWrapper::injectMap;
 	using DIWrapper::callHook;
 };
 
@@ -126,6 +135,8 @@ void DIWrapperTest::testCreate()
 	ACCESS_CALL(wrapper, injectNumber)("offset", 16);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
 	ACCESS_CALL(wrapper, injectList)("list", {"a", "b", "c"});
+	ACCESS_CALL(wrapper, injectMap)("map",
+			{{"a", "1"}, {"b", "2"}, {"c", "3"}});
 	ACCESS_CALL(wrapper, callHook)("call");
 
 	CPPUNIT_ASSERT_EQUAL("TEST NAME", test->m_name);
@@ -135,6 +146,9 @@ void DIWrapperTest::testCreate()
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", test->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", test->m_list[2]);
+	CPPUNIT_ASSERT_EQUAL("1", test->m_map["a"]);
+	CPPUNIT_ASSERT_EQUAL("2", test->m_map["b"]);
+	CPPUNIT_ASSERT_EQUAL("3", test->m_map["c"]);
 	CPPUNIT_ASSERT(test->m_called);
 }
 
@@ -181,6 +195,8 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	ACCESS_CALL(*wrapper, injectNumber)("offset", 18);
 	ACCESS_CALL(*wrapper, injectRef)("self", *w);
 	ACCESS_CALL(*wrapper, injectList)("list", {"a", "b", "c"});
+	ACCESS_CALL(*wrapper, injectMap)("map",
+			{{"a", "1"}, {"b", "2"}, {"c", "3"}});
 	ACCESS_CALL(*wrapper, callHook)("call");
 
 	CPPUNIT_ASSERT_EQUAL("TEST NAME2", test->m_name);
@@ -190,6 +206,9 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", test->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", test->m_list[2]);
+	CPPUNIT_ASSERT_EQUAL("1", test->m_map["a"]);
+	CPPUNIT_ASSERT_EQUAL("2", test->m_map["b"]);
+	CPPUNIT_ASSERT_EQUAL("3", test->m_map["c"]);
 	CPPUNIT_ASSERT(test->m_called);
 
 	delete w;
@@ -213,6 +232,8 @@ void DIWrapperTest::testInheritanceOfTarget()
 	ACCESS_CALL(wrapper, injectNumber)("offset", 19);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
 	ACCESS_CALL(wrapper, injectList)("list", {"a", "b", "c"});
+	ACCESS_CALL(wrapper, injectMap)("map",
+			{{"a", "1"}, {"b", "2"}, {"c", "3"}});
 	ACCESS_CALL(wrapper, callHook)("call");
 
 	CPPUNIT_ASSERT_EQUAL("TEST NAME3", test->m_name);
@@ -222,6 +243,9 @@ void DIWrapperTest::testInheritanceOfTarget()
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", test->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", test->m_list[2]);
+	CPPUNIT_ASSERT_EQUAL("1", test->m_map["a"]);
+	CPPUNIT_ASSERT_EQUAL("2", test->m_map["b"]);
+	CPPUNIT_ASSERT_EQUAL("3", test->m_map["c"]);
 	CPPUNIT_ASSERT(test->m_called);
 }
 

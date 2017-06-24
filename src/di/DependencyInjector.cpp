@@ -298,6 +298,56 @@ bool DependencyInjector::tryInjectList(
 	return false;
 }
 
+bool DependencyInjector::tryInjectMap(
+		const InstanceInfo &info,
+		DIWrapper *target,
+		const string &key,
+		const string &name)
+{
+	if (!m_conf->has(key + ".pair") && !m_conf->has(key + ".pair[1]"))
+		return false;
+
+	AbstractConfiguration::Keys keys;
+	m_conf->keys(key, keys);
+
+	map<Var, Var> m;
+
+	for (auto &pair : keys) {
+		if (!m_conf->has(key + "." + pair + "[@key]")) {
+			logger().warning("missing attribute @key for "
+				+ key + "." + pair);
+			continue;
+		}
+
+		if (!m_conf->has(key + "." + pair + "[@text]")) {
+			logger().error("missing attribute @text for "
+				+ key + "." + pair);
+			return false;
+		}
+
+		const string &mapKey = m_conf->getString(
+				key + "." + pair + "[@key]");
+		const string &mapText = m_conf->getString(
+				key + "." + pair + "[@text]");
+
+		logger().debug("map pair " + mapKey + " -> " + mapText,
+			       __FILE__, __LINE__);
+
+		if (!m.emplace(mapKey, mapText).second) {
+			throw InvalidArgumentException(
+				"duplicate map key " + mapKey + " for " + key
+				+ " when injecting into " + info.name()
+			);
+		}
+	}
+
+	logger().debug("injecting map " + name + " into " + info.name(),
+			__FILE__, __LINE__);
+
+	target->injectMap(name, m);
+	return true;
+}
+
 void DependencyInjector::injectValue(
 		const InstanceInfo &info,
 		DIWrapper *target,
@@ -314,6 +364,9 @@ void DependencyInjector::injectValue(
 		return;
 
 	if (tryInjectList(info, target, key, name))
+		return;
+
+	if (tryInjectMap(info, target, key, name))
 		return;
 
 	logger().error("malformed configuration entry "

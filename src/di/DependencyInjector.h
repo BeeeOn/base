@@ -44,6 +44,14 @@ class InstanceInfo;
  *   + attribute number - value to add is an integer
  *   + attribute if-yes - optional condition to avoid applying the "add"
  *
+ * * map: constructs a map of key-value pairs
+ *   + attribute name   - name of the property to inject
+ *   + attribute if-yes - optional constructs to avoid applying the "map"
+ *
+ *   * subelement: pair
+ *     + attribute key  - key of the map pair
+ *     + attribute text - value of the pair as string
+ *
  * * alias: defines alias name of an existing instance
  *   + attribute name   - name of the alias (new instance name)
  *   + attribute ref    - name of an existing instance
@@ -65,6 +73,13 @@ class InstanceInfo;
  *		<add name="listeners"   ref="errorListener" />
  *		<set name="whitelist"   list="192.168.5.5,192.168.15.1" />
  *	</instance>
+ *
+ *      <instance name="nameMap" class="BeeeOn::NameMap">
+ *		<map name="mapping">
+ *			<pair key="first" text="The First One" />
+ *			<pair key="second" text="The Second One" />
+ *		</map>
+ *      </instance>
  *
  *	<instance name="userService" class="BeeeOn::UserService" />
  *	<instance name="loginListener" class="BeeeOn::LoginListener" />
@@ -144,6 +159,10 @@ private:
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectList(const InstanceInfo &info,
+			DIWrapper *target,
+			const std::string &key,
+			const std::string &name);
+	bool tryInjectMap(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
