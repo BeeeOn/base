@@ -16,6 +16,7 @@ class ClassInfoTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testName);
 	CPPUNIT_TEST(testNameWithInheritance);
 	CPPUNIT_TEST(testIs);
+	CPPUNIT_TEST(testByName);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -26,6 +27,7 @@ public:
 	void testName();
 	void testNameWithInheritance();
 	void testIs();
+	void testByName();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ClassInfoTest);
@@ -180,6 +182,24 @@ void ClassInfoTest::testIs()
 	CPPUNIT_ASSERT(ClassInfo::forClass<A>().is<A>());
 	CPPUNIT_ASSERT(!ClassInfo::forClass<A>().is<B>());
 	CPPUNIT_ASSERT(!ClassInfo::forClass<A>().is<C>());
+}
+
+}
+
+BEEEON_CLASS(BeeeOn::TestObject0)
+
+namespace BeeeOn {
+
+void ClassInfoTest::testByName()
+{
+	ClassInfo info = ClassInfo::byName("BeeeOn::TestObject0");
+	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject0", info.name());
+	CPPUNIT_ASSERT(type_index(typeid(TestObject0)) == info.index());
+
+	ClassInfo::registerClass<TestObject1>("xxx");
+	ClassInfo xxx = ClassInfo::byName("xxx");
+	CPPUNIT_ASSERT_EQUAL("BeeeOn::TestObject1", xxx.name());
+	CPPUNIT_ASSERT(type_index(typeid(TestObject1)) == xxx.index());
 }
 
 }

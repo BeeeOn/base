@@ -74,9 +74,40 @@ public:
 		return info.index() != m_index;
 	}
 
+	static ClassInfo byName(const std::string &name);
+
+	template <typename T>
+	static void registerClass(const std::string &name)
+	{
+		registerClassInfo(name, typeid(T));
+	}
+
+protected:
+	static void registerClassInfo(
+			const std::string &name,
+			const std::type_info &info);
+
 private:
 	std::type_index m_index;
 };
+
+#define BEEEON_CLASS_REGISTER(T, name, reg)     \
+class reg {                                     \
+public:                                         \
+	reg()                                   \
+	{                                       \
+		ClassInfo::                     \
+			registerClass<T>(name); \
+	}                                       \
+};                                              \
+static reg reg##Register;
+
+#define BEEEON_CLASS(T)                         \
+namespace BeeeOn {                              \
+namespace Reflex {                              \
+BEEEON_CLASS_REGISTER(T, #T, Class##__COUNTER__)\
+}                                               \
+}
 
 }
 
