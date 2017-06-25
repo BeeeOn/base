@@ -73,9 +73,9 @@ string ClassInfo::name() const
 	return t == std::string::npos? s : s.substr(0, t);
 }
 #else
-string ClassInfo::displayName() const
+string ClassInfo::name() const
 {
-	return name();
+	return id();
 }
 #endif
 
