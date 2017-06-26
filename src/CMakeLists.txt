@@ -27,7 +27,9 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/loop/StoppableLoop.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunner.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
+	${PROJECT_SOURCE_DIR}/model/GlobalID.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
+	${PROJECT_SOURCE_DIR}/model/SimpleID.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
