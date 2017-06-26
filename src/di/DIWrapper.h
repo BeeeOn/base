@@ -3,10 +3,10 @@
 
 #include <string>
 #include <typeinfo>
+#include <list>
 #include <map>
 
 #include <Poco/SharedPtr.h>
-#include <Poco/ClassLibrary.h>
 #include <Poco/Logger.h>
 
 #include "util/Loggable.h"
@@ -629,36 +629,19 @@ void AbstractDIWrapper<T>::hookHandler(
 	installMethod(name, new DIWHookHandler<T, B>(hook));
 }
 
-class ManifestSingleton {
-private:
-	ManifestSingleton() {}
+/**
+ * Factory to create DIWrapper instances. The class manages a global
+ * registry of DIWrapperFactory instances usually created via the
+ * BEEEON_OBJECT_IMPL macro.
+ */
+class DIWrapperFactory {
 public:
-	static ManifestSingleton *instance()
-	{
-		if (ManifestSingleton::singleton == NULL)
-			ManifestSingleton::singleton = new ManifestSingleton();
+	virtual DIWrapper *create() const = 0;
 
-		return ManifestSingleton::singleton;
-	}
-
-	static void destroy()
-	{
-		if (ManifestSingleton::singleton) {
-			delete ManifestSingleton::singleton;
-			ManifestSingleton::singleton = NULL;
-		}
-	}
-
-	static Poco::Manifest<DIWrapper> &manifest()
-	{
-		return ManifestSingleton::instance()->m_manifest;
-	}
-
-	static void reportInfo(Poco::Logger &logger);
-
-private:
-	Poco::Manifest<DIWrapper> m_manifest;
-	static ManifestSingleton *singleton;
+	static void registerFactory(
+		const std::string &name, DIWrapperFactory &factory);
+	static DIWrapperFactory &lookupFactory(const std::string &name);
+	static void listFactories(std::list<std::string> &names);
 };
 
 #define _BEEEON_VA_EXPAND(x) x
@@ -673,16 +656,20 @@ private:
 	_BEEEON_VA_SELECT_HELPER(name, _BEEEON_VA_COUNT(__VA_ARGS__), __VA_ARGS__)
 
 #define BEEEON_OBJECT_IMPL(name, type)                  \
-POCO_BEGIN_NAMED_MANIFEST(name, BeeeOn::DIWrapper)      \
-POCO_EXPORT_CLASS(type)                                 \
-POCO_END_MANIFEST                                       \
+class name##Factory : public BeeeOn::DIWrapperFactory { \
+public:                                                 \
+	name##Factory()                                 \
+	{                                               \
+		BeeeOn::DIWrapperFactory                \
+			::registerFactory(#type, *this);\
+	}                                               \
                                                         \
-void name##_init() __attribute__((constructor));        \
-void name##_init()                                      \
-{                                                       \
-	POCO_JOIN(pocoBuildManifest, name)(             \
-		&BeeeOn::ManifestSingleton::manifest());\
-}
+	BeeeOn::DIWrapper *create() const override      \
+	{                                               \
+		return new type;                        \
+	}                                               \
+};                                                      \
+static name##Factory name##Factory;
 
 #define BEEEON_WRAPPER(cls, wrapper) \
 	struct wrapper final : public AbstractDIWrapper<cls> { \

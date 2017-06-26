@@ -192,13 +192,8 @@ DIWrapper *DependencyInjector::createNew(const InstanceInfo &info)
 
 	logger().debug("creating " + info.name() + " as " + cls);
 
-	Manifest<DIWrapper>::Iterator it =
-		ManifestSingleton::manifest().find(cls + "DIW");
-
-	if (it == ManifestSingleton::manifest().end())
-		throw NotFoundException("missing class " + cls);
-
-	return it->create();
+	DIWrapperFactory &factory = DIWrapperFactory::lookupFactory(cls + "DIW");
+	return factory.create();
 }
 
 bool DependencyInjector::tryInjectRef(

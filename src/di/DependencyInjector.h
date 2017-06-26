@@ -145,7 +145,6 @@ private:
 private:
 	WrapperMap m_set;
 	WrapperVector m_free;
-	Poco::Manifest<DIWrapper> m_manifest;
 	Poco::AutoPtr<Poco::Util::AbstractConfiguration> m_conf;
 };
 
