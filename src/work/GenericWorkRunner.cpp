@@ -4,8 +4,8 @@
 #include "di/Injectable.h"
 #include "work/GenericWorkRunner.h"
 #include "work/WorkAccess.h"
+#include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
-#include "work/WorkRepository.h"
 #include "work/WorkScheduler.h"
 #include "work/WorkSuspendThrowable.h"
 
@@ -54,7 +54,7 @@ void GenericWorkRunner::doFinish()
 
 	m_work->setState(Work::STATE_FINISHED, guard);
 	m_work->setFinished(Timestamp(), guard);
-	m_repository->store(m_work);
+	m_backup->store(m_work);
 }
 
 void GenericWorkRunner::doFailed()
@@ -68,7 +68,7 @@ void GenericWorkRunner::doFailed()
 
 	m_work->setState(Work::STATE_FAILED, guard);
 	m_work->setFinished(Timestamp(), guard);
-	m_repository->store(m_work);
+	m_backup->store(m_work);
 }
 
 void GenericWorkRunner::run()
@@ -98,7 +98,7 @@ void GenericWorkRunner::prepare()
 	WorkWriting guard(m_work, __FILE__, __LINE__);
 
 	m_work->setState(Work::STATE_EXECUTED, guard);
-	m_repository->store(m_work);
+	m_backup->store(m_work);
 }
 
 void GenericWorkRunner::execute()

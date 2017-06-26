@@ -3,7 +3,7 @@
 
 #include "work/BasicQueue.h"
 #include "work/WorkAccess.h"
-#include "work/WorkRepository.h"
+#include "work/WorkBackup.h"
 
 using namespace std;
 using namespace Poco;
