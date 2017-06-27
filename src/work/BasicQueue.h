@@ -80,16 +80,12 @@ public:
 	/**
 	 * Push the given work into the queue.
 	 * The BasicQueue::lock() must be held.
-	 *
-	 * It holds Work::executionLock().
 	 */
 	void pushUnlocked(Work::Ptr work, const WorkWriting &guard);
 
 	/**
 	 * Wakeup the given work if it is in the queue.
 	 * The BasicQueue::lock() must be held.
-	 *
-	 * It holds Work::executionLock().
 	 */
 	void wakeupUnlocked(Work::Ptr work, const WorkWriting &guard);
 

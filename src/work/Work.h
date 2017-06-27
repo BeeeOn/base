@@ -5,7 +5,6 @@
 #include <Poco/Timestamp.h>
 #include <Poco/Timespan.h>
 #include <Poco/Nullable.h>
-#include <Poco/Mutex.h>
 #include <Poco/RWLock.h>
 
 #include "model/Entity.h"
@@ -13,12 +12,10 @@
 
 namespace BeeeOn {
 
-class WorkExecuting;
 class WorkWriting;
 class WorkAccess;
 
 class Work : public Entity<GlobalID> {
-	friend WorkExecuting;
 	friend WorkWriting;
 	friend WorkAccess;
 public:
@@ -102,15 +99,6 @@ protected:
 		return m_accessLock;
 	}
 
-	/**
-	 * Execution lock prevents other threads to execute
-	 * the same Work instance simultaneously.
-	 */
-	Poco::Mutex &executionLock() const
-	{
-		return m_executionLock;
-	}
-
 private:
 	State m_state;
 	int m_priority;
@@ -118,7 +106,6 @@ private:
 	Poco::Timestamp m_created;
 	Poco::Timestamp m_suspended;
 	Poco::Timestamp m_finished;
-	mutable Poco::Mutex m_executionLock;
 	mutable Poco::RWLock m_accessLock;
 };
 

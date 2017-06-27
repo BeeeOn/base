@@ -6,33 +6,6 @@
 using namespace Poco;
 using namespace BeeeOn;
 
-WorkExecuting::WorkExecuting(const Work::Ptr work,
-		const char *file, int line):
-	m_work(work),
-	m_guard(work->executionLock())
-{
-	if (logger().debug()) {
-		logger().debug("begin work " + *m_work + " execution",
-				file, line);
-	}
-}
-
-void WorkExecuting::interrupt(const char *file, int line)
-{
-	if (logger().debug()) {
-		logger().debug("interrupt work " + *m_work + " execution",
-				file, line);
-	}
-
-	m_guard.unlock();
-}
-
-WorkExecuting::~WorkExecuting()
-{
-	if (logger().debug())
-		logger().debug("end work " + *m_work + " execution");
-}
-
 static const std::string &wrLabel(bool write)
 {
 	static const std::string writing("writing");
@@ -88,8 +61,7 @@ void WorkAccess::assureIs(const Work *work) const
 }
 
 WorkWriting::WorkWriting(const Work *work, const char *file, int line):
-	WorkAccess(work, true, file, line),
-	m_executionGuard(workNotNull(work)->executionLock())
+	WorkAccess(work, true, file, line)
 {
 	if (logger().debug()) {
 		logger().debug("work " + *m_work
@@ -99,8 +71,7 @@ WorkWriting::WorkWriting(const Work *work, const char *file, int line):
 }
 
 WorkWriting::WorkWriting(const Work::Ptr work, const char *file, int line):
-	WorkAccess(work, true, file, line),
-	m_executionGuard(workNotNull(work)->executionLock())
+	WorkAccess(work, true, file, line)
 {
 }
 

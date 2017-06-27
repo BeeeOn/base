@@ -16,7 +16,7 @@ public:
 protected:
 	virtual void prepare();
 	virtual void execute();
-	void doSuspend(WorkExecuting &guard);
+	void doSuspend();
 	void doFinish();
 	void doFailed();
 };

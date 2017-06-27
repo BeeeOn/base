@@ -6,19 +6,6 @@
 
 namespace BeeeOn {
 
-class WorkExecuting : Loggable {
-public:
-	WorkExecuting(const Work::Ptr work,
-			const char *file, int line);
-	~WorkExecuting();
-
-	void interrupt(const char *file, int line);
-
-private:
-	const Work::Ptr m_work;
-	Poco::ScopedLockWithUnlock<Poco::Mutex> m_guard;
-};
-
 class WorkAccess : protected Loggable {
 public:
 	void assureIs(const Work *work) const;
@@ -57,9 +44,6 @@ public:
 	WorkWriting(const Work::Ptr work, const char *file, int line);
 
 	~WorkWriting();
-
-private:
-	Poco::Mutex::ScopedLock m_executionGuard;
 };
 
 }

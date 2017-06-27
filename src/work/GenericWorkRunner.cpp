@@ -27,7 +27,7 @@ GenericWorkRunner::~GenericWorkRunner()
 {
 }
 
-void GenericWorkRunner::doSuspend(WorkExecuting &guard)
+void GenericWorkRunner::doSuspend()
 {
 	if (logger().debug()) {
 		logger().debug("work " + *m_work + " will be suspended",
@@ -36,12 +36,8 @@ void GenericWorkRunner::doSuspend(WorkExecuting &guard)
 
 	m_work->setSuspended(Timestamp());
 
-	// We do not set SCHEDULED because this will be done
-	// by schedule anyway. If somebody cancels the work
-	// before schedule() would lock the executionLock()
-	// then the work would be cancelled with suspended time
-	// set which is not a problem.
-	guard.interrupt(__FILE__, __LINE__);
+	// calling schedule while holding execution lock
+	// this should not be an issue
 	m_scheduler.schedule(m_work);
 }
 
@@ -105,7 +101,7 @@ void GenericWorkRunner::prepare()
 
 void GenericWorkRunner::execute()
 {
-	WorkExecuting guard(m_work, __FILE__, __LINE__);
+	WorkExecutionGuard guard(m_lockManager.execute(m_work->id()));
 
 	if (logger().debug())
 		logger().debug("executing work " + *m_work, __FILE__, __LINE__);
@@ -117,11 +113,11 @@ void GenericWorkRunner::execute()
 	}
 	catch (const WorkSuspendForEventThrowable &t) {
 		m_work->setNoSleepDuration();
-		doSuspend(guard);
+		doSuspend();
 	}
 	catch (const WorkSuspendThrowable &t) {
 		m_work->setSleepDuration(t.duration());
-		doSuspend(guard);
+		doSuspend();
 	}
 	catch (...) {
 		doFailed();
