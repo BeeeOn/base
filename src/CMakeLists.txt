@@ -77,6 +77,7 @@ file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/GenericWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/Work.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkBackup.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkContent.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkExecutor.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkFactory.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkLockManager.cpp
