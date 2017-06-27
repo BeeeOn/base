@@ -1,5 +1,6 @@
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <Poco/Exception.h>
 #include <Poco/Hash.h>
 
 #include "util/HashedLock.h"
@@ -37,12 +38,14 @@ class HashedLockTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(HashedLockTest);
 	CPPUNIT_TEST(testSingleLock);
 	CPPUNIT_TEST(testManyLocks);
+	CPPUNIT_TEST(testDelayedInit);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	typedef HashedLock<TestingLock, Poco::UInt32, Poco::Hash<Poco::UInt32>> LockManager;
 
 	void testSingleLock();
 	void testManyLocks();
+	void testDelayedInit();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(HashedLockTest);
@@ -114,6 +117,35 @@ void HashedLockTest::testManyLocks()
 	for (unsigned int i = 0; i < lock.size() * 32; ++i) {
 		lock.find(i).lock();
 	}
+}
+
+void HashedLockTest::testDelayedInit()
+{
+	LockManager lock;
+
+	CPPUNIT_ASSERT_THROW(
+		lock.find(0),
+		Poco::IllegalStateException
+	);
+
+	CPPUNIT_ASSERT_THROW(
+		lock.at(0),
+		Poco::IllegalStateException
+	);
+
+	CPPUNIT_ASSERT_EQUAL(0U, lock.size());
+
+	CPPUNIT_ASSERT_THROW(
+		lock.delayedInit(0),
+		Poco::InvalidArgumentException
+	);
+
+	CPPUNIT_ASSERT_NO_THROW(lock.delayedInit(10));
+
+	CPPUNIT_ASSERT_THROW(
+		lock.delayedInit(30),
+		Poco::InvalidAccessException
+	);
 }
 
 }

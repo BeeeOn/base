@@ -1,6 +1,7 @@
 #ifndef BEEEON_HASHED_LOCK_H
 #define BEEEON_HASHED_LOCK_H
 
+#include <Poco/Exception.h>
 #include <Poco/SharedPtr.h>
 
 #include <vector>
@@ -42,9 +43,22 @@ public:
 	typedef Poco::SharedPtr<HashedLock<Lock, ID, Hash>> Ptr;
 
 	/**
+	 * Create zero lock instances. It must be
+	 * allocated explicitly by calling delayedInit().
+	 */
+	HashedLock();
+
+	/**
 	 * Create count lock instances.
 	 */
 	HashedLock(unsigned int count);
+
+	/**
+	 * Initializes the internal locks. This call can be called
+	 * only once during its life time. Every other call would
+	 * end up with Poco::InvalidAccessException.
+	 */
+	void delayedInit(unsigned int count);
 
 	/**
 	 * Find a lock for a given instance (or its identifier).
@@ -62,9 +76,18 @@ public:
 	 */
 	unsigned int size() const;
 
+protected:
+	void assureInitialized();
+
 private:
 	std::vector<Lock> m_lock;
 };
+
+template <typename Lock, typename ID, typename Hash>
+HashedLock<Lock, ID, Hash>::HashedLock():
+	HashedLock<Lock, ID, Hash>(0)
+{
+}
 
 template <typename Lock, typename ID, typename Hash>
 HashedLock<Lock, ID, Hash>::HashedLock(unsigned int count):
@@ -73,8 +96,27 @@ HashedLock<Lock, ID, Hash>::HashedLock(unsigned int count):
 }
 
 template <typename Lock, typename ID, typename Hash>
+void HashedLock<Lock, ID, Hash>::delayedInit(unsigned int count)
+{
+	if (count == 0) {
+		throw Poco::InvalidArgumentException(
+			"HashedLock must be initialized by non-zero count of locks");
+	}
+
+	if (m_lock.empty()) {
+		m_lock = std::vector<Lock>(count);
+	}
+	else {
+		throw Poco::InvalidAccessException(
+			"delayedInit() can be called only once");
+	}
+}
+
+template <typename Lock, typename ID, typename Hash>
 Lock &HashedLock<Lock, ID, Hash>::find(const ID &id)
 {
+	assureInitialized();
+
 	Hash hash;
 	const unsigned int index = hash(id) % size();
 	return at(index);
@@ -83,6 +125,7 @@ Lock &HashedLock<Lock, ID, Hash>::find(const ID &id)
 template <typename Lock, typename ID, typename Hash>
 Lock &HashedLock<Lock, ID, Hash>::at(const unsigned int index)
 {
+	assureInitialized();
 	return m_lock[index];
 }
 
@@ -90,6 +133,15 @@ template <typename Lock, typename ID, typename Hash>
 unsigned int HashedLock<Lock, ID, Hash>::size() const
 {
 	return m_lock.size();
+}
+
+template <typename Lock, typename ID, typename Hash>
+void HashedLock<Lock, ID, Hash>::assureInitialized()
+{
+	if (m_lock.empty()) {
+		throw Poco::IllegalStateException(
+			"HashedLock has not been initialized yet");
+	}
 }
 
 }
