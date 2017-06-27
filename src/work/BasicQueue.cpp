@@ -2,7 +2,6 @@
 #include <Poco/Logger.h>
 
 #include "work/BasicQueue.h"
-#include "work/WorkAccess.h"
 #include "work/WorkBackup.h"
 
 using namespace std;
@@ -18,11 +17,11 @@ void BasicQueue::assertLocked()
 	throw IllegalStateException("lock is not held in the basic queue");
 }
 
-void BasicQueue::pushUnlocked(Work::Ptr work, const WorkWriting &guard)
+void BasicQueue::pushUnlocked(Work::Ptr work)
 {
 	assertLocked();
 
-	const Work::State state = work->state(guard);
+	const Work::State state = work->state();
 	if (state >= Work::STATE_FINISHED) {
 		if (logger().debug()) {
 			logger().debug("ignore finished work " + *work,
@@ -32,7 +31,7 @@ void BasicQueue::pushUnlocked(Work::Ptr work, const WorkWriting &guard)
 		return;
 	}
 
-	doPushUnfinishedUnlocked(work, guard);
+	doPushUnfinishedUnlocked(work);
 	m_wakeup.set();
 }
 
@@ -54,10 +53,10 @@ void BasicQueue::deactivate(Record &record)
 	record.ref = m_active.end();
 }
 
-void BasicQueue::doPushUnfinishedUnlocked(Work::Ptr work, const WorkWriting &guard)
+void BasicQueue::doPushUnfinishedUnlocked(Work::Ptr work)
 {
-	const Nullable<Timestamp> time = work->activationTime(guard);
-	const int priority = work->priority(guard);
+	const Nullable<Timestamp> time = work->activationTime();
+	const int priority = work->priority();
 	const WorkID id = work->id();
 
 	auto it = m_queue.find(id);
@@ -103,18 +102,18 @@ void BasicQueue::doPushUnfinishedUnlocked(Work::Ptr work, const WorkWriting &gua
 		m_queue.emplace(make_pair(id, record));
 	}
 
-	work->setState(Work::STATE_SCHEDULED, guard);
+	work->setState(Work::STATE_SCHEDULED);
 }
 
-void BasicQueue::wakeupUnlocked(Work::Ptr work, const WorkWriting &guard)
+void BasicQueue::wakeupUnlocked(Work::Ptr work)
 {
 	assertLocked();
 
 	if (m_queue.find(work->id()) == m_queue.end())
 		return; // no such work, no reason to wake up
 
-	work->setSleepDuration(0, guard); // execute early
-	pushUnlocked(work, guard);
+	work->setSleepDuration(0); // execute early
+	pushUnlocked(work);
 
 	m_wakeup.set();
 }

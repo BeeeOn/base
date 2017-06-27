@@ -6,6 +6,8 @@
 
 namespace BeeeOn {
 
+class WorkWriteGuard;
+
 class GenericWorkRunner : public WorkRunner, Loggable {
 public:
 	GenericWorkRunner(WorkScheduler &scheduler, WorkLockManager &lockManager);
@@ -16,7 +18,7 @@ public:
 protected:
 	virtual void prepare();
 	virtual void execute();
-	void doSuspend();
+	void doSuspend(WorkWriteGuard &guard);
 	void doFinish();
 	void doFailed();
 };

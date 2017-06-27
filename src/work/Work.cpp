@@ -81,9 +81,9 @@ void Work::setSleepDuration(const Timespan &duration)
 void Work::setSleepDuration(const Nullable<Timespan> &duration)
 {
 	if (duration.isNull())
-		setNoSleepDuration(guard);
+		setNoSleepDuration();
 	else
-		setSleepDuration(duration.value(), guard);
+		setSleepDuration(duration.value());
 }
 
 Nullable<Timespan> Work::sleepDuration() const

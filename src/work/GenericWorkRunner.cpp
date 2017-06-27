@@ -3,7 +3,6 @@
 
 #include "di/Injectable.h"
 #include "work/GenericWorkRunner.h"
-#include "work/WorkAccess.h"
 #include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
 #include "work/WorkLockManager.h"
@@ -27,7 +26,7 @@ GenericWorkRunner::~GenericWorkRunner()
 {
 }
 
-void GenericWorkRunner::doSuspend()
+void GenericWorkRunner::doSuspend(WorkWriteGuard &guard)
 {
 	if (logger().debug()) {
 		logger().debug("work " + *m_work + " will be suspended",
@@ -36,8 +35,10 @@ void GenericWorkRunner::doSuspend()
 
 	m_work->setSuspended(Timestamp());
 
-	// calling schedule while holding execution lock
-	// this should not be an issue
+	// Calling schedule while holding execution lock
+	// this should not be an issue.
+	// However, holding of access lock would cause a deadlock.
+	guard.unlock();
 	m_scheduler.schedule(m_work);
 }
 
@@ -48,10 +49,8 @@ void GenericWorkRunner::doFinish()
 				__FILE__, __LINE__);
 	}
 
-	WorkWriting guard(m_work, __FILE__, __LINE__);
-
-	m_work->setState(Work::STATE_FINISHED, guard);
-	m_work->setFinished(Timestamp(), guard);
+	m_work->setState(Work::STATE_FINISHED);
+	m_work->setFinished(Timestamp());
 	m_backup->store(m_work);
 }
 
@@ -62,10 +61,8 @@ void GenericWorkRunner::doFailed()
 				__FILE__, __LINE__);
 	}
 
-	WorkWriting guard(m_work, __FILE__, __LINE__);
-
-	m_work->setState(Work::STATE_FAILED, guard);
-	m_work->setFinished(Timestamp(), guard);
+	m_work->setState(Work::STATE_FAILED);
+	m_work->setFinished(Timestamp());
 	m_backup->store(m_work);
 }
 
@@ -93,15 +90,14 @@ void GenericWorkRunner::run()
 
 void GenericWorkRunner::prepare()
 {
-	WorkWriting guard(m_work, __FILE__, __LINE__);
-
-	m_work->setState(Work::STATE_EXECUTED, guard);
+	m_work->setState(Work::STATE_EXECUTED);
 	m_backup->store(m_work);
 }
 
 void GenericWorkRunner::execute()
 {
 	WorkExecutionGuard guard(m_lockManager.execute(m_work->id()));
+	WorkWriteGuard accessGuard(m_lockManager.readWrite(m_work->id()));
 
 	if (logger().debug())
 		logger().debug("executing work " + *m_work, __FILE__, __LINE__);
@@ -113,11 +109,11 @@ void GenericWorkRunner::execute()
 	}
 	catch (const WorkSuspendForEventThrowable &t) {
 		m_work->setNoSleepDuration();
-		doSuspend();
+		doSuspend(accessGuard);
 	}
 	catch (const WorkSuspendThrowable &t) {
 		m_work->setSleepDuration(t.duration());
-		doSuspend();
+		doSuspend(accessGuard);
 	}
 	catch (...) {
 		doFailed();

@@ -81,13 +81,13 @@ public:
 	 * Push the given work into the queue.
 	 * The BasicQueue::lock() must be held.
 	 */
-	void pushUnlocked(Work::Ptr work, const WorkWriting &guard);
+	void pushUnlocked(Work::Ptr work);
 
 	/**
 	 * Wakeup the given work if it is in the queue.
 	 * The BasicQueue::lock() must be held.
 	 */
-	void wakeupUnlocked(Work::Ptr work, const WorkWriting &guard);
+	void wakeupUnlocked(Work::Ptr work);
 
 	/**
 	 * Cancel the given work if it is in the queue.
@@ -120,7 +120,7 @@ protected:
 	 * If the given work is in STATE_EXECUTED, the Work::executionLock()
 	 * must be held to prevent race conditions.
 	 */
-	void doPushUnfinishedUnlocked(Work::Ptr work, const WorkWriting &guard);
+	void doPushUnfinishedUnlocked(Work::Ptr work);
 
 	/**
 	 * Pop the head of the queue if the Work is to be executed.

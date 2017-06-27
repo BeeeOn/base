@@ -4,7 +4,6 @@
 
 #include "di/Injectable.h"
 #include "work/BasicProcessor.h"
-#include "work/WorkAccess.h"
 #include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
 #include "work/WorkLockManager.h"
@@ -120,8 +119,8 @@ void BasicProcessor::initQueue()
 		else if (work->state() >= Work::STATE_FINISHED)
 			continue;
 
-		WorkWriting accessGuard(work, __FILE__, __LINE__);
-		m_queue.pushUnlocked(work, accessGuard);
+		WorkWriteGuard guard(m_lockManager->readWrite(work->id()));
+		m_queue.pushUnlocked(work);
 	}
 }
 
@@ -290,9 +289,9 @@ void BasicProcessor::schedule(Work::Ptr work)
 	}
 
 	FastMutex::ScopedLock guard(m_queue.lock());
-	WorkWriting accessGuard(work, __FILE__, __LINE__);
+	WorkWriteGuard workGuard(m_lockManager->readWrite(work->id()));
 
-	m_queue.pushUnlocked(work, accessGuard);
+	m_queue.pushUnlocked(work);
 	m_backup->store(work);
 
 	wakeUpSelf();
@@ -306,9 +305,9 @@ void BasicProcessor::wakeup(Work::Ptr work)
 	}
 
 	FastMutex::ScopedLock guard(m_queue.lock());
-	WorkWriting accessGuard(work, __FILE__, __LINE__);
+	WorkWriteGuard workGuard(m_lockManager->readWrite(work->id()));
 
-	m_queue.wakeupUnlocked(work, accessGuard);
+	m_queue.wakeupUnlocked(work);
 	m_backup->store(work);
 
 	wakeUpSelf();
@@ -324,10 +323,10 @@ void BasicProcessor::cancel(Work::Ptr work)
 	FastMutex::ScopedLock guard(m_queue.lock());
 
 	// lock the work to cancel it safely
-	WorkWriting accessGuard(work, __FILE__, __LINE__);
+	WorkWriteGuard workGuard(m_lockManager->readWrite(work->id()));
 
 	m_queue.cancelUnlocked(work);
-	work->setState(Work::STATE_CANCELED, accessGuard);
+	work->setState(Work::STATE_CANCELED);
 	m_backup->store(work);
 
 	wakeUpSelf();

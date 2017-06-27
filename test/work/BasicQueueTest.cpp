@@ -8,7 +8,6 @@
 #include "cppunit/BetterAssert.h"
 #include "work/BasicQueue.h"
 #include "work/Work.h"
-#include "work/WorkAccess.h"
 
 using namespace Poco;
 
@@ -72,13 +71,10 @@ void BasicQueueTest::testSimpleSchedule()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting work0Guard(work0, __FILE__, __LINE__);
-		WorkWriting work1Guard(work1, __FILE__, __LINE__);
-		WorkWriting work2Guard(work2, __FILE__, __LINE__);
 
-		queue.pushUnlocked(work0, work0Guard);
-		queue.pushUnlocked(work1, work1Guard);
-		queue.pushUnlocked(work2, work2Guard);
+		queue.pushUnlocked(work0);
+		queue.pushUnlocked(work1);
+		queue.pushUnlocked(work2);
 	} while (0);
 
 	// remove and test order
@@ -135,15 +131,11 @@ void BasicQueueTest::testPrioritySchedule()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting work0Guard(work0, __FILE__, __LINE__);
-		WorkWriting work1Guard(work1, __FILE__, __LINE__);
-		WorkWriting work2Guard(work2, __FILE__, __LINE__);
-		WorkWriting work3Guard(work3, __FILE__, __LINE__);
 
-		queue.pushUnlocked(work0, work0Guard);
-		queue.pushUnlocked(work1, work1Guard);
-		queue.pushUnlocked(work2, work2Guard);
-		queue.pushUnlocked(work3, work3Guard);
+		queue.pushUnlocked(work0);
+		queue.pushUnlocked(work1);
+		queue.pushUnlocked(work2);
+		queue.pushUnlocked(work3);
 	} while (0);
 
 	// remove and test order
@@ -181,13 +173,10 @@ void BasicQueueTest::testScheduleWithSuspend()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting work0Guard(work0, __FILE__, __LINE__);
-		WorkWriting work1Guard(work1, __FILE__, __LINE__);
-		WorkWriting work2Guard(work2, __FILE__, __LINE__);
 
-		queue.pushUnlocked(work0, work0Guard);
-		queue.pushUnlocked(work1, work1Guard);
-		queue.pushUnlocked(work2, work2Guard);
+		queue.pushUnlocked(work0);
+		queue.pushUnlocked(work1);
+		queue.pushUnlocked(work2);
 	} while (0);
 
 	// remove and test order
@@ -213,9 +202,7 @@ void BasicQueueTest::testScheduleIsNotDone()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting workGuard(work, __FILE__, __LINE__);
-
-		queue.pushUnlocked(work, workGuard);
+		queue.pushUnlocked(work);
 	} while (0);
 
 	CPPUNIT_ASSERT(queue.pop(false).isNull());
@@ -224,9 +211,7 @@ void BasicQueueTest::testScheduleIsNotDone()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting workGuard(work, __FILE__, __LINE__);
-
-		queue.pushUnlocked(work, workGuard);
+		queue.pushUnlocked(work);
 	} while (0);
 
 	CPPUNIT_ASSERT(queue.pop(false).isNull());
@@ -252,13 +237,10 @@ void BasicQueueTest::testCancelOutOfOrder()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting work0Guard(work0, __FILE__, __LINE__);
-		WorkWriting work1Guard(work1, __FILE__, __LINE__);
-		WorkWriting work2Guard(work2, __FILE__, __LINE__);
 
-		queue.pushUnlocked(work0, work0Guard);
-		queue.pushUnlocked(work1, work1Guard);
-		queue.pushUnlocked(work2, work2Guard);
+		queue.pushUnlocked(work0);
+		queue.pushUnlocked(work1);
+		queue.pushUnlocked(work2);
 	} while (0);
 
 	do {
@@ -304,8 +286,7 @@ void BasicQueueTest::testCurrentlyNothing()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting workGuard(work, __FILE__, __LINE__);
-		queue.pushUnlocked(work, workGuard);
+		queue.pushUnlocked(work);
 	} while (0);
 
 	CPPUNIT_ASSERT(queue.pop(false).isNull());
@@ -328,8 +309,7 @@ void BasicQueueTest::testSimpleBlocking()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting workGuard(work, __FILE__, __LINE__);
-		queue.pushUnlocked(work, workGuard);
+		queue.pushUnlocked(work);
 	} while (0);
 
 	CPPUNIT_ASSERT(Timestamp() - now < 100000);
@@ -379,8 +359,7 @@ public:
 	{
 		do {
 			FastMutex::ScopedLock guard(m_queue.lock());
-			WorkWriting workGuard(m_work, __FILE__, __LINE__);
-			m_queue.pushUnlocked(m_work, workGuard);
+			m_queue.pushUnlocked(m_work);
 		} while (0);
 	}
 };
@@ -429,8 +408,7 @@ void BasicQueueTest::testBlockingWithAsyncSchedules()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting work0Guard(work0, __FILE__, __LINE__);
-		queue.pushUnlocked(work0, work0Guard);
+		queue.pushUnlocked(work0);
 	} while (0);
 
 	CPPUNIT_ASSERT(Timestamp() - now < 40000);
@@ -459,8 +437,7 @@ public:
 	{
 		do {
 			FastMutex::ScopedLock guard(m_queue.lock());
-			WorkWriting workGuard(m_work, __FILE__, __LINE__);
-			m_queue.wakeupUnlocked(m_work, workGuard);
+			m_queue.wakeupUnlocked(m_work);
 		} while (0);
 	}
 };
@@ -487,8 +464,7 @@ void BasicQueueTest::testBlockingWithWakeup()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting workGuard(work, __FILE__, __LINE__);
-		queue.pushUnlocked(work, workGuard);
+		queue.pushUnlocked(work);
 	} while (0);
 
 	wakeupWork.start(deferAfter30);
@@ -534,13 +510,10 @@ void BasicQueueTest::testWakeupWaiting()
 
 	do {
 		FastMutex::ScopedLock guard(queue.lock());
-		WorkWriting work0Guard(work0, __FILE__, __LINE__);
-		WorkWriting work1Guard(work1, __FILE__, __LINE__);
-		WorkWriting work2Guard(work2, __FILE__, __LINE__);
 
-		queue.pushUnlocked(work0, work0Guard);
-		queue.pushUnlocked(work1, work1Guard);
-		queue.pushUnlocked(work2, work2Guard);
+		queue.pushUnlocked(work0);
+		queue.pushUnlocked(work1);
+		queue.pushUnlocked(work2);
 	} while (0);
 
 	wakeupWork0.start(deferAfter30);
@@ -567,8 +540,7 @@ void BasicQueueTest::testWakeupNonexisting()
 	Work::Ptr work(new Work);
 
 	FastMutex::ScopedLock guard(queue.lock());
-	WorkWriting workGuard(work, __FILE__, __LINE__);
-	queue.wakeupUnlocked(work, workGuard);
+	queue.wakeupUnlocked(work);
 }
 
 
