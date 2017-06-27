@@ -306,8 +306,9 @@ void BasicProcessor::wakeup(Work::Ptr work)
 	}
 
 	FastMutex::ScopedLock guard(m_queue.lock());
+	WorkWriting accessGuard(work, __FILE__, __LINE__);
 
-	m_queue.wakeupUnlocked(work);
+	m_queue.wakeupUnlocked(work, accessGuard);
 	m_backup->store(work);
 
 	wakeUpSelf();

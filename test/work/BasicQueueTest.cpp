@@ -509,7 +509,8 @@ public:
 	{
 		do {
 			FastMutex::ScopedLock guard(m_queue.lock());
-			m_queue.wakeupUnlocked(m_work);
+			WorkWriting workGuard(m_work, __FILE__, __LINE__);
+			m_queue.wakeupUnlocked(m_work, workGuard);
 		} while (0);
 	}
 };
@@ -616,7 +617,8 @@ void BasicQueueTest::testWakeupNonexisting()
 	Work::Ptr work(new Work);
 
 	FastMutex::ScopedLock guard(queue.lock());
-	queue.wakeupUnlocked(work);
+	WorkWriting workGuard(work, __FILE__, __LINE__);
+	queue.wakeupUnlocked(work, workGuard);
 }
 
 

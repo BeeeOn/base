@@ -106,17 +106,15 @@ void BasicQueue::doPushUnfinishedUnlocked(Work::Ptr work, const WorkWriting &gua
 	work->setState(Work::STATE_SCHEDULED, guard);
 }
 
-void BasicQueue::wakeupUnlocked(Work::Ptr work)
+void BasicQueue::wakeupUnlocked(Work::Ptr work, const WorkWriting &guard)
 {
 	assertLocked();
 
 	if (m_queue.find(work->id()) == m_queue.end())
 		return; // no such work, no reason to wake up
 
-	WorkWriting accessGuard(work, __FILE__, __LINE__);
-
-	work->setSleepDuration(0, accessGuard); // execute early
-	pushUnlocked(work, accessGuard);
+	work->setSleepDuration(0, guard); // execute early
+	pushUnlocked(work, guard);
 
 	m_wakeup.set();
 }
