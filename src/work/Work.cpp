@@ -6,6 +6,7 @@
 #include "work/Work.h"
 
 using namespace Poco;
+using namespace Poco::JSON;
 using namespace BeeeOn;
 
 Work::Work():
@@ -119,4 +120,19 @@ void Work::setFinished(const Timestamp &finished)
 Timestamp Work::finished() const
 {
 	return m_finished;
+}
+
+void Work::setContent(const WorkContent &content)
+{
+	m_content = content;
+}
+
+WorkContent &Work::content()
+{
+	return m_content;
+}
+
+WorkContent Work::content() const
+{
+	return m_content;
 }
