@@ -18,14 +18,7 @@ void BasicQueue::assertLocked()
 	throw IllegalStateException("lock is not held in the basic queue");
 }
 
-void BasicQueue::pushUnlocked(Work::Ptr work)
-{
-	doPushUnlocked(work, WorkWriting(work, __FILE__, __LINE__));
-
-	m_wakeup.set();
-}
-
-void BasicQueue::doPushUnlocked(Work::Ptr work, const WorkWriting &guard)
+void BasicQueue::pushUnlocked(Work::Ptr work, const WorkWriting &guard)
 {
 	assertLocked();
 
@@ -40,6 +33,7 @@ void BasicQueue::doPushUnlocked(Work::Ptr work, const WorkWriting &guard)
 	}
 
 	doPushUnfinishedUnlocked(work, guard);
+	m_wakeup.set();
 }
 
 void BasicQueue::activate(const Key &key, Record &record)
@@ -122,7 +116,7 @@ void BasicQueue::wakeupUnlocked(Work::Ptr work)
 	WorkWriting accessGuard(work, __FILE__, __LINE__);
 
 	work->setSleepDuration(0, accessGuard); // execute early
-	doPushUnlocked(work, accessGuard);
+	pushUnlocked(work, accessGuard);
 
 	m_wakeup.set();
 }

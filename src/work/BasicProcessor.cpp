@@ -120,7 +120,8 @@ void BasicProcessor::initQueue()
 		else if (work->state() >= Work::STATE_FINISHED)
 			continue;
 
-		m_queue.pushUnlocked(work);
+		WorkWriting accessGuard(work, __FILE__, __LINE__);
+		m_queue.pushUnlocked(work, accessGuard);
 	}
 }
 
@@ -289,8 +290,9 @@ void BasicProcessor::schedule(Work::Ptr work)
 	}
 
 	FastMutex::ScopedLock guard(m_queue.lock());
+	WorkWriting accessGuard(work, __FILE__, __LINE__);
 
-	m_queue.pushUnlocked(work);
+	m_queue.pushUnlocked(work, accessGuard);
 	m_backup->store(work);
 
 	wakeUpSelf();
