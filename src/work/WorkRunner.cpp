@@ -4,14 +4,16 @@
 #include "work/WorkRunner.h"
 #include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
+#include "work/WorkLockManager.h"
 
 using namespace Poco;
 using namespace BeeeOn;
 
-WorkRunner::WorkRunner(WorkScheduler &scheduler):
+WorkRunner::WorkRunner(WorkScheduler &scheduler, WorkLockManager &lockManager):
 	m_scheduler(scheduler),
 	m_executor(&NullWorkExecutor::instance()),
-	m_backup(&EmptyWorkBackup::instance())
+	m_backup(&EmptyWorkBackup::instance()),
+	m_lockManager(lockManager)
 {
 }
 
@@ -41,6 +43,11 @@ void WorkRunner::destroySelf()
 
 WorkRunnerFactory::~WorkRunnerFactory()
 {
+}
+
+void WorkRunnerFactory::setLockManager(WorkLockManager *manager)
+{
+	m_lockManager = manager;
 }
 
 WorkRunner *NullWorkRunnerFactory::create(WorkScheduler &)

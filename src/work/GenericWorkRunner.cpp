@@ -6,18 +6,20 @@
 #include "work/WorkAccess.h"
 #include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
+#include "work/WorkLockManager.h"
 #include "work/WorkScheduler.h"
 #include "work/WorkSuspendThrowable.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, GenericWorkRunnerFactory)
 BEEEON_OBJECT_CASTABLE(WorkRunnerFactory)
+BEEEON_OBJECT_REF("lockManager", &WorkRunnerFactory::setLockManager)
 BEEEON_OBJECT_END(BeeeOn, GenericWorkRunnerFactory)
 
 using namespace Poco;
 using namespace BeeeOn;
 
-GenericWorkRunner::GenericWorkRunner(WorkScheduler &scheduler):
-	WorkRunner(scheduler)
+GenericWorkRunner::GenericWorkRunner(WorkScheduler &scheduler, WorkLockManager &lockManager):
+	WorkRunner(scheduler, lockManager)
 {
 }
 
@@ -130,5 +132,5 @@ void GenericWorkRunner::execute()
 WorkRunner *GenericWorkRunnerFactory::create(
 		WorkScheduler &scheduler)
 {
-	return new GenericWorkRunner(scheduler);
+	return new GenericWorkRunner(scheduler, *m_lockManager);
 }

@@ -7,6 +7,7 @@
 #include "work/WorkAccess.h"
 #include "work/WorkBackup.h"
 #include "work/WorkExecutor.h"
+#include "work/WorkLockManager.h"
 #include "work/WorkRunner.h"
 #include "work/WorkScheduler.h"
 
@@ -15,6 +16,7 @@ BEEEON_OBJECT_CASTABLE(WorkScheduler)
 BEEEON_OBJECT_CASTABLE(StoppableRunnable)
 BEEEON_OBJECT_REF("backup", &BasicProcessor::setBackup)
 BEEEON_OBJECT_REF("runnerFactory", &BasicProcessor::setRunnerFactory)
+BEEEON_OBJECT_REF("lockManager", &BasicProcessor::setLockManager)
 BEEEON_OBJECT_REF("executors", &BasicProcessor::registerExecutor)
 BEEEON_OBJECT_NUMBER("minThreads", &BasicProcessor::setMinThreads)
 BEEEON_OBJECT_NUMBER("maxThreads", &BasicProcessor::setMaxThreads)
@@ -45,6 +47,11 @@ void BasicProcessor::setBackup(WorkBackup *backup)
 void BasicProcessor::setRunnerFactory(WorkRunnerFactory *factory)
 {
 	m_runnerFactory = factory? factory : &NullWorkRunnerFactory::instance();
+}
+
+void BasicProcessor::setLockManager(WorkLockManager *manager)
+{
+	m_lockManager = manager;
 }
 
 void BasicProcessor::setMinThreads(int min)

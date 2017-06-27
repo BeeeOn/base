@@ -18,6 +18,7 @@ namespace BeeeOn {
 
 class WorkBackup;
 class WorkExecutor;
+class WorkLockManager;
 class WorkRunner;
 class WorkRunnerFactory;
 
@@ -30,6 +31,7 @@ public:
 
 	void setBackup(WorkBackup *repository);
 	void setRunnerFactory(WorkRunnerFactory *factory);
+	void setLockManager(WorkLockManager *manager);
 
 	void setMinThreads(int min);
 	void setMaxThreads(int max);
@@ -60,6 +62,7 @@ protected:
 private:
 	WorkBackup *m_backup;
 	WorkRunnerFactory *m_runnerFactory;
+	WorkLockManager *m_lockManager;
 	std::list<WorkExecutor *> m_executors;
 	Poco::AtomicCounter m_shouldStop;
 	Poco::Thread *m_current;

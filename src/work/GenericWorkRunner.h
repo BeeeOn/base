@@ -8,7 +8,7 @@ namespace BeeeOn {
 
 class GenericWorkRunner : public WorkRunner, Loggable {
 public:
-	GenericWorkRunner(WorkScheduler &scheduler);
+	GenericWorkRunner(WorkScheduler &scheduler, WorkLockManager &lockManager);
 	~GenericWorkRunner();
 
 	void run() override;

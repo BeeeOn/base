@@ -6,6 +6,7 @@
 #include "work/GenericWorkRunner.h"
 #include "work/WorkExecutor.h"
 #include "work/WorkBackup.h"
+#include "work/WorkLockManager.h"
 #include "work/WorkScheduler.h"
 #include "work/WorkSuspendThrowable.h"
 
@@ -139,7 +140,8 @@ public:
 void GenericWorkRunnerTest::testSuspendExecution()
 {
 	TestWorkScheduler scheduler;
-	GenericWorkRunner *runner(new GenericWorkRunner(scheduler));
+	WorkLockManager manager(1, 1);
+	GenericWorkRunner *runner(new GenericWorkRunner(scheduler, manager));
 
 	TestWorkBackup backup;
 	SuspendingWorkExecutor executor;
@@ -173,7 +175,8 @@ void GenericWorkRunnerTest::testSuspendExecution()
 void GenericWorkRunnerTest::testEventSuspendExecution()
 {
 	TestWorkScheduler scheduler;
-	GenericWorkRunner *runner(new GenericWorkRunner(scheduler));
+	WorkLockManager manager(1, 1);
+	GenericWorkRunner *runner(new GenericWorkRunner(scheduler, manager));
 
 	TestWorkBackup backup;
 	EventSuspendingWorkExecutor executor;
@@ -207,7 +210,8 @@ void GenericWorkRunnerTest::testEventSuspendExecution()
 void GenericWorkRunnerTest::testFinishExecution()
 {
 	TestWorkScheduler scheduler;
-	GenericWorkRunner *runner(new GenericWorkRunner(scheduler));
+	WorkLockManager manager(1, 1);
+	GenericWorkRunner *runner(new GenericWorkRunner(scheduler, manager));
 
 	TestWorkBackup backup;
 	FinishingWorkExecutor executor;
@@ -241,7 +245,8 @@ void GenericWorkRunnerTest::testFinishExecution()
 void GenericWorkRunnerTest::testFailedExecution()
 {
 	TestWorkScheduler scheduler;
-	GenericWorkRunner *runner(new GenericWorkRunner(scheduler));
+	WorkLockManager manager(1, 1);
+	GenericWorkRunner *runner(new GenericWorkRunner(scheduler, manager));
 
 	TestWorkBackup backup;
 	FailingWorkExecutor executor;
@@ -283,9 +288,9 @@ public:
 
 class ConcurrentExecutor : public WorkExecutor, public Poco::Runnable {
 public:
-	ConcurrentExecutor(WorkScheduler &scheduler):
+	ConcurrentExecutor(WorkScheduler &scheduler, WorkLockManager &lockManager):
 		m_success(false),
-		m_runner(new GenericWorkRunner(scheduler))
+		m_runner(new GenericWorkRunner(scheduler, lockManager))
 	{
 	}
 
@@ -319,11 +324,12 @@ public:
 
 void GenericWorkRunnerTest::testConcurrentExecution()
 {
+	WorkLockManager lockManager(15, 15);
 	Work::Ptr work(new ConcurrentWork);
 
 	TestWorkScheduler scheduler0;
 	TestWorkBackup repository0;
-	ConcurrentExecutor executor0(scheduler0);
+	ConcurrentExecutor executor0(scheduler0, lockManager);
 	executor0.m_runner->setWork(work);
 	executor0.m_runner->setExecutor(&executor0);
 	executor0.m_runner->setBackup(&repository0);
@@ -331,7 +337,7 @@ void GenericWorkRunnerTest::testConcurrentExecution()
 
 	TestWorkScheduler scheduler1;
 	TestWorkBackup repository1;
-	ConcurrentExecutor executor1(scheduler1);
+	ConcurrentExecutor executor1(scheduler1, lockManager);
 	executor1.m_runner->setWork(work);
 	executor1.m_runner->setExecutor(&executor1);
 	executor1.m_runner->setBackup(&repository1);
@@ -339,7 +345,7 @@ void GenericWorkRunnerTest::testConcurrentExecution()
 
 	TestWorkScheduler scheduler2;
 	TestWorkBackup repository2;
-	ConcurrentExecutor executor2(scheduler2);
+	ConcurrentExecutor executor2(scheduler2, lockManager);
 	executor2.m_runner->setWork(work);
 	executor2.m_runner->setExecutor(&executor2);
 	executor2.m_runner->setBackup(&repository2);
