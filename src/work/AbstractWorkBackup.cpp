@@ -1,23 +1,23 @@
 #include <Poco/Exception.h>
 
-#include "work/AbstractWorkRepository.h"
+#include "work/AbstractWorkBackup.h"
 #include "work/WorkFactory.h"
 #include "Debug.h"
 
 using namespace Poco;
 using namespace BeeeOn;
 
-AbstractWorkRepository::AbstractWorkRepository()
+AbstractWorkBackup::AbstractWorkBackup()
 {
 }
 
-void AbstractWorkRepository::store(Work::Ptr work, bool transaction)
+void AbstractWorkBackup::store(Work::Ptr work, bool transaction)
 {
 	const std::string type = WorkFactory::identify(typeid(*work));
 	doStore(work, type, transaction);
 }
 
-void AbstractWorkRepository::registerFactory(WorkFactory *factory)
+void AbstractWorkBackup::registerFactory(WorkFactory *factory)
 {
 	if (m_registry.find(factory->id()) == m_registry.end()) {
 		m_registry[factory->id()] = factory;
@@ -28,7 +28,7 @@ void AbstractWorkRepository::registerFactory(WorkFactory *factory)
 	}
 }
 
-Work *AbstractWorkRepository::create(
+Work *AbstractWorkBackup::create(
 		const std::string &type,
 		const WorkID &id)
 {

@@ -1,5 +1,5 @@
-#ifndef BEEEON_WORK_REPOSITORY_H
-#define BEEEON_WORK_REPOSITORY_H
+#ifndef BEEEON_WORK_BACKUP_H
+#define BEEEON_WORK_BACKUP_H
 
 #include <vector>
 
@@ -7,9 +7,9 @@
 
 namespace BeeeOn {
 
-class WorkRepository {
+class WorkBackup {
 public:
-	virtual ~WorkRepository();
+	virtual ~WorkBackup();
 
 	/**
 	 * Store work persistently. It solves transactions automatically
@@ -23,12 +23,12 @@ public:
 	virtual void loadScheduled(std::vector<Work::Ptr> &all) = 0;
 };
 
-class EmptyWorkRepository : public WorkRepository {
+class EmptyWorkBackup : public WorkBackup {
 public:
 	void store(Work::Ptr work, bool transaction = false) override;
 	void loadScheduled(std::vector<Work::Ptr> &all) override;
 
-	static WorkRepository &instance();
+	static WorkBackup &instance();
 };
 
 }

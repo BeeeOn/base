@@ -4,15 +4,15 @@
 #include <map>
 #include <typeinfo>
 
-#include "work/WorkRepository.h"
+#include "work/WorkBackup.h"
 
 namespace BeeeOn {
 
 class WorkFactory;
 
-class AbstractWorkRepository : public WorkRepository {
+class AbstractWorkBackup : public WorkBackup {
 public:
-	AbstractWorkRepository();
+	AbstractWorkBackup();
 
 	void store(Work::Ptr work, bool transaction = false) override;
 
