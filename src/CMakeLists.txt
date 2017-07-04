@@ -36,6 +36,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRange.cpp
+	${PROJECT_SOURCE_DIR}/net/MACAddress.cpp
 	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
