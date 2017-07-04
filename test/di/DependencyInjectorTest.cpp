@@ -137,7 +137,7 @@ void DependencyInjectorTest::setUp()
 	m_config->setString("instance[2].set[1][@name]", "name");
 	m_config->setString("instance[2].set[1][@text]", "${FakeText}");
 	m_config->setString("instance[2].set[2][@name]", "index");
-	m_config->setString("instance[2].set[2][@number]", "${FakeNumber}");
+	m_config->setString("instance[2].set[2][@number]", "${FakeNumber} + 6");
 	m_config->setString("instance[2].set[3][@name]", "other");
 	m_config->setString("instance[2].set[3][@text]", "${NotExisting}");
 	m_config->setString("instance[3][@name]", "earlyInit0");
@@ -248,7 +248,7 @@ void DependencyInjectorTest::testExternalVariables()
 	CPPUNIT_ASSERT(!fake.isNull());
 	CPPUNIT_ASSERT(fake->m_name.compare("any string") == 0);
 	CPPUNIT_ASSERT(fake->m_other.compare("${NotExisting}") == 0);
-	CPPUNIT_ASSERT(fake->m_index == 42);
+	CPPUNIT_ASSERT(fake->m_index == (42 + 6));
 }
 
 /**

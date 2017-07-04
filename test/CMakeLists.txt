@@ -25,6 +25,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/io/ConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/io/TCPConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunnerTest.cpp
+	${PROJECT_SOURCE_DIR}/math/SimpleCalcTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
