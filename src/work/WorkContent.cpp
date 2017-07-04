@@ -7,7 +7,8 @@ using namespace Poco;
 using namespace Poco::JSON;
 using namespace BeeeOn;
 
-WorkContent::WorkContent()
+WorkContent::WorkContent():
+	m_json(new Object)
 {
 }
 
