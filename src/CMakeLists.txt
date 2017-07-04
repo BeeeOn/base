@@ -74,10 +74,13 @@ file(GLOB WORK_SOURCES
 	${PROJECT_SOURCE_DIR}/work/AbstractWorkBackup.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
 	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
+	${PROJECT_SOURCE_DIR}/work/DefaultWorkFacade.cpp
 	${PROJECT_SOURCE_DIR}/work/GenericWorkRunner.cpp
 	${PROJECT_SOURCE_DIR}/work/Work.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkBackup.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkContent.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkExecutor.cpp
+	${PROJECT_SOURCE_DIR}/work/WorkFacade.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkFactory.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkLockManager.cpp
 	${PROJECT_SOURCE_DIR}/work/WorkRunner.cpp

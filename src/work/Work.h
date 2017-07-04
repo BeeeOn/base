@@ -8,6 +8,7 @@
 
 #include "model/Entity.h"
 #include "model/GlobalID.h"
+#include "work/WorkContent.h"
 
 namespace BeeeOn {
 
@@ -61,6 +62,16 @@ public:
 	void setFinished(const Poco::Timestamp &finished);
 	Poco::Timestamp finished() const;
 
+	void setContent(const WorkContent &content);
+	WorkContent &content();
+	WorkContent content() const;
+
+	template <typename T>
+	T contentAs() const
+	{
+		return T(m_content);
+	}
+
 	static bool timestampValid(const Poco::Timestamp &tstamp)
 	{
 		return tstamp.epochMicroseconds() != 0;
@@ -76,6 +87,7 @@ private:
 	Poco::Timestamp m_created;
 	Poco::Timestamp m_suspended;
 	Poco::Timestamp m_finished;
+	WorkContent m_content;
 };
 
 typedef Work::ID WorkID;
