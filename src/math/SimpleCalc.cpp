@@ -83,6 +83,8 @@ double SimpleCalc::parseTerm(
 				state = S_DIGIT;
 			else if (c == '.')
 				state = S_FLOAT;
+			else if (c == '-')
+				continue;
 			else
 				throw SyntaxException("unexpected character " + to_string(c) + " for <term>");
 
