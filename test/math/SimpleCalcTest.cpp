@@ -18,6 +18,7 @@ class SimpleCalcTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testEndingWhitespace);
 	CPPUNIT_TEST(testLongExpression);
 	CPPUNIT_TEST(testMissingTerm);
+	CPPUNIT_TEST(testDoubleSign);
 	CPPUNIT_TEST(testGarbage);
 	CPPUNIT_TEST_SUITE_END();
 public:
@@ -27,6 +28,7 @@ public:
 	void testEndingWhitespace();
 	void testLongExpression();
 	void testMissingTerm();
+	void testDoubleSign();
 	void testGarbage();
 };
 
@@ -51,6 +53,8 @@ void SimpleCalcTest::testConstant()
 	CPPUNIT_ASSERT_EQUAL(12.3456789, calc.evaluate("12.34567890"));
 	CPPUNIT_ASSERT_EQUAL(1.23456789, calc.evaluate("1.234567890"));
 	CPPUNIT_ASSERT_EQUAL(.123456789, calc.evaluate(".1234567890"));
+	CPPUNIT_ASSERT_EQUAL(0.0, calc.evaluate("-0"));
+	CPPUNIT_ASSERT_EQUAL(-1.0, calc.evaluate("-1"));
 }
 
 void SimpleCalcTest::testTermOpTerm()
@@ -70,10 +74,30 @@ void SimpleCalcTest::testTermOpTerm()
 	CPPUNIT_ASSERT_EQUAL(1.0, calc.evaluate("1 * 1"));
 	CPPUNIT_ASSERT_EQUAL(1.0, calc.evaluate("1 / 1"));
 
+	CPPUNIT_ASSERT_EQUAL(0.0, calc.evaluate("-1 + 1"));
+	CPPUNIT_ASSERT_EQUAL(-2.0, calc.evaluate("-1 - 1"));
+	CPPUNIT_ASSERT_EQUAL(-1.0, calc.evaluate("-1 * 1"));
+	CPPUNIT_ASSERT_EQUAL(-1.0, calc.evaluate("-1 / 1"));
+
+	CPPUNIT_ASSERT_EQUAL(0.0, calc.evaluate("1 + -1"));
+	CPPUNIT_ASSERT_EQUAL(2.0, calc.evaluate("1 - -1"));
+	CPPUNIT_ASSERT_EQUAL(-1.0, calc.evaluate("1 * -1"));
+	CPPUNIT_ASSERT_EQUAL(-1.0, calc.evaluate("1 / -1"));
+
 	CPPUNIT_ASSERT_EQUAL(2.5, calc.evaluate("1.5 + 1"));
 	CPPUNIT_ASSERT_EQUAL(0.5, calc.evaluate("1.5 - 1"));
 	CPPUNIT_ASSERT_EQUAL(1.5, calc.evaluate("1.5 * 1"));
 	CPPUNIT_ASSERT_EQUAL(1.5, calc.evaluate("1.5 / 1"));
+
+	CPPUNIT_ASSERT_EQUAL(-0.5, calc.evaluate("-1.5 + 1"));
+	CPPUNIT_ASSERT_EQUAL(-2.5, calc.evaluate("-1.5 - 1"));
+	CPPUNIT_ASSERT_EQUAL(-1.5, calc.evaluate("-1.5 * 1"));
+	CPPUNIT_ASSERT_EQUAL(-1.5, calc.evaluate("-1.5 / 1"));
+
+	CPPUNIT_ASSERT_EQUAL(0.5, calc.evaluate("1.5 + -1"));
+	CPPUNIT_ASSERT_EQUAL(2.5, calc.evaluate("1.5 - -1"));
+	CPPUNIT_ASSERT_EQUAL(-1.5, calc.evaluate("1.5 * -1"));
+	CPPUNIT_ASSERT_EQUAL(-1.5, calc.evaluate("1.5 / -1"));
 }
 
 void SimpleCalcTest::testLeadingWhitespace()
@@ -141,6 +165,26 @@ void SimpleCalcTest::testMissingTerm()
 	);
 }
 
+void SimpleCalcTest::testDoubleSign()
+{
+	SimpleCalc calc;
+
+	CPPUNIT_ASSERT_THROW(
+		calc.evaluate("--"),
+		SyntaxException
+	);
+
+	CPPUNIT_ASSERT_THROW(
+		calc.evaluate("--1"),
+		SyntaxException
+	);
+
+	CPPUNIT_ASSERT_THROW(
+		calc.evaluate("5 + --1"),
+		SyntaxException
+	);
+}
+
 void SimpleCalcTest::testGarbage()
 {
 	SimpleCalc calc;
@@ -167,11 +211,6 @@ void SimpleCalcTest::testGarbage()
 
 	CPPUNIT_ASSERT_THROW(
 		calc.evaluate("/0"),
-		SyntaxException
-	);
-
-	CPPUNIT_ASSERT_THROW(
-		calc.evaluate("-0"),
 		SyntaxException
 	);
 
