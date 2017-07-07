@@ -86,7 +86,7 @@ double SimpleCalc::parseTerm(
 			else if (c == '-')
 				continue;
 			else
-				throw SyntaxException("unexpected character " + to_string(c) + " for <term>");
+				throw SyntaxException("unexpected character " + string(1, c) + " for <term>");
 
 			break;
 		case S_ZERO:
@@ -153,7 +153,7 @@ char SimpleCalc::parseOpOrEOF(
 		return op;
 	}
 
-	throw SyntaxException("unexpected character: " + to_string(op) + " for <op>");
+	throw SyntaxException("unexpected character: " + string(1, op) + " for <op>");
 }
 
 void SimpleCalc::apply(double &result, char op, double tmp) const
