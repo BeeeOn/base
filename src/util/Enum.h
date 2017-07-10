@@ -91,6 +91,11 @@ public:
 	typedef typename EnumHelper<Raw>::ValueMap ValueMap;
 	typedef typename EnumHelper<Raw>::Value Value;
 
+	Enum(const Raw &raw):
+		Enum(fromRaw(raw).m_value)
+	{
+	}
+
 private:
 	Enum(const Value &value):
 		m_value(value)
@@ -190,9 +195,19 @@ public:
 		return m_value == other.m_value;
 	}
 
+	bool operator ==(const Enum::Raw &other) const
+	{
+		return m_value->first == other;
+	}
+
 	bool operator !=(const Enum &other) const
 	{
 		return m_value != other.m_value;
+	}
+
+	bool operator !=(const Enum::Raw &other) const
+	{
+		return m_value->first != other;
 	}
 
 	bool operator <(const Enum &other) const
@@ -200,9 +215,19 @@ public:
 		return m_value->first < other.m_value->first;
 	}
 
+	bool operator <(const Enum::Raw &other) const
+	{
+		return m_value->first < other;
+	}
+
 	bool operator >(const Enum &other) const
 	{
 		return m_value->first > other.m_value->first;
+	}
+
+	bool operator >(const Enum::Raw &other) const
+	{
+		return m_value->first > other;
 	}
 
 	bool operator <=(const Enum &other) const
@@ -210,9 +235,19 @@ public:
 		return m_value->first <= other.m_value->first;
 	}
 
+	bool operator <=(const Enum::Raw &other) const
+	{
+		return m_value->first <= other;
+	}
+
 	bool operator >=(const Enum &other) const
 	{
 		return m_value->first >= other.m_value->first;
+	}
+
+	bool operator >=(const Enum::Raw &other) const
+	{
+		return m_value->first >= other;
 	}
 
 private:

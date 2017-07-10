@@ -15,6 +15,7 @@ class EnumTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCompare);
 	CPPUNIT_TEST(testStringConcat);
 	CPPUNIT_TEST(testRandom);
+	CPPUNIT_TEST(testImplicitConstructor);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -22,6 +23,7 @@ public:
 	void testCompare();
 	void testStringConcat();
 	void testRandom();
+	void testImplicitConstructor();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EnumTest);
@@ -123,6 +125,15 @@ void EnumTest::testRandom()
 {
 	for (int i = 0; i < 1000; ++i)
 		TestType::random();
+}
+
+void EnumTest::testImplicitConstructor()
+{
+	TestType type0(TestType::TEST_X2);
+	CPPUNIT_ASSERT_EQUAL("x2", type0.toString());
+
+	TestType type1 = TestType::TEST_X0;
+	CPPUNIT_ASSERT_EQUAL("x0", type1.toString());
 }
 
 }
