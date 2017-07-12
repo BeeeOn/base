@@ -79,8 +79,8 @@ template <typename T>
 const Poco::SharedPtr<T> InfoProvider<T>::findByName(const std::string &name) const
 {
 	for (auto info : infoSet()) {
-		if (info.name() == name)
-			return *info;
+		if (info->name() == name)
+			return info;
 	}
 
 	return NULL;
