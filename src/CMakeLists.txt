@@ -18,6 +18,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DIDaemon.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
 	${PROJECT_SOURCE_DIR}/di/DIXmlLoader.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWMessageType.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoClose.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStream.cpp
