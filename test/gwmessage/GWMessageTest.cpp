@@ -7,6 +7,9 @@
 #include "gwmessage/GWMessage.h"
 #include "gwmessage/GWGatewayRegister.h"
 #include "gwmessage/GWGatewayAccepted.h"
+#include "gwmessage/GWRequest.h"
+#include "gwmessage/GWResponse.h"
+#include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
 using namespace std;
@@ -24,6 +27,7 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateGatewayRegister);
 	CPPUNIT_TEST(testParseGatewayAccepted);
 	CPPUNIT_TEST(testCreateGatewayAccepted);
+	CPPUNIT_TEST(testDeriveResponse);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -33,6 +37,8 @@ public:
 	void testCreateGatewayRegister();
 	void testParseGatewayAccepted();
 	void testCreateGatewayAccepted();
+	void testDeriveResponse();
+
 protected:
 	string jsonReformat(const string &json);
 };
@@ -126,6 +132,54 @@ void GWMessageTest::testCreateGatewayAccepted()
 		})"),
 		message->toString()
 	);
+}
+
+class TestingResponse : public GWResponse {
+public:
+	typedef SharedPtr<TestingResponse> Ptr;
+
+	void setText(const string &text)
+	{
+		json()->set("text", text);
+	}
+
+	string text() const
+	{
+		return json()->getValue<string>("text");
+	}
+};
+
+class TestingRequest : public GWRequest {
+public:
+	TestingRequest():
+		GWRequest(GWMessageType::GATEWAY_REGISTER)
+	{
+	}
+
+	GWResponse::Ptr deriveResponse() const override
+	{
+		return deriveGenericResponse(new TestingResponse);
+	}
+};
+
+void GWMessageTest::testDeriveResponse()
+{
+	TestingRequest request;
+	request.setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+
+	GWResponse::Ptr resp1 = request.derive();
+	CPPUNIT_ASSERT(GWMessageType::GENERIC_RESPONSE == resp1->type());
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", resp1->id().toString());
+
+	TestingResponse::Ptr resp2 = request.derive<TestingResponse>(
+		[](TestingResponse::Ptr r) {
+			r->setText("test text");
+		}
+	);
+
+	CPPUNIT_ASSERT(GWMessageType::GENERIC_RESPONSE == resp1->type());
+	CPPUNIT_ASSERT_EQUAL("test text", resp2->text());
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", resp2->id().toString());
 }
 
 }
