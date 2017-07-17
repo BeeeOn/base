@@ -5,6 +5,7 @@ using namespace BeeeOn;
 EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 {
 	static EnumHelper<GWMessageTypeEnum::Raw>::ValueMap valueMap = {
+		{DEVICE_ACCEPT_REQUEST, "device_accept_request"},
 		{DEVICE_LIST_REQUEST, "device_list_request"},
 		{DEVICE_LIST_RESPONSE, "device_list_response"},
 		{GATEWAY_REGISTER, "gateway_register"},

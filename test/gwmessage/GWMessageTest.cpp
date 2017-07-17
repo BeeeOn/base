@@ -24,6 +24,7 @@
 #include "gwmessage/GWPingRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
 #include "gwmessage/GWSetValueRequest.h"
+#include "gwmessage/GWDeviceAcceptRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -63,6 +64,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateUnpair);
 	CPPUNIT_TEST(testParseSetValue);
 	CPPUNIT_TEST(testCreateSetValue);
+	CPPUNIT_TEST(testParseDeviceAccept);
+	CPPUNIT_TEST(testCreateDeviceAccept);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -93,6 +96,8 @@ public:
 	void testCreateUnpair();
 	void testParseSetValue();
 	void testCreateSetValue();
+	void testParseDeviceAccept();
+	void testCreateDeviceAccept();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -811,6 +816,39 @@ void GWMessageTest::testCreateSetValue()
 
 	GWSetValueRequest::Ptr request2(new GWSetValueRequest);
 	CPPUNIT_ASSERT_THROW(request2->setValue(NAN), InvalidArgumentException);
+}
+
+void GWMessageTest::testParseDeviceAccept()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "device_accept_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::DEVICE_ACCEPT_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWDeviceAcceptRequest>().isNull());
+
+	GWDeviceAcceptRequest::Ptr request = message.cast<GWDeviceAcceptRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+}
+
+void GWMessageTest::testCreateDeviceAccept()
+{
+	GWDeviceAcceptRequest::Ptr request(new GWDeviceAcceptRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "device_accept_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
+		})"),
+		request->toString()
+	);
 }
 
 }
