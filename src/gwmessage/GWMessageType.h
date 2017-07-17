@@ -21,6 +21,7 @@ struct GWMessageTypeEnum {
 		RESPONSE_WITH_ACK,
 		SENSOR_DATA_CONFIRM,
 		SENSOR_DATA_EXPORT,
+		UNPAIR_REQUEST,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

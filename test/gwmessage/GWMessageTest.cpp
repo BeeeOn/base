@@ -22,6 +22,7 @@
 #include "gwmessage/GWDeviceListRequest.h"
 #include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWPingRequest.h"
+#include "gwmessage/GWUnpairRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -57,6 +58,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateListen);
 	CPPUNIT_TEST(testParsePing);
 	CPPUNIT_TEST(testCreatePing);
+	CPPUNIT_TEST(testParseUnpair);
+	CPPUNIT_TEST(testCreateUnpair);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -83,6 +86,8 @@ public:
 	void testCreateListen();
 	void testParsePing();
 	void testCreatePing();
+	void testParseUnpair();
+	void testCreateUnpair();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -717,6 +722,39 @@ void GWMessageTest::testCreatePing()
 		jsonReformat(R"({
 			"message_type": "ping_request",
 			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseUnpair()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "unpair_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::UNPAIR_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWUnpairRequest>().isNull());
+
+	GWUnpairRequest::Ptr request = message.cast<GWUnpairRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+}
+
+void GWMessageTest::testCreateUnpair()
+{
+	GWUnpairRequest::Ptr request(new GWUnpairRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "unpair_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
 		})"),
 		request->toString()
 	);
