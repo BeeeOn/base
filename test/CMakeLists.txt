@@ -23,6 +23,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIDaemonTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapperTest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWMessageTest.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoCloseTest.cpp
 	${PROJECT_SOURCE_DIR}/io/ConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStreamTest.cpp
