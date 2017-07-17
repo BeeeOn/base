@@ -9,6 +9,7 @@ struct GWMessageTypeEnum {
 	enum Raw {
 		GATEWAY_REGISTER,
 		GATEWAY_ACCEPTED,
+		GENERIC_RESPONSE,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

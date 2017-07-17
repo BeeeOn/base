@@ -22,6 +22,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWGatewayRegister.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessage.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessageType.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoClose.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStream.cpp
