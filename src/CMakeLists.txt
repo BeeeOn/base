@@ -18,6 +18,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DIDaemon.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
 	${PROJECT_SOURCE_DIR}/di/DIXmlLoader.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWAck.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWGatewayAccepted.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWGatewayRegister.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessage.cpp

@@ -10,6 +10,7 @@ struct GWMessageTypeEnum {
 		GATEWAY_REGISTER,
 		GATEWAY_ACCEPTED,
 		GENERIC_RESPONSE,
+		GENERIC_ACK,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();
