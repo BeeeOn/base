@@ -9,6 +9,7 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{GATEWAY_ACCEPTED, "gateway_accepted"},
 		{GENERIC_RESPONSE, "generic_response"},
 		{GENERIC_ACK, "generic_ack"},
+		{NEW_DEVICE_REQUEST, "new_device_request"},
 		{RESPONSE_WITH_ACK, "response_with_ack"},
 		{SENSOR_DATA_CONFIRM, "sensor_data_confirm"},
 		{SENSOR_DATA_EXPORT, "sensor_data_export"},

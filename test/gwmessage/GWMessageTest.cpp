@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <Poco/Exception.h>
@@ -13,6 +15,7 @@
 #include "gwmessage/GWResponseWithAck.h"
 #include "gwmessage/GWSensorDataConfirm.h"
 #include "gwmessage/GWSensorDataExport.h"
+#include "gwmessage/GWNewDeviceRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -38,6 +41,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseSensorDataExport);
 	CPPUNIT_TEST(testCreateSensorDataExport);
 	CPPUNIT_TEST(testGetConfirmFromSensorDataExport);
+	CPPUNIT_TEST(testParseNewDevice);
+	CPPUNIT_TEST(testCreateNewDevice);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -54,7 +59,8 @@ public:
 	void testParseSensorDataExport();
 	void testCreateSensorDataExport();
 	void testGetConfirmFromSensorDataExport();
-
+	void testParseNewDevice();
+	void testCreateNewDevice();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -380,6 +386,109 @@ void GWMessageTest::testGetConfirmFromSensorDataExport()
 	CPPUNIT_ASSERT(!confirm.isNull());
 	CPPUNIT_ASSERT_EQUAL(GWMessageType::SENSOR_DATA_CONFIRM, confirm->type().raw());
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", confirm->id().toString());
+}
+
+void GWMessageTest::testParseNewDevice()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "new_device_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"vendor" : "Good Company",
+			"product_name" : "Nice Product",
+			"refresh_time" : 30,
+			"module_types" : [
+				{
+					"type" : "humidity",
+					"attributes" : [
+						{"attribute" : "inner"}
+					]
+				},
+				{
+					"type" : "pressure",
+					"attributes" : [
+						{"attribute" : "outer"},
+						{"attribute" : "manual-only"}
+					]
+				}
+			]
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::NEW_DEVICE_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWNewDeviceRequest>().isNull());
+
+	GWNewDeviceRequest::Ptr request = message.cast<GWNewDeviceRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL("Good Company", request->vendor());
+	CPPUNIT_ASSERT_EQUAL("Nice Product", request->productName());
+	CPPUNIT_ASSERT(Timespan(30, 0) == request->refreshTime());
+
+	const list<ModuleType> &types = request->moduleTypes();
+
+	CPPUNIT_ASSERT_EQUAL("humidity", types.begin()->type().toString());
+	CPPUNIT_ASSERT_EQUAL("inner", types.begin()->attributes().begin()->toString());
+	CPPUNIT_ASSERT_EQUAL("pressure", types.rbegin()->type().toString());
+
+	const set<ModuleType::Attribute> &attributes = types.rbegin()->attributes();
+	CPPUNIT_ASSERT(attributes.size() == 2);
+	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::TYPE_OUTER) != attributes.end());
+	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::TYPE_MANUAL_ONLY) != attributes.end());
+}
+
+void GWMessageTest::testCreateNewDevice()
+{
+	GWNewDeviceRequest::Ptr request(new GWNewDeviceRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+	request->setVendor("Good Company");
+	request->setProductName("Nice Product");
+	request->setRefreshTime(Timespan(30, 0));
+
+	set<ModuleType::Attribute> attributes1;
+	attributes1.emplace(ModuleType::Attribute::TYPE_INNER);
+	ModuleType type1(ModuleType::Type::fromRaw(
+		ModuleType::Type::TYPE_HUMIDITY), attributes1);
+
+	set<ModuleType::Attribute> attributes2;
+	attributes2.emplace(ModuleType::Attribute::TYPE_MANUAL_ONLY);
+	attributes2.emplace(ModuleType::Attribute::TYPE_OUTER);
+	ModuleType type2(ModuleType::Type::fromRaw(
+		ModuleType::Type::TYPE_PRESSURE), attributes2);
+
+	list<ModuleType> types;
+	types.push_back(type1);
+	types.push_back(type2);
+
+	request->setModuleTypes(types);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "new_device_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"vendor" : "Good Company",
+			"product_name" : "Nice Product",
+			"refresh_time" : 30,
+			"module_types" : [
+				{
+					"type" : "humidity",
+					"attributes" : [
+						{"attribute" : "inner"}
+					]
+				},
+				{
+					"type" : "pressure",
+					"attributes" : [
+						{"attribute" : "manual-only"},
+						{"attribute" : "outer"}
+					]
+				}
+			]
+		})"),
+		request->toString()
+	);
 }
 
 }
