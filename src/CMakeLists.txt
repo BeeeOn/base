@@ -35,6 +35,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/GlobalID.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleID.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
+	${PROJECT_SOURCE_DIR}/model/SensorValue.cpp
 	${PROJECT_SOURCE_DIR}/model/SimpleID.cpp
 	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp
