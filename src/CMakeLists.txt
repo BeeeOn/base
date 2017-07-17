@@ -35,6 +35,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataConfirm.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataExport.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWSetValueRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWUnpairRequest.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoClose.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp

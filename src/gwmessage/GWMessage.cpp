@@ -13,6 +13,7 @@
 #include "gwmessage/GWResponseWithAck.h"
 #include "gwmessage/GWSensorDataConfirm.h"
 #include "gwmessage/GWSensorDataExport.h"
+#include "gwmessage/GWSetValueRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
 #include "util/JsonUtil.h"
 
@@ -87,6 +88,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWSensorDataConfirm(object);
 	case GWMessageType::SENSOR_DATA_EXPORT:
 		return new GWSensorDataExport(object);
+	case GWMessageType::SET_VALUE_REQUEST:
+		return new GWSetValueRequest(object);
 	case GWMessageType::UNPAIR_REQUEST:
 		return new GWUnpairRequest(object);
 	default:

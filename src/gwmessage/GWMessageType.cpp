@@ -19,6 +19,7 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{RESPONSE_WITH_ACK, "response_with_ack"},
 		{SENSOR_DATA_CONFIRM, "sensor_data_confirm"},
 		{SENSOR_DATA_EXPORT, "sensor_data_export"},
+		{SET_VALUE_REQUEST, "set_value_request"},
 		{UNPAIR_REQUEST, "unpair_request"},
 	};
 
