@@ -3,6 +3,7 @@
 #include "gwmessage/GWGatewayAccepted.h"
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWAck.h"
+#include "gwmessage/GWResponseWithAck.h"
 #include "util/JsonUtil.h"
 
 using namespace std;
@@ -56,6 +57,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWResponse(object);
 	case GWMessageType::GENERIC_ACK:
 		return new GWAck(object);
+	case GWMessageType::RESPONSE_WITH_ACK:
+		return new GWResponseWithAck(object);
 	default:
 		throw InvalidArgumentException(
 			"unsupported message type" + type.toString());

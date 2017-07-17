@@ -9,6 +9,7 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{GATEWAY_ACCEPTED, "gateway_accepted"},
 		{GENERIC_RESPONSE, "generic_response"},
 		{GENERIC_ACK, "generic_ack"},
+		{RESPONSE_WITH_ACK, "response_with_ack"},
 	};
 
 	return valueMap;

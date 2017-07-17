@@ -11,6 +11,7 @@ struct GWMessageTypeEnum {
 		GATEWAY_ACCEPTED,
 		GENERIC_RESPONSE,
 		GENERIC_ACK,
+		RESPONSE_WITH_ACK,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

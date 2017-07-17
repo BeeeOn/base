@@ -9,6 +9,8 @@
 #include "gwmessage/GWGatewayAccepted.h"
 #include "gwmessage/GWRequest.h"
 #include "gwmessage/GWResponse.h"
+#include "gwmessage/GWAck.h"
+#include "gwmessage/GWResponseWithAck.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -28,6 +30,7 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseGatewayAccepted);
 	CPPUNIT_TEST(testCreateGatewayAccepted);
 	CPPUNIT_TEST(testDeriveResponse);
+	CPPUNIT_TEST(testGetAckFromResponse);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -38,7 +41,7 @@ public:
 	void testParseGatewayAccepted();
 	void testCreateGatewayAccepted();
 	void testDeriveResponse();
-
+	void testGetAckFromResponse();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -180,6 +183,20 @@ void GWMessageTest::testDeriveResponse()
 	CPPUNIT_ASSERT(GWMessageType::GENERIC_RESPONSE == resp1->type());
 	CPPUNIT_ASSERT_EQUAL("test text", resp2->text());
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", resp2->id().toString());
+}
+
+void GWMessageTest::testGetAckFromResponse()
+{
+	GWResponseWithAck::Ptr resp(new GWResponseWithAck);
+	resp->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	resp->setStatus(GWResponse::SUCCESS);
+
+	GWAck::Ptr ack = resp->ack();
+
+	CPPUNIT_ASSERT(!ack.isNull());
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::GENERIC_ACK, ack->type().raw());
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", ack->id().toString());
+	CPPUNIT_ASSERT_EQUAL(GWResponse::SUCCESS, ack->status());
 }
 
 }
