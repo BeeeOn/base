@@ -664,7 +664,7 @@ template <typename T>
 void AbstractDIWrapper<T>::callHook(const std::string &name)
 {
 	auto entry = m_method.find(name);
-	if (entry != m_method.end()) {
+	if (entry == m_method.end()) {
 		if (logger().debug()) {
 			logger().debug("no such hook '"
 				+ name + "' defined for "
@@ -672,9 +672,11 @@ void AbstractDIWrapper<T>::callHook(const std::string &name)
 				__FILE__, __LINE__);
 		}
 
-		DIWHook &handler = dynamic_cast<DIWHook &>(*(entry->second));
-		handler.call(*this);
+		return;
 	}
+
+	DIWHook &handler = dynamic_cast<DIWHook &>(*(entry->second));
+	handler.call(*this);
 }
 
 template <typename T>
