@@ -29,6 +29,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWListenRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceRequest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWPingRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp

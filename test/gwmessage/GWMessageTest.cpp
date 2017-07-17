@@ -21,6 +21,7 @@
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWDeviceListRequest.h"
 #include "gwmessage/GWListenRequest.h"
+#include "gwmessage/GWPingRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -54,6 +55,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateDeviceList);
 	CPPUNIT_TEST(testParseListen);
 	CPPUNIT_TEST(testCreateListen);
+	CPPUNIT_TEST(testParsePing);
+	CPPUNIT_TEST(testCreatePing);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -78,6 +81,8 @@ public:
 	void testCreateDeviceList();
 	void testParseListen();
 	void testCreateListen();
+	void testParsePing();
+	void testCreatePing();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -683,6 +688,35 @@ void GWMessageTest::testCreateListen()
 			"message_type": "listen_request",
 			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
 			"duration": 60
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParsePing()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "ping_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::PING_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWPingRequest>().isNull());
+
+	GWPingRequest::Ptr request = message.cast<GWPingRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+}
+
+void GWMessageTest::testCreatePing()
+{
+	GWPingRequest::Ptr request(new GWPingRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "ping_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
 		})"),
 		request->toString()
 	);
