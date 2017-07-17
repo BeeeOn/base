@@ -8,6 +8,7 @@ namespace BeeeOn {
 struct GWMessageTypeEnum {
 	enum Raw {
 		GATEWAY_REGISTER,
+		GATEWAY_ACCEPTED,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

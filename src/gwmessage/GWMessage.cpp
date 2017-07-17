@@ -1,5 +1,6 @@
 #include "gwmessage/GWMessage.h"
 #include "gwmessage/GWGatewayRegister.h"
+#include "gwmessage/GWGatewayAccepted.h"
 #include "util/JsonUtil.h"
 
 using namespace std;
@@ -47,6 +48,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 	switch(type.raw()) {
 	case GWMessageType::GATEWAY_REGISTER:
 		return new GWGatewayRegister(object);
+	case GWMessageType::GATEWAY_ACCEPTED:
+		return new GWGatewayAccepted(object);
 	default:
 		throw InvalidArgumentException(
 			"unsupported message type" + type.toString());

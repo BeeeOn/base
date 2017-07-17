@@ -6,6 +6,7 @@
 #include "cppunit/BetterAssert.h"
 #include "gwmessage/GWMessage.h"
 #include "gwmessage/GWGatewayRegister.h"
+#include "gwmessage/GWGatewayAccepted.h"
 #include "util/JsonUtil.h"
 
 using namespace std;
@@ -21,6 +22,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseUnknownType);
 	CPPUNIT_TEST(testParseGatewayRegister);
 	CPPUNIT_TEST(testCreateGatewayRegister);
+	CPPUNIT_TEST(testParseGatewayAccepted);
+	CPPUNIT_TEST(testCreateGatewayAccepted);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -28,6 +31,8 @@ public:
 	void testParseUnknownType();
 	void testParseGatewayRegister();
 	void testCreateGatewayRegister();
+	void testParseGatewayAccepted();
+	void testCreateGatewayAccepted();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -95,6 +100,29 @@ void GWMessageTest::testCreateGatewayRegister()
 			"gateway_id" : "1863705252509532",
 			"version" : "v1.0",
 			"ip_address" : "192.168.1.1"
+		})"),
+		message->toString()
+	);
+}
+
+void GWMessageTest::testParseGatewayAccepted()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "gateway_accepted"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::GATEWAY_ACCEPTED, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWGatewayAccepted>().isNull());
+}
+
+void GWMessageTest::testCreateGatewayAccepted()
+{
+	GWGatewayAccepted::Ptr message(new GWGatewayAccepted);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "gateway_accepted"
 		})"),
 		message->toString()
 	);
