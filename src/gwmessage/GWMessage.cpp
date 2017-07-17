@@ -5,6 +5,7 @@
 #include "gwmessage/GWGatewayAccepted.h"
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWLastValueResponse.h"
+#include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWAck.h"
@@ -72,6 +73,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWLastValueRequest(object);
 	case GWMessageType::LAST_VALUE_RESPONSE:
 		return new GWLastValueResponse(object);
+	case GWMessageType::LISTEN_REQUEST:
+		return new GWListenRequest(object);
 	case GWMessageType::NEW_DEVICE_REQUEST:
 		return new GWNewDeviceRequest(object);
 	case GWMessageType::RESPONSE_WITH_ACK:

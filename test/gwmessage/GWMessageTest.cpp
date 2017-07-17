@@ -20,6 +20,7 @@
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWDeviceListRequest.h"
+#include "gwmessage/GWListenRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -51,6 +52,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateLastValue);
 	CPPUNIT_TEST(testParseDeviceList);
 	CPPUNIT_TEST(testCreateDeviceList);
+	CPPUNIT_TEST(testParseListen);
+	CPPUNIT_TEST(testCreateListen);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -73,6 +76,8 @@ public:
 	void testCreateLastValue();
 	void testParseDeviceList();
 	void testCreateDeviceList();
+	void testParseListen();
+	void testCreateListen();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -647,6 +652,37 @@ void GWMessageTest::testCreateDeviceList()
 			"message_type": "device_list_request",
 			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
 			"device_prefix": "Fitprotocol"
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseListen()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "listen_request",
+			"duration" : 30
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::LISTEN_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWListenRequest>().isNull());
+
+	GWListenRequest::Ptr request = message.cast<GWListenRequest>();
+	CPPUNIT_ASSERT(request->duration() == Timespan(30, 0));
+}
+
+void GWMessageTest::testCreateListen()
+{
+	GWListenRequest::Ptr request(new GWListenRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDuration(Timespan(60, 0));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "listen_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"duration": 60
 		})"),
 		request->toString()
 	);
