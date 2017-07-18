@@ -17,6 +17,7 @@
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWNewDeviceRequest.h"
 #include "gwmessage/GWLastValueResponse.h"
+#include "gwmessage/GWLastValueRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -515,6 +516,22 @@ void GWMessageTest::testParseLastValue()
 	CPPUNIT_ASSERT_EQUAL(GWResponse::Status::SUCCESS, resp->status());
 	CPPUNIT_ASSERT_EQUAL(78.5, resp->value());
 	CPPUNIT_ASSERT(resp->valid());
+
+	message = GWMessage::fromJSON(
+	R"({
+			"message_type": "last_value_request",
+			"id": "495b7a34-d2e7-4cc7-afcc-0690fa5f072a",
+			"device_id": "0xfe01020304050607",
+			"module_id": "0"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::LAST_VALUE_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWLastValueRequest>().isNull());
+
+	GWLastValueRequest::Ptr request = message.cast<GWLastValueRequest>();
+	CPPUNIT_ASSERT_EQUAL("495b7a34-d2e7-4cc7-afcc-0690fa5f072a", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL("0", request->moduleID().toString());
 }
 
 void GWMessageTest::testCreateLastValue()
@@ -534,6 +551,21 @@ void GWMessageTest::testCreateLastValue()
 			"valid": true
 		})"),
 		response->toString()
+	);
+
+	GWLastValueRequest::Ptr request(new GWLastValueRequest);
+	request->setID(GlobalID::parse("a08c356b-316d-4690-84d4-b77d95b403fe"));
+	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+	request->setModuleID(0);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "last_value_request",
+			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
+			"device_id": "0xfe01020304050607",
+			"module_id": "0"
+		})"),
+		request->toString()
 	);
 }
 

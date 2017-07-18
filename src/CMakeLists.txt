@@ -23,6 +23,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWGatewayRegister.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessage.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessageType.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
