@@ -16,6 +16,7 @@
 #include "gwmessage/GWSensorDataConfirm.h"
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWNewDeviceRequest.h"
+#include "gwmessage/GWLastValueResponse.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -43,6 +44,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testGetConfirmFromSensorDataExport);
 	CPPUNIT_TEST(testParseNewDevice);
 	CPPUNIT_TEST(testCreateNewDevice);
+	CPPUNIT_TEST(testParseLastValue);
+	CPPUNIT_TEST(testCreateLastValue);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -61,6 +64,8 @@ public:
 	void testGetConfirmFromSensorDataExport();
 	void testParseNewDevice();
 	void testCreateNewDevice();
+	void testParseLastValue();
+	void testCreateLastValue();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -488,6 +493,47 @@ void GWMessageTest::testCreateNewDevice()
 			]
 		})"),
 		request->toString()
+	);
+}
+
+void GWMessageTest::testParseLastValue()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "last_value_response",
+			"id": "495b7a34-d2e7-4cc7-afcc-0690fa5f072a",
+			"status": 1,
+			"value": 78.5,
+			"valid": true
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::LAST_VALUE_RESPONSE, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWLastValueResponse>().isNull());
+
+	GWLastValueResponse::Ptr resp = message.cast<GWLastValueResponse>();
+	CPPUNIT_ASSERT_EQUAL("495b7a34-d2e7-4cc7-afcc-0690fa5f072a", resp->id().toString());
+	CPPUNIT_ASSERT_EQUAL(GWResponse::Status::SUCCESS, resp->status());
+	CPPUNIT_ASSERT_EQUAL(78.5, resp->value());
+	CPPUNIT_ASSERT(resp->valid());
+}
+
+void GWMessageTest::testCreateLastValue()
+{
+	GWLastValueResponse::Ptr response(new GWLastValueResponse);
+	response->setID(GlobalID::parse("a08c356b-316d-4690-84d4-b77d95b403fe"));
+	response->setStatus(GWResponse::Status::SUCCESS);
+	response->setValue(80);
+	response->setValid(true);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "last_value_response",
+			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
+			"status": 1,
+			"value": 80,
+			"valid": true
+		})"),
+		response->toString()
 	);
 }
 
