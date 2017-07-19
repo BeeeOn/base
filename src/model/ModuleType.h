@@ -24,6 +24,10 @@ public:
 			 */
 			TYPE_INNER,
 			/**
+			 * The sensor enables to set (to modify) value only from sensor.
+			 */
+			TYPE_MANUAL_ONLY,
+			/**
 			 * The sensor/actuator is located outside.
 			 */
 			TYPE_OUTER,
@@ -45,6 +49,11 @@ public:
 			 */
 			TYPE_CO2,
 			/**
+			 * Value 0: no fire detected
+			 * Value 1: fire detected
+			 */
+			TYPE_FIRE,
+			/**
 			 * Range: 0..100
 			 * Unit: %
 			 */
@@ -59,6 +68,11 @@ public:
 			 */
 			TYPE_NOISE,
 			/**
+			 * Value 0: open
+			 * Value 1: closed
+			 */
+			TYPE_OPEN_CLOSE,
+			/**
 			 * Value 0: off
 			 * Value 1: on
 			 */
@@ -67,6 +81,17 @@ public:
 			 * Unit: hPa
 			 */
 			TYPE_PRESSURE,
+			/**
+			 * Value 0: no security alert
+			 * Value 1: security alert is active
+			 *
+			 */
+			TYPE_SECURITY_ALERT,
+			/**
+			 * Value 0: no shake detect
+			 * Value 1: shake detect
+			 */
+			TYPE_SHAKE,
 			/**
 			 * Unit: °C
 			 */
