@@ -44,6 +44,11 @@ ModuleType::ModuleType(const ModuleType::Type &type,
 {
 }
 
+ModuleType::ModuleType(const ModuleType::Type &type):
+	m_type(type)
+{
+}
+
 void ModuleType::setType(const ModuleType::Type &type)
 {
 	m_type = type;

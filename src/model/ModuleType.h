@@ -104,6 +104,7 @@ public:
 	typedef Enum<TypeEnum> Type;
 	typedef Enum<AttributeEnum> Attribute;
 
+	ModuleType(const Type &type);
 	ModuleType(const Type &type, const std::set<Attribute> &attributes);
 
 	void setType(const Type &type);
