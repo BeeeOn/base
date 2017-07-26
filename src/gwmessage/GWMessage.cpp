@@ -1,4 +1,5 @@
 #include "gwmessage/GWMessage.h"
+#include "gwmessage/GWDeviceListRequest.h"
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWGatewayRegister.h"
 #include "gwmessage/GWGatewayAccepted.h"
@@ -55,6 +56,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 	);
 
 	switch(type.raw()) {
+	case GWMessageType::DEVICE_LIST_REQUEST:
+		return new GWDeviceListRequest(object);
 	case GWMessageType::DEVICE_LIST_RESPONSE:
 		return new GWDeviceListResponse(object);
 	case GWMessageType::GATEWAY_REGISTER:
