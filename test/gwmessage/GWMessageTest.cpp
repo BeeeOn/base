@@ -18,6 +18,7 @@
 #include "gwmessage/GWNewDeviceRequest.h"
 #include "gwmessage/GWLastValueResponse.h"
 #include "gwmessage/GWLastValueRequest.h"
+#include "gwmessage/GWDeviceListResponse.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -47,6 +48,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateNewDevice);
 	CPPUNIT_TEST(testParseLastValue);
 	CPPUNIT_TEST(testCreateLastValue);
+	CPPUNIT_TEST(testParseDeviceList);
+	CPPUNIT_TEST(testCreateDeviceList);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -67,6 +70,8 @@ public:
 	void testCreateNewDevice();
 	void testParseLastValue();
 	void testCreateLastValue();
+	void testParseDeviceList();
+	void testCreateDeviceList();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -566,6 +571,56 @@ void GWMessageTest::testCreateLastValue()
 			"module_id": "0"
 		})"),
 		request->toString()
+	);
+}
+
+void GWMessageTest::testParseDeviceList()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "device_list_response",
+			"id": "495b7a34-d2e7-4cc7-afcc-0690fa5f072a",
+			"status": 1,
+			"devices": [
+				{"device_id": "0xa15410132465788"},
+				{"device_id": "0xa15410132465789"}
+			]
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::DEVICE_LIST_RESPONSE, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWDeviceListResponse>().isNull());
+
+	GWDeviceListResponse::Ptr response = message.cast<GWDeviceListResponse>();
+	CPPUNIT_ASSERT_EQUAL("495b7a34-d2e7-4cc7-afcc-0690fa5f072a", response->id().toString());
+	CPPUNIT_ASSERT_EQUAL(GWResponse::Status::SUCCESS, response->status());
+
+	vector<DeviceID> devices = response->devices();
+	CPPUNIT_ASSERT_EQUAL("0xa15410132465788", devices[0].toString());
+	CPPUNIT_ASSERT_EQUAL("0xa15410132465789", devices[1].toString());
+}
+
+void GWMessageTest::testCreateDeviceList()
+{
+	GWDeviceListResponse::Ptr response(new GWDeviceListResponse);
+	response->setID(GlobalID::parse("a08c356b-316d-4690-84d4-b77d95b403fe"));
+	response->setStatus(GWResponse::Status::SUCCESS);
+
+	vector<DeviceID> devices;
+	devices.push_back(DeviceID::parse("0xa1001234567890a0"));
+	devices.push_back(DeviceID::parse("0xa1001234567890a1"));
+	response->setDevices(devices);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "device_list_response",
+			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
+			"status": 1,
+			"devices": [
+				{"device_id": "0xa1001234567890a0"},
+				{"device_id": "0xa1001234567890a1"}
+			]
+		})"),
+		response->toString()
 	);
 }
 

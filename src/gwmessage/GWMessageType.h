@@ -7,6 +7,7 @@ namespace BeeeOn {
 
 struct GWMessageTypeEnum {
 	enum Raw {
+		DEVICE_LIST_RESPONSE,
 		GATEWAY_REGISTER,
 		GATEWAY_ACCEPTED,
 		GENERIC_RESPONSE,
