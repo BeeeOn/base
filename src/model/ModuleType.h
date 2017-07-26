@@ -19,7 +19,13 @@ class ModuleType {
 public:
 	struct AttributeEnum {
 		enum Raw {
+			/**
+			 * The sensor/actuator is located inside (a building).
+			 */
 			TYPE_INNER,
+			/**
+			 * The sensor/actuator is located outside.
+			 */
 			TYPE_OUTER,
 		};
 
@@ -28,13 +34,42 @@ public:
 
 	struct TypeEnum {
 		enum Raw {
+			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
 			TYPE_BATTERY,
+			/**
+			 * Min: 0
+			 * Unit: one part per million (ppm)
+			 */
 			TYPE_CO2,
+			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
 			TYPE_HUMIDITY,
+			/**
+			 * Value 0: no motion detected
+			 * Value 1: motion detected
+			 */
 			TYPE_MOTION,
+			/**
+			 * Unit: dB
+			 */
 			TYPE_NOISE,
+			/**
+			 * Value 0: off
+			 * Value 1: on
+			 */
 			TYPE_ON_OFF,
+			/**
+			 * Unit: hPa
+			 */
 			TYPE_PRESSURE,
+			/**
+			 * Unit: °C
+			 */
 			TYPE_TEMPERATURE,
 		};
 
