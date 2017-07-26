@@ -37,8 +37,9 @@ class Factory:
 		self._configDefaults()
 
 		if ini is not None:
-			logging.info("loading INI file '%s'" % ini.name)
-			self.config.read_file(ini)
+			for one in ini:
+				logging.info("loading INI file '%s'" % one.name)
+				self.config.read_file(one)
 
 		if groups is not None:
 			logging.info("loading groups INI file '%s'" % groups.name)
@@ -301,7 +302,7 @@ if __name__ == '__main__':
 	parser.add_argument('sources', metavar='source',
 			type=argparse.FileType('r'), nargs='+',
 			help='source files to process at once')
-	parser.add_argument('--ini', metavar='file', dest='ini',
+	parser.add_argument('--ini', metavar='file', dest='ini', action='append',
 			type=argparse.FileType('r'),
 			help='ini files containing configuration')
 	parser.add_argument('--groups', metavar='file', dest='groups',
