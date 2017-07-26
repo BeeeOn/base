@@ -52,6 +52,8 @@ public:
 	void setAttributes(const std::set<Attribute> &attributes);
 	std::set<Attribute> attributes() const;
 
+	static ModuleType parse(std::string input);
+
 private:
 	Type m_type;
 	std::set<Attribute> m_attributes;

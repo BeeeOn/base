@@ -1,6 +1,9 @@
+#include <Poco/StringTokenizer.h>
+
 #include "model/ModuleType.h"
 
 using namespace BeeeOn;
+using namespace Poco;
 using namespace std;
 
 EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum::valueMap()
@@ -54,4 +57,28 @@ void ModuleType::setAttributes(const set<ModuleType::Attribute> &attributes)
 set<ModuleType::Attribute> ModuleType::attributes() const
 {
 	return m_attributes;
+}
+
+ModuleType ModuleType::parse(string input)
+{
+	set<ModuleType::Attribute> attributes;
+
+	const StringTokenizer tokens(input, ",",
+		StringTokenizer::TOK_IGNORE_EMPTY | StringTokenizer::TOK_TRIM);
+
+	for (unsigned int k = 1; k < tokens.count(); k++) {
+		ModuleType::Attribute current =
+			ModuleType::Attribute::parse(tokens[k]);
+
+		auto it = attributes.find(current);
+		if (it != attributes.end()) {
+			throw InvalidArgumentException(
+				"duplicate attribute '" + input + "'");
+		}
+
+		attributes.insert(current);
+	}
+
+	return ModuleType(
+		ModuleType::Type::parse(tokens[0]), attributes);
 }
