@@ -114,6 +114,29 @@ void DependencyInjector::destroyOne(DIWrapper *one) const
 	delete one;
 }
 
+void DependencyInjector::cleanup(const WrapperVector vec) const
+{
+	for (auto wrapper : vec) {
+		if (wrapper->hasHook("cleanup")) {
+			try {
+				logger().debug("calling hook 'cleanup' for "
+					+ ClassInfo(wrapper->type()).name());
+
+				wrapper->callHook("cleanup");
+			}
+			catch (const Exception &e) {
+				logger().log(e, __FILE__, __LINE__);
+			}
+			catch (const exception &e) {
+				logger().critical(e.what(), __FILE__, __LINE__);
+			}
+			catch (...) {
+				logger().critical("unknown failure", __FILE__, __LINE__);
+			}
+		}
+	}
+}
+
 DependencyInjector::WrapperVector DependencyInjector::tryDestroy(const WrapperVector vec) const
 {
 	WrapperVector alive;
@@ -157,6 +180,8 @@ DependencyInjector::~DependencyInjector()
 
 	WrapperVector alive = m_free;
 	m_free.clear();
+
+	cleanup(alive);
 
 	while (!alive.empty()) {
 		const size_t count = alive.size();
