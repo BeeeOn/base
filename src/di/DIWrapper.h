@@ -354,6 +354,7 @@ protected:
 	virtual void injectMap(const std::string &name,
 			const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &l) = 0;
 	virtual void callHook(const std::string &name) = 0;
+	virtual bool hasHook(const std::string &name) const = 0;
 };
 
 /**
@@ -386,6 +387,7 @@ protected:
 	void injectMap(const std::string &name,
 		       const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) override;
 	void callHook(const std::string &name) override;
+	bool hasHook(const std::string &name) const override;
 
 	template <typename B, typename I>
 	void refSetter(const std::string &name, void (B::*setter)(I *));
@@ -733,6 +735,12 @@ void AbstractDIWrapper<T>::callHook(const std::string &name)
 
 	DIWHook &handler = dynamic_cast<DIWHook &>(*(entry->second));
 	handler.call(*this);
+}
+
+template <typename T>
+bool AbstractDIWrapper<T>::hasHook(const std::string &name) const
+{
+	return m_method.find(name) != m_method.end();
 }
 
 template <typename T>
