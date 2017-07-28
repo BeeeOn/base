@@ -68,12 +68,10 @@ void DeviceInfo::clear()
 
 bool DeviceInfo::lookup(ModuleInfo &module) const
 {
-	for (auto &info : *this) {
-		if (info.id() == module.id()) {
-			module = info;
-			return true;
-		}
-	}
+	auto it = m_modules.find(module);
+	if (it == m_modules.end())
+		return false;
 
-	return false;
+	module = *it;
+	return true;
 }
