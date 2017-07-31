@@ -5,11 +5,13 @@
 #include <cppunit/TestRunner.h>
 #include <cppunit/TestResult.h>
 #include <cppunit/TestResultCollector.h>
+#include <cppunit/TextTestProgressListener.h>
 
 #include <Poco/Environment.h>
 #include <Poco/Logger.h>
 #include <Poco/AutoPtr.h>
 #include <Poco/File.h>
+#include <Poco/NumberParser.h>
 #include <Poco/Util/IniFileConfiguration.h>
 #include <Poco/Util/MapConfiguration.h>
 #include <Poco/Util/LoggingConfigurator.h>
@@ -41,14 +43,19 @@ void setupLogger(const std::string &path)
 	}
 }
 
-static int runStandard(Test *suite, const string &format)
+static int runStandard(Test *suite, const string &format, bool progress)
 {
 	TestRunner runner;
 	TestResult controller;
 	TestResultCollector collector;
+	TextTestProgressListener progressListener;
 
 	runner.addTest(suite);
 	controller.addListener(&collector);
+
+	if (progress)
+		controller.addListener(&progressListener);
+
 	runner.run(controller);
 
 	if (format == "human") {
@@ -78,5 +85,6 @@ int main(int argc, char **argv)
 	Test *suite = TestFactoryRegistry::getRegistry().makeTest();
 
 	const string &format = Environment::get("TEST_OUTPUT_FORMAT", "human");
-	return runStandard(suite, format);
+	const string &progress = Environment::get("TEST_OUTPUT_PROGRESS", "no");
+	return runStandard(suite, format, NumberParser::parseBool(progress));
 }
