@@ -56,6 +56,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
 	${PROJECT_SOURCE_DIR}/util/ApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParser.cpp
+	${PROJECT_SOURCE_DIR}/util/AsyncExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfo.cpp
