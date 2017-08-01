@@ -10,6 +10,7 @@ EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum:
 {
 	static EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap valueMap = {
 		{ModuleType::AttributeEnum::TYPE_INNER, "inner"},
+		{ModuleType::AttributeEnum::TYPE_MANUAL_ONLY, "manual-only"},
 		{ModuleType::AttributeEnum::TYPE_OUTER, "outer"},
 	};
 
@@ -21,11 +22,15 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 	static EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap valueMap = {
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
+		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
 		{ModuleType::TypeEnum::TYPE_HUMIDITY, "humidity"},
 		{ModuleType::TypeEnum::TYPE_MOTION, "motion"},
 		{ModuleType::TypeEnum::TYPE_NOISE, "noise"},
 		{ModuleType::TypeEnum::TYPE_ON_OFF, "on-off"},
+		{ModuleType::TypeEnum::TYPE_OPEN_CLOSE, "open-close"},
 		{ModuleType::TypeEnum::TYPE_PRESSURE, "pressure"},
+		{ModuleType::TypeEnum::TYPE_SECURITY_ALERT, "security-alert"},
+		{ModuleType::TypeEnum::TYPE_SHAKE, "shake"},
 		{ModuleType::TypeEnum::TYPE_TEMPERATURE, "temperature"},
 	};
 
@@ -36,6 +41,11 @@ ModuleType::ModuleType(const ModuleType::Type &type,
 		const set<ModuleType::Attribute> &attributes):
 	m_type(type),
 	m_attributes(attributes)
+{
+}
+
+ModuleType::ModuleType(const ModuleType::Type &type):
+	m_type(type)
 {
 }
 
