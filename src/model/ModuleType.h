@@ -39,6 +39,11 @@ public:
 	struct TypeEnum {
 		enum Raw {
 			/**
+			 * Value 0: unreachable
+			 * Value 1: reachable
+			 */
+			TYPE_AVAILABILITY,
+			/**
 			 * Range: 0..100
 			 * Unit: %
 			 */

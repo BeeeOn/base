@@ -20,6 +20,7 @@ EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum:
 EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap()
 {
 	static EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap valueMap = {
+		{ModuleType::TypeEnum::TYPE_AVAILABILITY, "availability"},
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
 		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
