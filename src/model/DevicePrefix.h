@@ -23,6 +23,7 @@ public:
 		PREFIX_ZWAVE = 0xa8,
 		PREFIX_JABLOTRON = 0x09,
 		PREFIX_IQRF = 0xa9,
+		PREFIX_LEDS = 0xaa,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

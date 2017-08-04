@@ -17,6 +17,7 @@ EnumHelper<DevicePrefixEnum::Raw>::ValueMap
 		{DevicePrefixEnum::PREFIX_ZWAVE, "Z-Wave"},
 		{DevicePrefixEnum::PREFIX_JABLOTRON, "Jablotron"},
 		{DevicePrefixEnum::PREFIX_IQRF, "IQRF"},
+		{DevicePrefixEnum::PREFIX_LEDS, "LEDs"},
 	};
 
 	return valueMap;
