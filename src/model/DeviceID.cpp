@@ -2,6 +2,7 @@
 #include <sstream>
 
 #include <Poco/Exception.h>
+#include <Poco/NumberParser.h>
 #include <Poco/Random.h>
 
 #include "model/DeviceID.h"
@@ -44,21 +45,12 @@ DeviceID::DeviceID(const DevicePrefix &prefix, uint64_t ident)
 
 DeviceID DeviceID::parse(const string &s)
 {
-	unsigned long long v;
+	uint64_t v;
 
-	try {
-		v = stoull(s, NULL, 0);
-	}
-	catch (invalid_argument &e) {
-		throw InvalidArgumentException(
-			string("parse device ID: ") + e.what());
-	}
-	catch (std::out_of_range &e) {
-		throw InvalidArgumentException(
-			"device ID is out-of-range");
-	}
+	if (NumberParser::tryParseHex64(s, v))
+		return DeviceID(v);
 
-	return DeviceID((uint64_t) v);
+	return NumberParser::parseUnsigned64(s);
 }
 
 string DeviceID::toString() const
