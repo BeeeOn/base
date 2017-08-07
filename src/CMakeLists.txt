@@ -68,6 +68,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/CryptoParams.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
+	${PROJECT_SOURCE_DIR}/util/FailDetector.cpp
 	${PROJECT_SOURCE_DIR}/util/FileLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
 	${PROJECT_SOURCE_DIR}/util/JsonUtil.cpp
