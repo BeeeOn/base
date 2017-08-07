@@ -21,8 +21,8 @@ file(GLOB TEST_LIBRARY_SOURCES
 
 file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
-	${PROJECT_SOURCE_DIR}/di/DIWrapperTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIDaemonTest.cpp
+	${PROJECT_SOURCE_DIR}/di/DIWrapperTest.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoCloseTest.cpp
 	${PROJECT_SOURCE_DIR}/io/ConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStreamTest.cpp
@@ -30,27 +30,27 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/l10n/SystemLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunnerTest.cpp
 	${PROJECT_SOURCE_DIR}/math/SimpleCalcTest.cpp
-	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
+	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleTypeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/AsyncExecutorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
+	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
+	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
 	${PROJECT_SOURCE_DIR}/util/FailDetectorTest.cpp
-	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/HashedLockTest.cpp
+	${PROJECT_SOURCE_DIR}/util/JsonUtilTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
-	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTraceTest.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp
-	${PROJECT_SOURCE_DIR}/util/JsonUtilTest.cpp
 )
 
 file(GLOB TEST_WORK_SOURCES
