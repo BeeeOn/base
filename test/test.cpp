@@ -12,11 +12,14 @@
 #include <Poco/AutoPtr.h>
 #include <Poco/File.h>
 #include <Poco/NumberParser.h>
+#include <Poco/NullStream.h>
+#include <Poco/FileStream.h>
 #include <Poco/Util/IniFileConfiguration.h>
 #include <Poco/Util/MapConfiguration.h>
 #include <Poco/Util/LoggingConfigurator.h>
 
 #include "cppunit/TapOutputter.h"
+#include "cppunit/TestTimingListener.h"
 
 using namespace std;
 using namespace CppUnit;
@@ -43,15 +46,17 @@ void setupLogger(const std::string &path)
 	}
 }
 
-static int runStandard(Test *suite, const string &format, bool progress)
+static int runStandard(Test *suite, const string &format, bool progress, ostream &timing)
 {
 	TestRunner runner;
 	TestResult controller;
 	TestResultCollector collector;
 	TextTestProgressListener progressListener;
+	BeeeOn::TestTimingListener timingListener(timing);
 
 	runner.addTest(suite);
 	controller.addListener(&collector);
+	controller.addListener(&timingListener);
 
 	if (progress)
 		controller.addListener(&progressListener);
@@ -86,5 +91,27 @@ int main(int argc, char **argv)
 
 	const string &format = Environment::get("TEST_OUTPUT_FORMAT", "human");
 	const string &progress = Environment::get("TEST_OUTPUT_PROGRESS", "no");
-	return runStandard(suite, format, NumberParser::parseBool(progress));
+	const string &timing = Environment::get("TEST_OUTPUT_TIMING", "");
+
+	NullOutputStream noTiming;
+	FileOutputStream fileTiming;
+	ostream *timingOutput;
+
+	if (!timing.empty()) {
+		if (timing == "stdout") {
+			timingOutput = &cout;
+		}
+		else if (timing == "stderr") {
+			timingOutput = &cerr;
+		}
+		else {
+			fileTiming.open(timing, ios::trunc);
+			timingOutput = &fileTiming;
+		}
+	}
+	else {
+		timingOutput = &noTiming;
+	}
+
+	return runStandard(suite, format, NumberParser::parseBool(progress), *timingOutput);
 }
