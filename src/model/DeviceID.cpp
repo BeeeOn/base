@@ -1,6 +1,8 @@
 #include <exception>
 #include <sstream>
+
 #include <Poco/Exception.h>
+#include <Poco/NumberParser.h>
 #include <Poco/Random.h>
 
 #include "model/DeviceID.h"
@@ -8,6 +10,10 @@
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
+
+const unsigned int DeviceID::IDENT_WIDTH = 56;
+const uint64_t DeviceID::IDENT_MASK = (((uint64_t) 1) << IDENT_WIDTH) - 1;
+const uint64_t DeviceID::PREFIX_MASK = ~IDENT_MASK;
 
 DeviceID::DeviceID():
 	m_value(0)
@@ -17,7 +23,7 @@ DeviceID::DeviceID():
 DeviceID::DeviceID(uint64_t value):
 	m_value(value)
 {
-	const int shift = is32bit()? 24 : 56;
+	const int shift = is32bit()? 24 : IDENT_WIDTH;
 
 	if ((m_value >> shift) == 0) {
 		throw InvalidArgumentException(
@@ -28,32 +34,23 @@ DeviceID::DeviceID(uint64_t value):
 
 DeviceID::DeviceID(const DevicePrefix &prefix, uint64_t ident)
 {
-	if (ident & 0xff00000000000000UL) {
+	if (ident & PREFIX_MASK) {
 		throw InvalidArgumentException(
 			"ident part of device ID must not overflow 56 bits");
 	}
 
-	m_value = ((uint64_t) prefix) << 56;
+	m_value = ((uint64_t) prefix) << IDENT_WIDTH;
 	m_value |= ident;
 }
 
 DeviceID DeviceID::parse(const string &s)
 {
-	unsigned long long v;
+	uint64_t v;
 
-	try {
-		v = stoull(s, NULL, 0);
-	}
-	catch (invalid_argument &e) {
-		throw InvalidArgumentException(
-			string("parse device ID: ") + e.what());
-	}
-	catch (std::out_of_range &e) {
-		throw InvalidArgumentException(
-			"device ID is out-of-range");
-	}
+	if (NumberParser::tryParseHex64(s, v))
+		return DeviceID(v);
 
-	return DeviceID((uint64_t) v);
+	return NumberParser::parseUnsigned64(s);
 }
 
 string DeviceID::toString() const

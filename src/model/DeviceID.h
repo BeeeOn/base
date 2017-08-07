@@ -17,6 +17,10 @@ namespace BeeeOn {
  */
 class DeviceID {
 public:
+	static const unsigned int IDENT_WIDTH;
+	static const uint64_t IDENT_MASK;
+	static const uint64_t PREFIX_MASK;
+
 	/**
 	 * Construct an empty ID. The isNull() method would return true.
 	 */
