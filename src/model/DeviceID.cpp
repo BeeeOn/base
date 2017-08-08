@@ -45,10 +45,8 @@ DeviceID::DeviceID(const DevicePrefix &prefix, uint64_t ident)
 
 DeviceID DeviceID::parse(const string &s)
 {
-	uint64_t v;
-
-	if (NumberParser::tryParseHex64(s, v))
-		return DeviceID(v);
+	if (s.size() >= 2 && s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))
+		return NumberParser::parseHex64(s);
 
 	return NumberParser::parseUnsigned64(s);
 }
