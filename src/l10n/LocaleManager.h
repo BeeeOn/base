@@ -10,6 +10,8 @@ namespace BeeeOn {
 
 class LocaleManager {
 public:
+	typedef Poco::SharedPtr<LocaleManager> Ptr;
+
 	virtual ~LocaleManager();
 
 	virtual Locale parse(const std::string &input) = 0;
