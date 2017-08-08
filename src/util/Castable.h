@@ -8,6 +8,12 @@ namespace BeeeOn {
 class Castable {
 public:
 	template <typename T>
+	bool is()
+	{
+		return dynamic_cast<T *>(this) != nullptr;
+	}
+
+	template <typename T>
 	bool is() const
 	{
 		return dynamic_cast<const T *>(this) != nullptr;
