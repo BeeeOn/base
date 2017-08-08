@@ -10,7 +10,7 @@ public:
 	template <typename T>
 	bool is() const
 	{
-		return typeid(*this) == typeid(T);
+		return dynamic_cast<const T *>(this) != nullptr;
 	}
 
 	template<typename C>
