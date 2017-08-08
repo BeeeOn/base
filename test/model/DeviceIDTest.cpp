@@ -83,6 +83,9 @@ void DeviceIDTest::testParse()
 	CPPUNIT_ASSERT_EQUAL(
 		DevicePrefix::fromRaw(DevicePrefix::PREFIX_PRESSURE_SENSOR), id.prefix());
 	CPPUNIT_ASSERT_EQUAL((uint64_t) 0x11223344556677UL, id.ident());
+
+	CPPUNIT_ASSERT_NO_THROW(DeviceID::parse("102434131"));
+	CPPUNIT_ASSERT_EQUAL(DeviceID(102434131), DeviceID::parse("102434131"));
 }
 
 /**
