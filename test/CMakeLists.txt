@@ -42,6 +42,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
+	${PROJECT_SOURCE_DIR}/util/FailDetectorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/HashedLockTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
