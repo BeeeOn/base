@@ -38,6 +38,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/AsyncExecutorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
+	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
