@@ -52,6 +52,30 @@ ModuleType::ModuleType(const ModuleType::Type &type):
 {
 }
 
+ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customID):
+	m_type(type),
+	m_customID(customID)
+{
+	switch (m_type) {
+	default:
+		throw InvalidArgumentException(
+			"module type " + m_type.toString() + " does not support type ID");
+	}
+}
+
+ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customID,
+		const std::set<Attribute> &attributes):
+	m_type(type),
+	m_attributes(attributes),
+	m_customID(customID)
+{
+	switch (m_type) {
+	default:
+		throw InvalidArgumentException(
+			"module type " + m_type.toString() + " does not support type ID");
+	}
+}
+
 void ModuleType::setType(const ModuleType::Type &type)
 {
 	m_type = type;
@@ -70,6 +94,22 @@ void ModuleType::setAttributes(const set<ModuleType::Attribute> &attributes)
 set<ModuleType::Attribute> ModuleType::attributes() const
 {
 	return m_attributes;
+}
+
+void ModuleType::setCustomTypeID(CustomTypeID id)
+{
+	switch (m_type) {
+	default:
+		throw IllegalStateException(
+			"module type " + m_type.toString() + " does not support type ID");
+	}
+
+	m_customID = id;
+}
+
+CustomTypeID ModuleType::customTypeID() const
+{
+	return m_customID;
 }
 
 ModuleType ModuleType::parse(string input)

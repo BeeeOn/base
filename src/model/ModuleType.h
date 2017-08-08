@@ -3,6 +3,7 @@
 
 #include <set>
 
+#include "model/CustomTypeID.h"
 #include "util/Enum.h"
 
 namespace BeeeOn {
@@ -122,6 +123,8 @@ public:
 
 	ModuleType(const Type &type);
 	ModuleType(const Type &type, const std::set<Attribute> &attributes);
+	ModuleType(const Type &type, const CustomTypeID &customID);
+	ModuleType(const Type &type, const CustomTypeID &customID, const std::set<Attribute> &attributes);
 
 	void setType(const Type &type);
 	Type type() const;
@@ -129,11 +132,15 @@ public:
 	void setAttributes(const std::set<Attribute> &attributes);
 	std::set<Attribute> attributes() const;
 
+	void setCustomTypeID(CustomTypeID id);
+	CustomTypeID customTypeID() const;
+
 	static ModuleType parse(std::string input);
 
 private:
 	Type m_type;
 	std::set<Attribute> m_attributes;
+	CustomTypeID m_customID;
 };
 
 }
