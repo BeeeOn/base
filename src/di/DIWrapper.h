@@ -556,13 +556,6 @@ AbstractDIWrapper<T>::AbstractDIWrapper():
 template <typename T>
 AbstractDIWrapper<T>::~AbstractDIWrapper()
 {
-	if (m_instance.referenceCount() > 1) {
-		logger().warning(typeid(T).name()
-			+ std::string(" is still referenced: ")
-			+ std::to_string(m_instance.referenceCount()),
-			__FILE__, __LINE__);
-	}
-
 	for (auto s : m_method)
 		delete s.second;
 }
