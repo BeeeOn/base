@@ -55,6 +55,11 @@ public:
 			 */
 			TYPE_CO2,
 			/**
+			 * It defines specific enum module
+			 * type which is stored in m_customID.
+			 */
+			TYPE_ENUM,
+			/**
 			 * Value 0: no fire detected
 			 * Value 1: fire detected
 			 */

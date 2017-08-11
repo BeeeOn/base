@@ -1,3 +1,4 @@
+#include <Poco/RegularExpression.h>
 #include <Poco/StringTokenizer.h>
 
 #include "model/ModuleType.h"
@@ -23,6 +24,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_AVAILABILITY, "availability"},
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
+		{ModuleType::TypeEnum::TYPE_ENUM, "enum"},
 		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
 		{ModuleType::TypeEnum::TYPE_HUMIDITY, "humidity"},
 		{ModuleType::TypeEnum::TYPE_LUMINANCE, "luminance"},
@@ -57,6 +59,8 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 	m_customID(customID)
 {
 	switch (m_type) {
+	case ModuleType::Type::TYPE_ENUM:
+		break;
 	default:
 		throw InvalidArgumentException(
 			"module type " + m_type.toString() + " does not support type ID");
@@ -70,6 +74,8 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 	m_customID(customID)
 {
 	switch (m_type) {
+	case ModuleType::Type::TYPE_ENUM:
+		break;
 	default:
 		throw InvalidArgumentException(
 			"module type " + m_type.toString() + " does not support type ID");
@@ -99,6 +105,8 @@ set<ModuleType::Attribute> ModuleType::attributes() const
 void ModuleType::setCustomTypeID(CustomTypeID id)
 {
 	switch (m_type) {
+	case ModuleType::Type::TYPE_ENUM:
+		break;
 	default:
 		throw IllegalStateException(
 			"module type " + m_type.toString() + " does not support type ID");
@@ -132,6 +140,31 @@ ModuleType ModuleType::parse(string input)
 		attributes.insert(current);
 	}
 
-	return ModuleType(
-		ModuleType::Type::parse(tokens[0]), attributes);
+	RegularExpression::MatchVec matches;
+	RegularExpression re("(enum):(.+)");
+
+	string typeName;
+	string idValue;
+
+	if (re.match(tokens[0], 0, matches) == 3) {
+		typeName = tokens[0].substr(matches[1].offset, matches[1].length);
+		idValue = tokens[0].substr(matches[2].offset, matches[2].length);
+	}
+	else {
+		typeName = tokens[0];
+	}
+
+	const ModuleType::Type type = ModuleType::Type::parse(typeName);
+
+	switch (type) {
+	case ModuleType::Type::TYPE_ENUM:
+		if (idValue.empty())
+			throw InvalidArgumentException("missing ID for type " + type.toString());
+		break;
+	default:
+		return ModuleType(type, attributes);
+	}
+
+	const auto id = CustomTypeID::parse(idValue);
+	return ModuleType(type, id, attributes);
 }
