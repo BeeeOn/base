@@ -23,6 +23,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 	static EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap valueMap = {
 		{ModuleType::TypeEnum::TYPE_AVAILABILITY, "availability"},
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
+		{ModuleType::TypeEnum::TYPE_BITMAP, "bitmap"},
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
 		{ModuleType::TypeEnum::TYPE_ENUM, "enum"},
 		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
@@ -61,6 +62,8 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 	switch (m_type) {
 	case ModuleType::Type::TYPE_ENUM:
 		break;
+	case ModuleType::Type::TYPE_BITMAP:
+		break;
 	default:
 		throw InvalidArgumentException(
 			"module type " + m_type.toString() + " does not support type ID");
@@ -75,6 +78,8 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 {
 	switch (m_type) {
 	case ModuleType::Type::TYPE_ENUM:
+		break;
+	case ModuleType::Type::TYPE_BITMAP:
 		break;
 	default:
 		throw InvalidArgumentException(
@@ -106,6 +111,8 @@ void ModuleType::setCustomTypeID(CustomTypeID id)
 {
 	switch (m_type) {
 	case ModuleType::Type::TYPE_ENUM:
+		break;
+	case ModuleType::Type::TYPE_BITMAP:
 		break;
 	default:
 		throw IllegalStateException(
@@ -141,7 +148,7 @@ ModuleType ModuleType::parse(string input)
 	}
 
 	RegularExpression::MatchVec matches;
-	RegularExpression re("(enum):(.+)");
+	RegularExpression re("(enum|bitmap):(.+)");
 
 	string typeName;
 	string idValue;
@@ -158,6 +165,7 @@ ModuleType ModuleType::parse(string input)
 
 	switch (type) {
 	case ModuleType::Type::TYPE_ENUM:
+	case ModuleType::Type::TYPE_BITMAP:
 		if (idValue.empty())
 			throw InvalidArgumentException("missing ID for type " + type.toString());
 		break;

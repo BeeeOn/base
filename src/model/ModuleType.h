@@ -50,6 +50,11 @@ public:
 			 */
 			TYPE_BATTERY,
 			/**
+			 * It defines specific bitmap module
+			 * type which is stored in m_customID.
+			 */
+			TYPE_BITMAP,
+			/**
 			 * Min: 0
 			 * Unit: one part per million (ppm)
 			 */
