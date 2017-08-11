@@ -99,6 +99,11 @@ public:
 			 */
 			TYPE_ON_OFF,
 			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
+			TYPE_PERFORMANCE,
+			/**
 			 * Unit: hPa
 			 */
 			TYPE_PRESSURE,
