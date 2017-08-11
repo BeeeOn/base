@@ -50,6 +50,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/JsonUtilTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
+	${PROJECT_SOURCE_DIR}/util/UnsafePtrTest.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTraceTest.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp
 )
