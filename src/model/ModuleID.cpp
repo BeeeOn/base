@@ -37,4 +37,3 @@ string ModuleID::toString() const
 {
 	return Poco::NumberFormatter::formatHex(m_moduleID);
 }
-
