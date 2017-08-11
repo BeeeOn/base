@@ -47,7 +47,7 @@ const Backtrace &Throwable::traceOf(const E &e)
 	}
 }
 
-namespace Poco { // BeeeOn::Poco - only for Poco::Exception and derived classes
+namespace ForPoco { // BeeeOn::ForPoco - only for Poco::Exception and derived classes
 
 template <typename E>
 class WithTrace : public Throwable, public E {

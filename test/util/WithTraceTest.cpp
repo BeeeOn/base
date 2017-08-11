@@ -7,7 +7,7 @@
 using namespace std;
 using namespace Poco;
 
-using BeeeOn::Poco::WithTrace;
+using BeeeOn::ForPoco::WithTrace;
 
 namespace BeeeOn {
 
