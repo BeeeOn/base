@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cppunit/extensions/TestFactoryRegistry.h>
+#include <cppunit/extensions/RepeatedTest.h>
 #include <cppunit/CompilerOutputter.h>
 #include <cppunit/XmlOutputter.h>
 #include <cppunit/TestRunner.h>
@@ -113,5 +114,8 @@ int main(int argc, char **argv)
 		timingOutput = &noTiming;
 	}
 
-	return runStandard(suite, format, NumberParser::parseBool(progress), *timingOutput);
+	const string &repeat = Environment::get("TEST_REPEAT", "1");
+	Test *test = new RepeatedTest(suite, NumberParser::parseUnsigned(repeat));
+
+	return runStandard(test, format, NumberParser::parseBool(progress), *timingOutput);
 }
