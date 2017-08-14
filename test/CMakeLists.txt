@@ -32,6 +32,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/math/SimpleCalcTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
+	${PROJECT_SOURCE_DIR}/model/ModuleIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleTypeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp

@@ -35,6 +35,5 @@ ModuleID ModuleID::parse(const string &s)
 
 string ModuleID::toString() const
 {
-	return Poco::NumberFormatter::formatHex(m_moduleID);
+	return to_string(m_moduleID);
 }
-
