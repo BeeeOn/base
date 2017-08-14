@@ -26,6 +26,11 @@ void FailDetector::success()
 	m_fails = 0;
 }
 
+bool FailDetector::isGoingToFail() const
+{
+	return m_fails > 0;
+}
+
 bool FailDetector::isFailed() const
 {
 	return (m_fails >= m_failsTreshold) && (m_failsTreshold > 0);

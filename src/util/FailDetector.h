@@ -28,6 +28,12 @@ public:
 	void success();
 
 	/**
+	 * Returns true if there is at least one fail detected already
+	 * (even if the threshold has not been reached yet).
+	 */
+	bool isGoingToFail() const;
+
+	/**
 	 * Returns true if counted of fails greater than or equal to fails treshold.
 	 */
 	bool isFailed() const;
