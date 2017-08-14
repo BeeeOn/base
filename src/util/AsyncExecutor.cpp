@@ -8,6 +8,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, AsyncExecutor)
 BEEEON_OBJECT_CASTABLE(StoppableRunnable)
 BEEEON_OBJECT_END(BeeeOn, AsyncExecutor)
 
+using namespace std;
 using namespace BeeeOn;
 
 AsyncExecutor::AsyncExecutor() :
@@ -20,7 +21,7 @@ AsyncExecutor::~AsyncExecutor()
 	if (!m_taskQueue.empty()) {
 		poco_warning(logger(),
 			"deleting object with non empty queue, tasks count: "
-			+ m_taskQueue.size());
+			+ to_string(m_taskQueue.size()));
 	}
 }
 
