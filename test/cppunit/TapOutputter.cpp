@@ -74,7 +74,7 @@ void TapOutputter::reportFailures(unsigned int id, Test *test,
 		if (fail->thrownException() != NULL)
 			reportException(fail->thrownException());
 
-		m_output << " ---" << endl;
+		m_output << " ..." << endl;
 	}
 	
 	m_output << "not ok " << id << " - " << test->getName() << endl;
