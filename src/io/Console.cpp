@@ -103,6 +103,10 @@ Console::Console():
 {
 }
 
+Console::~Console()
+{
+}
+
 void Console::setEol(const char eol)
 {
 	m_eol = eol;
