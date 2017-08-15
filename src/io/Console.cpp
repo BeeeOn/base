@@ -136,3 +136,27 @@ string Console::prompt() const
 {
 	return m_prompt;
 }
+
+ConsoleSessionImpl::Ptr Console::closedSession()
+{
+	return new ClosedConsoleSessionImpl;
+}
+
+string Console::ClosedConsoleSessionImpl::readUntil(const char)
+{
+	return "";
+}
+
+string Console::ClosedConsoleSessionImpl::readBytes(const unsigned int)
+{
+	return "";
+}
+
+void Console::ClosedConsoleSessionImpl::print(const string &, bool)
+{
+}
+
+bool Console::ClosedConsoleSessionImpl::eof()
+{
+	return true;
+}

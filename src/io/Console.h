@@ -125,6 +125,16 @@ public:
 protected:
 	virtual ConsoleSessionImpl::Ptr openSession() = 0;
 
+	class ClosedConsoleSessionImpl : public ConsoleSessionImpl {
+	public:
+		std::string readUntil(const char c) override;
+		std::string readBytes(const unsigned int length) override;
+		void print(const std::string &text, bool newline = true) override;
+		bool eof() override;
+	};
+
+	ConsoleSessionImpl::Ptr closedSession();
+
 private:
 	char m_eol;
 	char m_skipEol;
