@@ -45,12 +45,22 @@ bool StdConsoleSessionImpl::eof()
 }
 
 StdConsole::StdConsole():
-	m_semaphore(1)
+	m_semaphore(1),
+	m_close(false)
 {
+}
+
+void StdConsole::close()
+{
+	m_close = true;
 }
 
 ConsoleSessionImpl::Ptr StdConsole::openSession()
 {
 	m_semaphore.wait();
+
+	if (m_close)
+		return closedSession();
+
 	return new StdConsoleSessionImpl(m_semaphore);
 }
