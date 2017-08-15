@@ -13,6 +13,7 @@ BEEEON_OBJECT_TEXT("address", &TCPConsole::setAddress)
 BEEEON_OBJECT_NUMBER("port", &TCPConsole::setPort)
 BEEEON_OBJECT_NUMBER("sendTimeout", &TCPConsole::setSendTimeout)
 BEEEON_OBJECT_NUMBER("recvTimeout", &TCPConsole::setRecvTimeout)
+BEEEON_OBJECT_NUMBER("pollTimeout", &TCPConsole::setPollTimeout)
 BEEEON_OBJECT_NUMBER("backlog", &TCPConsole::setBacklog)
 BEEEON_OBJECT_TEXT("eol", &TCPConsole::setEol)
 BEEEON_OBJECT_TEXT("skipEol", &TCPConsole::setSkipEol)
@@ -73,7 +74,9 @@ TCPConsole::TCPConsole():
 	m_port(DEFAULT_PORT),
 	m_sendTimeout(DEFAULT_TIMEOUT_MS * Timespan::MILLISECONDS),
 	m_recvTimeout(DEFAULT_TIMEOUT_MS * Timespan::MILLISECONDS),
-	m_backlog(DEFAULT_PORT)
+	m_pollTimeout(DEFAULT_TIMEOUT_MS * Timespan::MILLISECONDS),
+	m_backlog(DEFAULT_PORT),
+	m_close(false)
 {
 }
 
@@ -110,6 +113,13 @@ void TCPConsole::setRecvTimeout(int ms)
 	m_recvTimeout = Timespan(ms * Timespan::MILLISECONDS);
 }
 
+void TCPConsole::setPollTimeout(int ms)
+{
+	if (ms < 0)
+		ms = -1; // blocking poll
+
+	m_pollTimeout = Timespan(ms * Timespan::MILLISECONDS);
+}
 
 void TCPConsole::setBacklog(int backlog)
 {
@@ -131,6 +141,7 @@ void TCPConsole::startListenUnlocked()
 		return;
 
 	m_serverSocket = new ServerSocket;
+	m_close = false;
 
 	SocketAddress address(m_address, m_port);
 	m_serverSocket->bind(address, true);
@@ -148,9 +159,19 @@ ConsoleSessionImpl::Ptr TCPConsole::openSession()
 	logger().information("waiting for connection...",
 			__FILE__, __LINE__);
 
+	while (!m_serverSocket->poll(m_pollTimeout, Socket::SELECT_READ)) {
+		if (m_close)
+			return closedSession();
+	}
+
 	Socket socket = m_serverSocket->acceptConnection();
 	socket.setSendTimeout(m_sendTimeout);
 	socket.setReceiveTimeout(m_recvTimeout);
 
 	return new TCPConsoleSessionImpl(socket);
+}
+
+void TCPConsole::close()
+{
+	m_close = true;
 }

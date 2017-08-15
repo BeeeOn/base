@@ -64,9 +64,11 @@ public:
 	void setPort(int port);
 	void setSendTimeout(int ms);
 	void setRecvTimeout(int ms);
+	void setPollTimeout(int ms);
 	void setBacklog(int backlog);
 
 	void startListen();
+	void close() override;
 
 protected:
 	ConsoleSessionImpl::Ptr openSession() override;
@@ -77,9 +79,11 @@ private:
 	unsigned int m_port;
 	Poco::Timespan m_sendTimeout;
 	Poco::Timespan m_recvTimeout;
+	Poco::Timespan m_pollTimeout;
 	unsigned int m_backlog;
 	Poco::SharedPtr<Poco::Net::ServerSocket> m_serverSocket;
 	Poco::FastMutex m_lock;
+	Poco::AtomicCounter m_close;
 };
 
 }
