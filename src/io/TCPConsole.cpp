@@ -145,6 +145,8 @@ void TCPConsole::startListenUnlocked()
 
 	SocketAddress address(m_address, m_port);
 	m_serverSocket->bind(address, true);
+	m_serverSocket->setReuseAddress(true);
+	m_serverSocket->setReusePort(true);
 	m_serverSocket->listen(m_backlog);
 
 	logger().information("listening at " + address.toString(),
