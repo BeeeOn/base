@@ -122,6 +122,8 @@ public:
 	void setPrompt(const std::string &prompt);
 	std::string prompt() const;
 
+	virtual void close();
+
 protected:
 	virtual ConsoleSessionImpl::Ptr openSession() = 0;
 

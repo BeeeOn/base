@@ -137,6 +137,10 @@ string Console::prompt() const
 	return m_prompt;
 }
 
+void Console::close()
+{
+}
+
 ConsoleSessionImpl::Ptr Console::closedSession()
 {
 	return new ClosedConsoleSessionImpl;
