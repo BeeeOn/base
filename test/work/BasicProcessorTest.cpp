@@ -84,6 +84,7 @@ void BasicProcessorTest::setUp()
 void BasicProcessorTest::tearDown()
 {
 	delete m_processor;
+	delete m_lockManager;
 }
 
 /**
