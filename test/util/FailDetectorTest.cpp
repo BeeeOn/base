@@ -35,14 +35,17 @@ void FailDetectorTest::testFail()
 	FailDetector detector(2);
 
 	CPPUNIT_ASSERT(!detector.isFailed());
+	CPPUNIT_ASSERT(!detector.isGoingToFail());
 
 	detector.fail();
 
 	CPPUNIT_ASSERT(!detector.isFailed());
+	CPPUNIT_ASSERT(detector.isGoingToFail());
 
 	detector.fail();
 
 	CPPUNIT_ASSERT(detector.isFailed());
+	CPPUNIT_ASSERT(detector.isGoingToFail());
 }
 
 void FailDetectorTest::testSuccess()
@@ -50,14 +53,17 @@ void FailDetectorTest::testSuccess()
 	FailDetector detector(1);
 
 	CPPUNIT_ASSERT(!detector.isFailed());
+	CPPUNIT_ASSERT(!detector.isGoingToFail());
 
 	detector.fail();
 
 	CPPUNIT_ASSERT(detector.isFailed());
+	CPPUNIT_ASSERT(detector.isGoingToFail());
 
 	detector.success();
 
 	CPPUNIT_ASSERT(!detector.isFailed());
+	CPPUNIT_ASSERT(!detector.isGoingToFail());
 }
 
 void FailDetectorTest::testTresholdUnlimited()
@@ -70,6 +76,7 @@ void FailDetectorTest::testTresholdUnlimited()
 		detector.fail();
 
 	CPPUNIT_ASSERT(!detector.isFailed());
+	CPPUNIT_ASSERT(detector.isGoingToFail());
 }
 
 void FailDetectorTest::testLastFailBefore()
