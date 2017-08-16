@@ -1,3 +1,4 @@
+#include <Poco/RegularExpression.h>
 #include <Poco/StringTokenizer.h>
 
 #include "model/ModuleType.h"
@@ -22,7 +23,9 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 	static EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap valueMap = {
 		{ModuleType::TypeEnum::TYPE_AVAILABILITY, "availability"},
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
+		{ModuleType::TypeEnum::TYPE_BITMAP, "bitmap"},
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
+		{ModuleType::TypeEnum::TYPE_ENUM, "enum"},
 		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
 		{ModuleType::TypeEnum::TYPE_HUMIDITY, "humidity"},
 		{ModuleType::TypeEnum::TYPE_LUMINANCE, "luminance"},
@@ -30,6 +33,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_NOISE, "noise"},
 		{ModuleType::TypeEnum::TYPE_ON_OFF, "on-off"},
 		{ModuleType::TypeEnum::TYPE_OPEN_CLOSE, "open-close"},
+		{ModuleType::TypeEnum::TYPE_PERFORMANCE, "performance"},
 		{ModuleType::TypeEnum::TYPE_PRESSURE, "pressure"},
 		{ModuleType::TypeEnum::TYPE_SECURITY_ALERT, "security-alert"},
 		{ModuleType::TypeEnum::TYPE_SHAKE, "shake"},
@@ -52,6 +56,38 @@ ModuleType::ModuleType(const ModuleType::Type &type):
 {
 }
 
+ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customID):
+	m_type(type),
+	m_customID(customID)
+{
+	switch (m_type) {
+	case ModuleType::Type::TYPE_ENUM:
+		break;
+	case ModuleType::Type::TYPE_BITMAP:
+		break;
+	default:
+		throw InvalidArgumentException(
+			"module type " + m_type.toString() + " does not support type ID");
+	}
+}
+
+ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customID,
+		const std::set<Attribute> &attributes):
+	m_type(type),
+	m_attributes(attributes),
+	m_customID(customID)
+{
+	switch (m_type) {
+	case ModuleType::Type::TYPE_ENUM:
+		break;
+	case ModuleType::Type::TYPE_BITMAP:
+		break;
+	default:
+		throw InvalidArgumentException(
+			"module type " + m_type.toString() + " does not support type ID");
+	}
+}
+
 void ModuleType::setType(const ModuleType::Type &type)
 {
 	m_type = type;
@@ -70,6 +106,26 @@ void ModuleType::setAttributes(const set<ModuleType::Attribute> &attributes)
 set<ModuleType::Attribute> ModuleType::attributes() const
 {
 	return m_attributes;
+}
+
+void ModuleType::setCustomTypeID(CustomTypeID id)
+{
+	switch (m_type) {
+	case ModuleType::Type::TYPE_ENUM:
+		break;
+	case ModuleType::Type::TYPE_BITMAP:
+		break;
+	default:
+		throw IllegalStateException(
+			"module type " + m_type.toString() + " does not support type ID");
+	}
+
+	m_customID = id;
+}
+
+CustomTypeID ModuleType::customTypeID() const
+{
+	return m_customID;
 }
 
 ModuleType ModuleType::parse(string input)
@@ -92,6 +148,32 @@ ModuleType ModuleType::parse(string input)
 		attributes.insert(current);
 	}
 
-	return ModuleType(
-		ModuleType::Type::parse(tokens[0]), attributes);
+	RegularExpression::MatchVec matches;
+	RegularExpression re("(enum|bitmap):(.+)");
+
+	string typeName;
+	string idValue;
+
+	if (re.match(tokens[0], 0, matches) == 3) {
+		typeName = tokens[0].substr(matches[1].offset, matches[1].length);
+		idValue = tokens[0].substr(matches[2].offset, matches[2].length);
+	}
+	else {
+		typeName = tokens[0];
+	}
+
+	const ModuleType::Type type = ModuleType::Type::parse(typeName);
+
+	switch (type) {
+	case ModuleType::Type::TYPE_ENUM:
+	case ModuleType::Type::TYPE_BITMAP:
+		if (idValue.empty())
+			throw InvalidArgumentException("missing ID for type " + type.toString());
+		break;
+	default:
+		return ModuleType(type, attributes);
+	}
+
+	const auto id = CustomTypeID::parse(idValue);
+	return ModuleType(type, id, attributes);
 }

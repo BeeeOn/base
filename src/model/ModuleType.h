@@ -3,6 +3,7 @@
 
 #include <set>
 
+#include "model/CustomTypeID.h"
 #include "util/Enum.h"
 
 namespace BeeeOn {
@@ -49,10 +50,20 @@ public:
 			 */
 			TYPE_BATTERY,
 			/**
+			 * It defines specific bitmap module
+			 * type which is stored in m_customID.
+			 */
+			TYPE_BITMAP,
+			/**
 			 * Min: 0
 			 * Unit: one part per million (ppm)
 			 */
 			TYPE_CO2,
+			/**
+			 * It defines specific enum module
+			 * type which is stored in m_customID.
+			 */
+			TYPE_ENUM,
 			/**
 			 * Value 0: no fire detected
 			 * Value 1: fire detected
@@ -88,6 +99,11 @@ public:
 			 */
 			TYPE_ON_OFF,
 			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
+			TYPE_PERFORMANCE,
+			/**
 			 * Unit: hPa
 			 */
 			TYPE_PRESSURE,
@@ -122,6 +138,8 @@ public:
 
 	ModuleType(const Type &type);
 	ModuleType(const Type &type, const std::set<Attribute> &attributes);
+	ModuleType(const Type &type, const CustomTypeID &customID);
+	ModuleType(const Type &type, const CustomTypeID &customID, const std::set<Attribute> &attributes);
 
 	void setType(const Type &type);
 	Type type() const;
@@ -129,11 +147,15 @@ public:
 	void setAttributes(const std::set<Attribute> &attributes);
 	std::set<Attribute> attributes() const;
 
+	void setCustomTypeID(CustomTypeID id);
+	CustomTypeID customTypeID() const;
+
 	static ModuleType parse(std::string input);
 
 private:
 	Type m_type;
 	std::set<Attribute> m_attributes;
+	CustomTypeID m_customID;
 };
 
 }
