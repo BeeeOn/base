@@ -111,6 +111,7 @@ class Console {
 	friend ConsoleSession;
 public:
 	Console();
+	virtual ~Console();
 
 	void setEol(const char c);
 	char eol() const;

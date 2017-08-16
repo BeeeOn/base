@@ -52,6 +52,7 @@ private:
 class TCPConsole : public Console, protected Loggable {
 public:
 	TCPConsole();
+	~TCPConsole();
 
 	enum {
 		DEFAULT_PORT = 6000,

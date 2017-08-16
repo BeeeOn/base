@@ -77,6 +77,10 @@ TCPConsole::TCPConsole():
 {
 }
 
+TCPConsole::~TCPConsole()
+{
+}
+
 void TCPConsole::setAddress(const string &address)
 {
 	m_address = IPAddress(address);
