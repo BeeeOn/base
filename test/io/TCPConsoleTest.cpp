@@ -23,19 +23,16 @@ namespace BeeeOn {
 #define TIMEOUT_SECS  4
 #define TIMEOUT_MSECS (TIMEOUT_SECS * 1000)
 
-/**
- * Multiple tests of sockets is unreliable on some machines
- * or operating systems and thus there is only a single test
- * that seems to work.
- */
 class TCPConsoleTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(TCPConsoleTest);
 	CPPUNIT_TEST(testReadLine);
+	CPPUNIT_TEST(testReadMultiLine);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	TCPConsoleTest();
 
 	void testReadLine();
+	void testReadMultiLine();
 
 protected:
 	void connect(StreamSocket &socket);
@@ -138,6 +135,29 @@ void TCPConsoleTest::testReadLine()
 	CPPUNIT_ASSERT_EQUAL('n', in.get());
 	CPPUNIT_ASSERT_EQUAL('d', in.get());
 	CPPUNIT_ASSERT_EQUAL('\n', in.get());
+
+	CPPUNIT_ASSERT_EQUAL('>', in.get());
+	CPPUNIT_ASSERT_EQUAL(' ', in.get());
+
+	socket.close();
+
+	CPPUNIT_ASSERT_NO_THROW(
+		m_thread.join(TIMEOUT_MSECS)
+	);
+}
+
+void TCPConsoleTest::testReadMultiLine()
+{
+	m_thread.start(m_echoRunnable);
+	CPPUNIT_ASSERT_NO_THROW(
+		m_listening.wait(TIMEOUT_MSECS)
+	);
+
+	StreamSocket socket;
+	connect(socket);
+
+	SocketInputStream in(socket);
+	SocketOutputStream out(socket);
 
 	CPPUNIT_ASSERT_EQUAL('>', in.get());
 	CPPUNIT_ASSERT_EQUAL(' ', in.get());
