@@ -25,6 +25,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
 		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
 		{ModuleType::TypeEnum::TYPE_HUMIDITY, "humidity"},
+		{ModuleType::TypeEnum::TYPE_LUMINANCE, "luminance"},
 		{ModuleType::TypeEnum::TYPE_MOTION, "motion"},
 		{ModuleType::TypeEnum::TYPE_NOISE, "noise"},
 		{ModuleType::TypeEnum::TYPE_ON_OFF, "on-off"},
@@ -33,6 +34,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_SECURITY_ALERT, "security-alert"},
 		{ModuleType::TypeEnum::TYPE_SHAKE, "shake"},
 		{ModuleType::TypeEnum::TYPE_TEMPERATURE, "temperature"},
+		{ModuleType::TypeEnum::TYPE_ULTRAVIOLET, "ultraviolet"},
 	};
 
 	return valueMap;

@@ -64,6 +64,11 @@ public:
 			 */
 			TYPE_HUMIDITY,
 			/**
+			 * Range: 0..100000
+			 * Unit: lux
+			 */
+			TYPE_LUMINANCE,
+			/**
 			 * Value 0: no motion detected
 			 * Value 1: motion detected
 			 */
@@ -101,6 +106,12 @@ public:
 			 * Unit: °C
 			 */
 			TYPE_TEMPERATURE,
+			/**
+			 * Ultraviolet light
+			 * Unit: UV index
+			 * Range: 0..11
+			 */
+			TYPE_ULTRAVIOLET,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
