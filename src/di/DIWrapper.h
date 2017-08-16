@@ -305,6 +305,11 @@ public:
 	virtual void *raw() = 0;
 
 	/**
+	 * Return count of references in the Poco::SharedPtr<?>
+	 */
+	virtual int referenceCount() = 0;
+
+	/**
 	 * Return type of the underlying instance.
 	 * This is typeid(?) from Poco::SharedPtr<?>.
 	 */
@@ -341,6 +346,7 @@ public:
 	Poco::SharedPtr<T> instance();
 
 	void *raw() override;
+	int referenceCount() override;
 	const std::type_info &type() override;
 
 protected:
@@ -550,13 +556,6 @@ AbstractDIWrapper<T>::AbstractDIWrapper():
 template <typename T>
 AbstractDIWrapper<T>::~AbstractDIWrapper()
 {
-	if (m_instance.referenceCount() > 1) {
-		logger().warning(typeid(T).name()
-			+ std::string(" is still referenced: ")
-			+ std::to_string(m_instance.referenceCount()),
-			__FILE__, __LINE__);
-	}
-
 	for (auto s : m_method)
 		delete s.second;
 }
@@ -571,6 +570,12 @@ template <typename T>
 void *AbstractDIWrapper<T>::raw()
 {
 	return reinterpret_cast<void *>(&m_instance);
+}
+
+template <typename T>
+int AbstractDIWrapper<T>::referenceCount()
+{
+	return m_instance.referenceCount();
 }
 
 template <typename T>

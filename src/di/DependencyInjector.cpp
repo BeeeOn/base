@@ -6,6 +6,7 @@
 
 #include "di/DependencyInjector.h"
 #include "math/SimpleCalc.h"
+#include "util/ClassInfo.h"
 #include "Debug.h"
 
 using namespace std;
@@ -102,17 +103,77 @@ private:
 
 }
 
-DependencyInjector::~DependencyInjector()
+void DependencyInjector::destroyOne(DIWrapper *one) const
 {
-	m_set.clear();
+	logger().debug(
+		"deleting an instance of "
+		+ ClassInfo(one->type()).name(),
+		__FILE__, __LINE__);
 
-	WrapperVector::iterator it;
-	for (it = m_free.begin(); it != m_free.end(); ++it) {
-		auto wrapper = *it;
-		delete wrapper;
+	delete one;
+}
+
+DependencyInjector::WrapperVector DependencyInjector::tryDestroy(const WrapperVector vec) const
+{
+	WrapperVector alive;
+
+	for (auto wrapper : vec) {
+		const int count = wrapper->referenceCount();
+		if (count > 1)
+			alive.emplace_back(wrapper);
+		else
+			destroyOne(wrapper);
 	}
 
+	return alive;
+}
+
+void DependencyInjector::destroyRest(const WrapperVector vec) const
+{
+	for (auto wrapper : vec) {
+		const int count = wrapper->referenceCount();
+		if (count > 1) {
+			logger().warning(
+				"an instance of "
+				+ ClassInfo(wrapper->type()).name()
+				+ " is still referenced ("
+				+ to_string(wrapper->referenceCount() - 1)
+				+ ")",
+				__FILE__, __LINE__);
+		}
+
+		destroyOne(wrapper);
+	}
+}
+
+DependencyInjector::~DependencyInjector()
+{
+	logger().debug(
+		"destroying " + to_string(m_free.size()) + " instances",
+		__FILE__, __LINE__);
+
+	m_set.clear();
+
+	WrapperVector alive = m_free;
 	m_free.clear();
+
+	while (!alive.empty()) {
+		const size_t count = alive.size();
+
+		logger().trace("try destroy up to " + to_string(count) + " instances",
+				__FILE__, __LINE__);
+
+		alive = tryDestroy(alive);
+		if (count == alive.size()) {
+			logger().warning(
+				"could not delete all instances,"
+				" there might be a circular dependency",
+				__FILE__, __LINE__);
+			break;
+		}
+	}
+
+	destroyRest(alive);
 }
 
 void DependencyInjector::createEarly()

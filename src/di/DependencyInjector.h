@@ -135,6 +135,10 @@ private:
 	 */
 	void createEarly();
 
+	void destroyOne(DIWrapper *one) const;
+	WrapperVector tryDestroy(const WrapperVector vec) const;
+	void destroyRest(const WrapperVector vec) const;
+
 	DIWrapper *createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);
