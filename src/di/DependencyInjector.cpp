@@ -498,7 +498,14 @@ DIWrapper *DependencyInjector::injectDependencies(
 			__FILE__, __LINE__);
 
 	try {
-		target->callHook("done");
+		if (!target->hasHook("done")) {
+			logger().debug("no such hook 'done' defined for "
+				+ ClassInfo(target->type()).name(),
+				__FILE__, __LINE__);
+		}
+		else {
+			target->callHook("done");
+		}
 	} catch (const Exception &e) {
 		logger().error("hook 'done' failed for " + info.name(),
 				__FILE__, __LINE__);

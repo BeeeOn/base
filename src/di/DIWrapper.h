@@ -8,11 +8,8 @@
 #include <map>
 
 #include <Poco/SharedPtr.h>
-#include <Poco/Logger.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Timespan.h>
-
-#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -362,7 +359,7 @@ protected:
  * instance as Poco::SharedPtr<T>.
  */
 template <typename T>
-class AbstractDIWrapper : public DIWrapper, Loggable {
+class AbstractDIWrapper : public DIWrapper {
 	friend DependencyInjector;
 public:
 	AbstractDIWrapper();
@@ -585,7 +582,6 @@ void DIWHookHandler<T, B>::call(DIWrapper &b)
 
 template <typename T>
 AbstractDIWrapper<T>::AbstractDIWrapper():
-	Loggable(typeid(T)),
 	m_instance(new T)
 {
 }
@@ -722,16 +718,8 @@ template <typename T>
 void AbstractDIWrapper<T>::callHook(const std::string &name)
 {
 	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		if (logger().debug()) {
-			logger().debug("no such hook '"
-				+ name + "' defined for "
-				+ typeid(T).name(),
-				__FILE__, __LINE__);
-		}
-
-		return;
-	}
+	if (entry == m_method.end())
+		throw Poco::NotFoundException("no such hook " + name);
 
 	DIWHook &handler = dynamic_cast<DIWHook &>(*(entry->second));
 	handler.call(*this);
