@@ -27,6 +27,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/io/TCPConsole.cpp
 	${PROJECT_SOURCE_DIR}/l10n/Locale.cpp
 	${PROJECT_SOURCE_DIR}/l10n/LocaleImpl.cpp
+	${PROJECT_SOURCE_DIR}/l10n/LocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/NoTranslator.cpp
 	${PROJECT_SOURCE_DIR}/l10n/SystemLocaleManager.cpp
 	${PROJECT_SOURCE_DIR}/l10n/Translator.cpp

@@ -9,6 +9,8 @@ namespace BeeeOn {
 
 class LocaleManager {
 public:
+	virtual ~LocaleManager();
+
 	virtual Locale parse(const std::string &input) = 0;
 };
 
