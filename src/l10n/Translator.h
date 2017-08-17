@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 
+#include <Poco/SharedPtr.h>
 #include <Poco/Dynamic/Var.h>
 
 namespace BeeeOn {
@@ -13,6 +14,8 @@ class Locale;
 
 class Translator {
 public:
+	typedef Poco::SharedPtr<Translator> Ptr;
+
 	virtual ~Translator();
 
 	/**
@@ -65,6 +68,8 @@ protected:
 
 class TranslatorFactory {
 public:
+	typedef Poco::SharedPtr<TranslatorFactory> Ptr;
+
 	virtual ~TranslatorFactory();
 
 	/**
