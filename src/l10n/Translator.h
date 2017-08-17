@@ -65,6 +65,8 @@ protected:
 
 class TranslatorFactory {
 public:
+	virtual ~TranslatorFactory();
+
 	/**
 	 * Create an instance of Translator for the given locale
 	 * and package name.
