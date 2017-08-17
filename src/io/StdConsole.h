@@ -3,6 +3,7 @@
 
 #include <iosfwd>
 
+#include <Poco/AtomicCounter.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Semaphore.h>
 
@@ -33,6 +34,8 @@ class StdConsole : public Console {
 public:
 	StdConsole();
 
+	void close() override;
+
 protected:
 	/**
 	 * Waits until the semaphore is ready and then it
@@ -48,6 +51,10 @@ private:
 	 * The access is controlled by the semaphore.
 	 */
 	Poco::Semaphore m_semaphore;
+	/**
+	 * Signalize closing of the console.
+	 */
+	Poco::AtomicCounter m_close;
 };
 
 }
