@@ -9,6 +9,8 @@ namespace BeeeOn {
  */
 class LocaleImpl {
 public:
+	virtual ~LocaleImpl();
+
 	/**
 	 * Returns language code of the locale.
 	 */

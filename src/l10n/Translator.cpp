@@ -5,3 +5,7 @@ using namespace BeeeOn;
 Translator::~Translator()
 {
 }
+
+TranslatorFactory::~TranslatorFactory()
+{
+}

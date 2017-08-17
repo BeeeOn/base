@@ -6,6 +6,10 @@
 using namespace std;
 using namespace BeeeOn;
 
+LocaleImpl::~LocaleImpl()
+{
+}
+
 string SystemLocaleImpl::language() const
 {
 	locale loc;
