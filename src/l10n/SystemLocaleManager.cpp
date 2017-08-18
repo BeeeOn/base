@@ -12,3 +12,8 @@ Locale SystemLocaleManager::parse(const string &)
 {
 	return Locale();
 }
+
+Locale SystemLocaleManager::chooseBest(const vector<string> &)
+{
+	return Locale();
+}
