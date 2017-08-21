@@ -87,24 +87,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 )
 
-file(GLOB WORK_SOURCES
-	${PROJECT_SOURCE_DIR}/work/AbstractWorkBackup.cpp
-	${PROJECT_SOURCE_DIR}/work/BasicProcessor.cpp
-	${PROJECT_SOURCE_DIR}/work/BasicQueue.cpp
-	${PROJECT_SOURCE_DIR}/work/DefaultWorkFacade.cpp
-	${PROJECT_SOURCE_DIR}/work/GenericWorkRunner.cpp
-	${PROJECT_SOURCE_DIR}/work/Work.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkBackup.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkContent.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkExecutor.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkFacade.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkFactory.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkLockManager.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkRunner.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkScheduler.cpp
-	${PROJECT_SOURCE_DIR}/work/WorkSuspendThrowable.cpp
-)
-
 file(GLOB TRANSACTION_SOURCES
 	${PROJECT_SOURCE_DIR}/transaction/NoTransactionFactory.cpp
 	${PROJECT_SOURCE_DIR}/transaction/NullTransactionManager.cpp
@@ -118,10 +100,9 @@ include_directories(
 )
 
 add_library(BeeeOnBase SHARED ${SOURCES})
-add_library(BeeeOnWork SHARED ${WORK_SOURCES})
 add_library(BeeeOnTransaction SHARED ${TRANSACTION_SOURCES})
 
-install(TARGETS BeeeOnBase BeeeOnWork BeeeOnTransaction
+install(TARGETS BeeeOnBase BeeeOnTransaction
 	LIBRARY DESTINATION lib
 	ARCHIVE DESTINATION lib
 )
