@@ -55,19 +55,13 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp
 )
 
-file(GLOB TEST_WORK_SOURCES
-	${PROJECT_SOURCE_DIR}/work/BasicProcessorTest.cpp
-	${PROJECT_SOURCE_DIR}/work/BasicQueueTest.cpp
-	${PROJECT_SOURCE_DIR}/work/GenericWorkRunnerTest.cpp
-)
-
 include_directories(
 	${PROJECT_SOURCE_DIR}
 	${PROJECT_SOURCE_DIR}/../src
 )
 
 add_library(BeeeOnBaseTest SHARED ${TEST_LIBRARY_SOURCES})
-add_executable(test-suite-base test.cpp ${TEST_SOURCES} ${TEST_WORK_SOURCES})
+add_executable(test-suite-base test.cpp ${TEST_SOURCES})
 add_test(COMMAND test-suite-base)
 
 set(LIBS
@@ -87,7 +81,6 @@ if (APPLE)
 	target_link_libraries(test-suite-base
 		-Wl,-all_load
 		BeeeOnBaseTest
-		BeeeOnWork
 		BeeeOnBase
 		${LIBS}
 	)
@@ -97,7 +90,6 @@ else()
 	target_link_libraries(test-suite-base
 		-Wl,--whole-archive
 		BeeeOnBaseTest
-		BeeeOnWork
 		BeeeOnBase
 		-Wl,--no-whole-archive
 		${LIBS}
