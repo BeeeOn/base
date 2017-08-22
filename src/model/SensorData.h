@@ -18,67 +18,24 @@ namespace BeeeOn {
  */
 class SensorData {
 public:
-	void setDeviceID(const DeviceID &deviceID)
-	{
-		m_deviceID = deviceID;
-	}
+	void setDeviceID(const DeviceID &deviceID);
+	const DeviceID deviceID() const;
 
-	const DeviceID deviceID() const
-	{
-		return m_deviceID;
-	}
+	void setTimestamp(const IncompleteTimestamp &timestamp);
+	const IncompleteTimestamp timestamp() const;
 
-	void setTimestamp(const IncompleteTimestamp &timestamp)
-	{
-		m_timestamp = timestamp;
-	}
+	bool isEmpty() const;
 
-	bool isEmpty() const
-	{
-		return m_values.empty();
-	}
+	void insertValue(const SensorValue &value);
 
-	const IncompleteTimestamp timestamp() const
-	{
-		return m_timestamp;
-	}
+	std::vector<SensorValue>::iterator begin();
+	std::vector<SensorValue>::iterator end();
 
-	void insertValue(const SensorValue &value)
-	{
-		m_values.push_back(value);
-	}
+	std::vector<SensorValue>::const_iterator begin() const;
+	std::vector<SensorValue>::const_iterator end() const;
 
-	std::vector<SensorValue>::iterator begin()
-	{
-		return m_values.begin();
-	}
-
-	std::vector<SensorValue>::iterator end()
-	{
-		return m_values.end();
-	}
-
-	std::vector<SensorValue>::const_iterator begin() const
-	{
-		return m_values.begin();
-	}
-
-	std::vector<SensorValue>::const_iterator end() const
-	{
-		return m_values.end();
-	}
-
-	bool operator !=(const SensorData &data) const
-	{
-		return !(*this == data);
-	}
-
-	bool operator ==(const SensorData &data) const
-	{
-		return m_deviceID == data.m_deviceID
-			&& m_timestamp == data.m_timestamp
-			&& m_values == data.m_values;
-	}
+	bool operator !=(const SensorData &data) const;
+	bool operator ==(const SensorData &data) const;
 
 private:
 	DeviceID m_deviceID;
