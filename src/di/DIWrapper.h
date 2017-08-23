@@ -10,6 +10,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 #include <Poco/Dynamic/Var.h>
+#include <Poco/Timespan.h>
 
 #include "util/Loggable.h"
 
@@ -106,6 +107,30 @@ public:
 	}
 
 	void call(DIWrapper &b, const std::string &text) override;
+private:
+	Setter m_setter;
+};
+
+/**
+ * Interface to implementations of time setters.
+ */
+struct DIWTimeSetter : public DIWMethodHelper {
+	virtual ~DIWTimeSetter();
+	virtual void call(DIWrapper &b, const Poco::Timespan &time) = 0;
+};
+
+template <typename T, typename B>
+class DIWTimespanSetter final : public DIWTimeSetter {
+public:
+	typedef void (B::*Setter)(const Poco::Timespan &);
+
+	DIWTimespanSetter(Setter setter):
+		m_setter(setter)
+	{
+	}
+
+	void call(DIWrapper &b, const Poco::Timespan &time) override;
+
 private:
 	Setter m_setter;
 };
@@ -437,6 +462,13 @@ void DIWCharSetter<T, B>::call(DIWrapper &b, const std::string &text)
 
 	B &base = extractInstance<T, B>(b);
 	(base.*m_setter)(text.at(0));
+}
+
+template <typename T, typename B>
+void DIWTimespanSetter<T, B>::call(DIWrapper &b, const Poco::Timespan &time)
+{
+	B &base = extractInstance<T, B>(b);
+	(base.*m_setter)(time);
 }
 
 template <typename T, typename B>
