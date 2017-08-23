@@ -1,6 +1,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <Poco/Logger.h>
+#include <Poco/Timespan.h>
 
 #include "di/DIWrapper.h"
 #include "cppunit/BetterAssert.h"
@@ -50,6 +51,11 @@ public:
 		m_self = self;
 	}
 
+	void setTimespan(const Timespan &time)
+	{
+		m_timespan = time;
+	}
+
 	void setList(const list<string> &l)
 	{
 		m_list.clear();
@@ -72,6 +78,7 @@ public:
 	char m_char = '0';
 	int m_offset = 0;
 	DITest *m_self = NULL;
+	Timespan m_timespan;
 	vector<string> m_list;
 	map<string, string> m_map;
 	bool m_called = false;
@@ -87,6 +94,7 @@ BEEEON_OBJECT_TEXT("name", &DITest::setName)
 BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITest::setOffset)
 BEEEON_OBJECT_REF("self", &DITest::setSelf)
+BEEEON_OBJECT_TIME("timespan", &DITest::setTimespan)
 BEEEON_OBJECT_LIST("list", &DITest::setList)
 BEEEON_OBJECT_MAP("map", &DITest::setMap)
 BEEEON_OBJECT_HOOK("call", &DITest::call)
@@ -98,6 +106,7 @@ BEEEON_OBJECT_TEXT("name", &DITestChild::setName)
 BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITestChild::setOffset)
 BEEEON_OBJECT_REF("self", &DITestChild::setSelf)
+BEEEON_OBJECT_TIME("timespan", &DITestChild::setTimespan)
 BEEEON_OBJECT_LIST("list", &DITestChild::setList)
 BEEEON_OBJECT_MAP("map", &DITestChild::setMap)
 BEEEON_OBJECT_HOOK("call", &DITestChild::call)
@@ -109,6 +118,7 @@ struct ProtectedAccess : DIWrapper {
 	using DIWrapper::injectRef;
 	using DIWrapper::injectNumber;
 	using DIWrapper::injectText;
+	using DIWrapper::injectTime;
 	using DIWrapper::injectList;
 	using DIWrapper::injectMap;
 	using DIWrapper::callHook;
@@ -127,6 +137,7 @@ void DIWrapperTest::testCreate()
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 	CPPUNIT_ASSERT(test->m_self == NULL);
+	CPPUNIT_ASSERT(test->m_timespan == 0);
 	CPPUNIT_ASSERT(test->m_list.empty());
 	CPPUNIT_ASSERT(!test->m_called);
 
@@ -134,6 +145,7 @@ void DIWrapperTest::testCreate()
 	ACCESS_CALL(wrapper, injectText)("char", "X");
 	ACCESS_CALL(wrapper, injectNumber)("offset", 16);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
+	ACCESS_CALL(wrapper, injectTime)("timespan", 10 * Timespan::HOURS);
 	ACCESS_CALL(wrapper, injectList)("list", {"a", "b", "c"});
 	ACCESS_CALL(wrapper, injectMap)("map",
 			{{"a", "1"}, {"b", "2"}, {"c", "3"}});
@@ -143,6 +155,7 @@ void DIWrapperTest::testCreate()
 	CPPUNIT_ASSERT_EQUAL('X', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(16, test->m_offset);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
+	CPPUNIT_ASSERT(Timespan(10 * Timespan::HOURS) == test->m_timespan);
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", test->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", test->m_list[2]);
@@ -187,6 +200,7 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 	CPPUNIT_ASSERT(test->m_self == NULL);
+	CPPUNIT_ASSERT(test->m_timespan == 0);
 	CPPUNIT_ASSERT(test->m_list.empty());
 	CPPUNIT_ASSERT(!test->m_called);
 
@@ -194,6 +208,7 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	ACCESS_CALL(*wrapper, injectText)("char", "Z");
 	ACCESS_CALL(*wrapper, injectNumber)("offset", 18);
 	ACCESS_CALL(*wrapper, injectRef)("self", *w);
+	ACCESS_CALL(*wrapper, injectTime)("timespan", 5 * Timespan::SECONDS);
 	ACCESS_CALL(*wrapper, injectList)("list", {"a", "b", "c"});
 	ACCESS_CALL(*wrapper, injectMap)("map",
 			{{"a", "1"}, {"b", "2"}, {"c", "3"}});
@@ -203,6 +218,7 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	CPPUNIT_ASSERT_EQUAL('Z', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(18, test->m_offset);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
+	CPPUNIT_ASSERT(Timespan(5 * Timespan::SECONDS) == test->m_timespan);
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", test->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", test->m_list[2]);
@@ -224,6 +240,7 @@ void DIWrapperTest::testInheritanceOfTarget()
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT(test->m_self == NULL);
+	CPPUNIT_ASSERT(test->m_timespan == 0);
 	CPPUNIT_ASSERT(test->m_list.empty());
 	CPPUNIT_ASSERT(!test->m_called);
 
@@ -231,6 +248,7 @@ void DIWrapperTest::testInheritanceOfTarget()
 	ACCESS_CALL(wrapper, injectText)("char", "Y");
 	ACCESS_CALL(wrapper, injectNumber)("offset", 19);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
+	ACCESS_CALL(wrapper, injectTime)("timespan", 16 * Timespan::DAYS);
 	ACCESS_CALL(wrapper, injectList)("list", {"a", "b", "c"});
 	ACCESS_CALL(wrapper, injectMap)("map",
 			{{"a", "1"}, {"b", "2"}, {"c", "3"}});
@@ -240,6 +258,7 @@ void DIWrapperTest::testInheritanceOfTarget()
 	CPPUNIT_ASSERT_EQUAL('Y', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(19, test->m_offset);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
+	CPPUNIT_ASSERT(Timespan(16 * Timespan::DAYS) == test->m_timespan);
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", test->m_list[1]);
 	CPPUNIT_ASSERT_EQUAL("c", test->m_list[2]);
