@@ -7,6 +7,7 @@
 #include "di/DependencyInjector.h"
 #include "math/SimpleCalc.h"
 #include "util/ClassInfo.h"
+#include "util/TimespanParser.h"
 #include "Debug.h"
 
 using namespace std;
@@ -337,6 +338,26 @@ bool DependencyInjector::tryInjectText(
 	return false;
 }
 
+bool DependencyInjector::tryInjectTime(
+		const InstanceInfo &info,
+		DIWrapper *target,
+		const string &key,
+		const string &name)
+{
+	if (m_conf->has(key + "[@time]")) {
+		const string value = m_conf->getString(key + "[@time]");
+
+		logger().debug("injecting " + value + " as " + name
+				+ " into " + info.name());
+
+		const Timespan &span = TimespanParser::parse(value);
+		target->injectTime(name, span);
+		return true;
+	}
+
+	return false;
+}
+
 bool DependencyInjector::tryInjectList(
 		const InstanceInfo &info,
 		DIWrapper *target,
@@ -425,6 +446,9 @@ void DependencyInjector::injectValue(
 		return;
 
 	if (tryInjectText(info, target, key, name))
+		return;
+
+	if (tryInjectTime(info, target, key, name))
 		return;
 
 	if (tryInjectList(info, target, key, name))
