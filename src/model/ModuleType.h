@@ -60,6 +60,11 @@ public:
 			 */
 			TYPE_CO2,
 			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
+			TYPE_DIM,
+			/**
 			 * It defines specific enum module
 			 * type which is stored in m_customID.
 			 */

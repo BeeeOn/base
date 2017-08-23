@@ -25,6 +25,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
 		{ModuleType::TypeEnum::TYPE_BITMAP, "bitmap"},
 		{ModuleType::TypeEnum::TYPE_CO2, "co2"},
+		{ModuleType::TypeEnum::TYPE_DIM, "dim"},
 		{ModuleType::TypeEnum::TYPE_ENUM, "enum"},
 		{ModuleType::TypeEnum::TYPE_FIRE, "fire"},
 		{ModuleType::TypeEnum::TYPE_HUMIDITY, "humidity"},
