@@ -51,10 +51,26 @@ public:
 	 */
 	bool lastFailBefore(const Poco::Timespan &timeout) const;
 
+	/**
+	 * Returns Timestamp containing the time of failure (the moment
+	 * when failsTreshold was reached).
+	 */
+	Poco::Timestamp timeOfFailure() const;
+
+	/**
+	 * Returns true if the timeout has elapsed since failure (the moment
+	 * when failsTreshold was reached).
+	 *
+	 * Warning: If treshold was not reached yet, returns true if timeout is
+	 * elapsed since creating FailDetector.
+	 */
+	bool failedBefore(const Poco::Timespan &timeout) const;
+
 private:
 	unsigned int m_fails;
 	unsigned int m_failsTreshold;
 	Poco::Timestamp m_timeOfLastFail;
+	Poco::Timestamp m_timeOfFailure;
 };
 
 }
