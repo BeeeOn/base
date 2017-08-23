@@ -46,7 +46,7 @@ public:
 	/**
 	 * Returns true if the timeout has elapsed since last fail.
 	 *
-	 * Warning: If fail() was not called yet, returns ture if timeout is
+	 * Warning: If fail() was not called yet, returns true if timeout is
 	 * elapsed since creating FailDetector.
 	 */
 	bool lastFailBefore(const Poco::Timespan &timeout) const;
