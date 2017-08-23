@@ -67,8 +67,9 @@ class InstanceInfo;
  *
  * Example configuration:
  *
+ * <pre>
  * <factory>
- *  	<instance name="main" class="BeeeOn::Main">
+ *	<instance name="main" class="BeeeOn::Main">
  *		<set name="userService" ref="userService" />
  *		<set name="listenPort"  number="8080" />
  *		<set name="timeout"     time="5 s" />
@@ -93,6 +94,7 @@ class InstanceInfo;
  *
  * DependencyInjector di(config.createView("factory"));
  * Poco::SharedPtr<Main> main = di.create<Main>("main");
+ * </pre>
  */
 class DependencyInjector : public Loggable {
 public:
