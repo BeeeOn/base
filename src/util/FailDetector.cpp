@@ -17,8 +17,10 @@ void FailDetector::fail()
 {
 	m_timeOfLastFail.update();
 
-	if (!isFailed())
-		++m_fails;
+	if (!isFailed()) {
+		if (++m_fails && isFailed())
+			m_timeOfFailure.update();
+	}
 }
 
 void FailDetector::success()
@@ -44,4 +46,14 @@ Timestamp FailDetector::timeOfLastFail() const
 bool FailDetector::lastFailBefore(const Timespan &timeout) const
 {
 	return m_timeOfLastFail.isElapsed(timeout.totalMicroseconds());
+}
+
+Timestamp FailDetector::timeOfFailure() const
+{
+	return m_timeOfFailure;
+}
+
+bool FailDetector::failedBefore(const Timespan &timeout) const
+{
+	return m_timeOfFailure.isElapsed(timeout.totalMicroseconds());
 }
