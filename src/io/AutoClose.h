@@ -61,6 +61,16 @@ public:
 		return &m_closable;
 	}
 
+	Closable &operator *()
+	{
+		return m_closable;
+	}
+
+	const Closable &operator *() const
+	{
+		return m_closable;
+	}
+
 private:
 	Closable &m_closable;
 	Poco::Logger &m_logger;
