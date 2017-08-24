@@ -19,6 +19,7 @@ class MACAddressTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParse);
 	CPPUNIT_TEST(testOperators);
 	CPPUNIT_TEST(testSeparator);
+	CPPUNIT_TEST(testInto);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -30,6 +31,7 @@ public:
 	void testParse();
 	void testOperators();
 	void testSeparator();
+	void testInto();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MACAddressTest);
@@ -110,6 +112,21 @@ void MACAddressTest::testSeparator()
 	CPPUNIT_ASSERT(mac.toString(':') == "AA:00:CC:00:EE:FF");
 	CPPUNIT_ASSERT(mac.toString('-') == "AA-00-CC-00-EE-FF");
 	CPPUNIT_ASSERT(mac.toString('.') == "AA.00.CC.00.EE.FF");
+}
+
+void MACAddressTest::testInto()
+{
+	MACAddress address(0x0000112233445566);
+
+	unsigned char bytes[6];
+	address.into(bytes);
+
+	CPPUNIT_ASSERT_EQUAL(0x66, bytes[0]);
+	CPPUNIT_ASSERT_EQUAL(0x55, bytes[1]);
+	CPPUNIT_ASSERT_EQUAL(0x44, bytes[2]);
+	CPPUNIT_ASSERT_EQUAL(0x33, bytes[3]);
+	CPPUNIT_ASSERT_EQUAL(0x22, bytes[4]);
+	CPPUNIT_ASSERT_EQUAL(0x11, bytes[5]);
 }
 
 }

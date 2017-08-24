@@ -26,6 +26,11 @@ public:
 		return m_bytes;
 	}
 
+	/**
+	 * Copy the raw MAC address bytes into the given array.
+	 */
+	void into(unsigned char bytes[6]) const;
+
 	operator uint64_t() const
 	{
 		return toNumber();

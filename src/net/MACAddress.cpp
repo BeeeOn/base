@@ -52,6 +52,12 @@ uint64_t MACAddress::toNumber() const
 	return num;
 }
 
+void MACAddress::into(unsigned char bytes[6]) const
+{
+	for (unsigned int i = 0; i < m_bytes.size(); ++i)
+		bytes[i] = m_bytes[i];
+}
+
 string MACAddress::toString() const
 {
 	string str = "";
