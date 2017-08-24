@@ -14,6 +14,7 @@ class MACAddressTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(MACAddressTest);
 	CPPUNIT_TEST(testCreate);
 	CPPUNIT_TEST(testCreateFromVector);
+	CPPUNIT_TEST(testCreateFromArray);
 	CPPUNIT_TEST(testCreateFromUint64);
 	CPPUNIT_TEST(testParse);
 	CPPUNIT_TEST(testOperators);
@@ -24,6 +25,7 @@ public:
 	void tearDown();
 	void testCreate();
 	void testCreateFromVector();
+	void testCreateFromArray();
 	void testCreateFromUint64();
 	void testParse();
 	void testOperators();
@@ -62,6 +64,14 @@ void MACAddressTest::testCreateFromVector()
 		MACAddress address({2, 1, 0}),
 		Poco::InvalidArgumentException
 	);
+}
+
+void MACAddressTest::testCreateFromArray()
+{
+	unsigned char bytes[] = {5, 4, 3, 2, 1, 0};
+
+	MACAddress address(bytes);
+	CPPUNIT_ASSERT_EQUAL("00:01:02:03:04:05", address.toString(':'));
 }
 
 void MACAddressTest::testCreateFromUint64()

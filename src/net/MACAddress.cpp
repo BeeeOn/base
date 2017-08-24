@@ -11,6 +11,12 @@ using namespace std;
 using Poco::NumberFormatter;
 using Poco::RegularExpression;
 
+MACAddress::MACAddress(const unsigned char bytes[6])
+{
+	for (int i = 0; i < 6; ++i)
+		m_bytes.push_back(bytes[i]);
+}
+
 MACAddress::MACAddress(const vector<unsigned char> &bytes) :
 	m_bytes(bytes)
 {

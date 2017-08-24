@@ -8,6 +8,7 @@ namespace BeeeOn {
 
 class MACAddress {
 public:
+	MACAddress(const unsigned char bytes[6]);
 	MACAddress(const std::vector<unsigned char> &bytes);
 
 	MACAddress(const uint64_t numMac);
