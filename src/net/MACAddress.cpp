@@ -14,6 +14,8 @@ using Poco::RegularExpression;
 MACAddress::MACAddress(const vector<unsigned char> &bytes) :
 	m_bytes(bytes)
 {
+	if (m_bytes.size() != 6)
+		throw InvalidArgumentException("invalid count of MAC address bytes");
 }
 
 MACAddress::MACAddress(const uint64_t numMac) :

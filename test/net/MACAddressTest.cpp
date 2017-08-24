@@ -1,6 +1,8 @@
 #include <set>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <Poco/Exception.h>
+
 #include "cppunit/BetterAssert.h"
 #include "net/MACAddress.h"
 
@@ -11,6 +13,7 @@ namespace BeeeOn {
 class MACAddressTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(MACAddressTest);
 	CPPUNIT_TEST(testCreate);
+	CPPUNIT_TEST(testCreateFromVector);
 	CPPUNIT_TEST(testCreateFromUint64);
 	CPPUNIT_TEST(testParse);
 	CPPUNIT_TEST(testOperators);
@@ -20,6 +23,7 @@ public:
 	void setUp();
 	void tearDown();
 	void testCreate();
+	void testCreateFromVector();
 	void testCreateFromUint64();
 	void testParse();
 	void testOperators();
@@ -42,6 +46,22 @@ void MACAddressTest::testCreate()
 
 	CPPUNIT_ASSERT_EQUAL(0, mac.toNumber());
 	CPPUNIT_ASSERT(mac.toString() == "000000000000");
+}
+
+void MACAddressTest::testCreateFromVector()
+{
+	vector<unsigned char> valid = {5, 4, 3, 2, 1, 0};
+
+	MACAddress address0(valid);
+	CPPUNIT_ASSERT_EQUAL("00:01:02:03:04:05", address0.toString(':'));
+
+	MACAddress address1({5, 4, 3, 2, 1, 0});
+	CPPUNIT_ASSERT_EQUAL("00:01:02:03:04:05", address1.toString(':'));
+
+	CPPUNIT_ASSERT_THROW(
+		MACAddress address({2, 1, 0}),
+		Poco::InvalidArgumentException
+	);
 }
 
 void MACAddressTest::testCreateFromUint64()
