@@ -76,6 +76,18 @@ private:
 	Poco::Logger &m_logger;
 };
 
+struct FdClose {
+	void operator() (const int fd) const;
+};
+
+class FdAutoClose : public AutoClose<int, FdClose> {
+public:
+	FdAutoClose(const int fd);
+
+private:
+	int m_fd;
+};
+
 }
 
 #endif
