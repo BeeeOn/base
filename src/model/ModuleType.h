@@ -55,6 +55,11 @@ public:
 			 */
 			TYPE_BITMAP,
 			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
+			TYPE_BRIGHTNESS,
+			/**
 			 * Min: 0
 			 * Unit: one part per million (ppm)
 			 */
