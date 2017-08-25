@@ -27,6 +27,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataConfirm.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataExport.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoClose.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStream.cpp

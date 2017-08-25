@@ -12,6 +12,7 @@
 #include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponseWithAck.h"
 #include "gwmessage/GWSensorDataConfirm.h"
+#include "gwmessage/GWSensorDataExport.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -34,6 +35,9 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testGetAckFromResponse);
 	CPPUNIT_TEST(testParseSensorDataConfirm);
 	CPPUNIT_TEST(testCreateSensorDataConfirm);
+	CPPUNIT_TEST(testParseSensorDataExport);
+	CPPUNIT_TEST(testCreateSensorDataExport);
+	CPPUNIT_TEST(testGetConfirmFromSensorDataExport);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -47,6 +51,9 @@ public:
 	void testGetAckFromResponse();
 	void testParseSensorDataConfirm();
 	void testCreateSensorDataConfirm();
+	void testParseSensorDataExport();
+	void testCreateSensorDataExport();
+	void testGetConfirmFromSensorDataExport();
 
 protected:
 	string jsonReformat(const string &json);
@@ -232,6 +239,147 @@ void GWMessageTest::testCreateSensorDataConfirm()
 		})"),
 		message->toString()
 	);
+}
+
+void GWMessageTest::testParseSensorDataExport()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "sensor_data_export",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"data" : [
+				{
+					"device_id" : "0xa123123412341234",
+					"timestamp" : 1500334250150150,
+					"values": [
+						{
+							"module_id" : "0",
+							"valid" : true,
+							"value" : 3.5
+						}
+					]
+				},
+				{
+					"device_id" : "0xa123444455556666",
+					"timestamp" : 1111111111111111,
+					"values": [
+						{
+							"module_id" : "0",
+							"valid" : true,
+							"value" : 3.5
+						},
+						{
+							"module_id": "1",
+							"valid": false
+						}
+					]
+				}
+			]
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SENSOR_DATA_EXPORT, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSensorDataExport>().isNull());
+
+	GWSensorDataExport::Ptr dataExport = message.cast<GWSensorDataExport>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", dataExport->id().toString() );
+
+	vector<SensorData> data = dataExport->data();
+	CPPUNIT_ASSERT(data.size() == 2);
+
+	CPPUNIT_ASSERT_EQUAL("0xa123123412341234", data[0].deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL(1500334250150150, data[0].timestamp().value().epochMicroseconds());
+	CPPUNIT_ASSERT_EQUAL(0, data[0].begin()->moduleID().value());
+	CPPUNIT_ASSERT_EQUAL(3.5, data[0].begin()->value());
+	CPPUNIT_ASSERT(data[0].begin()->isValid());
+
+	CPPUNIT_ASSERT_EQUAL("0xa123444455556666", data[1].deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL(1111111111111111, data[1].timestamp().value().epochMicroseconds());
+	CPPUNIT_ASSERT_EQUAL(0, data[1].begin()->moduleID().value());
+	CPPUNIT_ASSERT_EQUAL(3.5, data[1].begin()->value());
+	CPPUNIT_ASSERT(data[1].begin()->isValid());
+	CPPUNIT_ASSERT_EQUAL(1, (data[1].begin() + 1)->moduleID().value());
+	CPPUNIT_ASSERT(!(data[1].begin() + 1)->isValid());
+}
+
+void GWMessageTest::testCreateSensorDataExport()
+{
+	GWSensorDataExport::Ptr message(new GWSensorDataExport);
+	message->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+
+	SensorValue value1;
+	value1.setModuleID(0);
+	value1.setValue(3.5);
+	value1.setValid(true);
+
+	SensorValue value2;
+	value2.setModuleID(1);
+	value2.setValue(NAN);
+	value2.setValid(false);
+
+	SensorData data1;
+	data1.setDeviceID(DeviceID::parse("0xa123123412341234"));
+	data1.setTimestamp(Timestamp(1500334250150150));
+	data1.insertValue(value1);
+
+	SensorData data2;
+	data2.setDeviceID(DeviceID::parse("0xa123444455556666"));
+	data2.setTimestamp(Timestamp(1111111111111111));
+	data2.insertValue(value1);
+	data2.insertValue(value2);
+
+	vector<SensorData> dataVector;
+	dataVector.push_back(data1);
+	dataVector.push_back(data2);
+
+	message->setData(dataVector);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "sensor_data_export",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"data" : [
+				{
+					"device_id" : "0xa123123412341234",
+					"timestamp" : 1500334250150150,
+					"values": [
+						{
+							"module_id" : "0",
+							"valid" : true,
+							"value" : 3.5
+						}
+					]
+				},
+				{
+					"device_id" : "0xa123444455556666",
+					"timestamp" : 1111111111111111,
+					"values": [
+						{
+							"module_id" : "0",
+							"valid" : true,
+							"value" : 3.5
+						},
+						{
+							"module_id": "1",
+							"valid": false
+						}
+					]
+				}
+			]
+		})"),
+		message->toString()
+	);
+}
+
+void GWMessageTest::testGetConfirmFromSensorDataExport()
+{
+	GWSensorDataExport::Ptr message(new GWSensorDataExport);
+	message->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+
+	GWSensorDataConfirm::Ptr confirm = message->confirm();
+
+	CPPUNIT_ASSERT(!confirm.isNull());
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SENSOR_DATA_CONFIRM, confirm->type().raw());
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", confirm->id().toString());
 }
 
 }
