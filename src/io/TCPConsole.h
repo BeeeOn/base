@@ -62,9 +62,9 @@ public:
 
 	void setAddress(const std::string &address);
 	void setPort(int port);
-	void setSendTimeout(int ms);
-	void setRecvTimeout(int ms);
-	void setPollTimeout(int ms);
+	void setSendTimeout(const Poco::Timespan &timeout);
+	void setRecvTimeout(const Poco::Timespan &timeout);
+	void setPollTimeout(const Poco::Timespan &timeout);
 	void setBacklog(int backlog);
 
 	void startListen();
