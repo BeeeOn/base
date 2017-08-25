@@ -12,6 +12,7 @@ struct GWMessageTypeEnum {
 		GENERIC_RESPONSE,
 		GENERIC_ACK,
 		RESPONSE_WITH_ACK,
+		SENSOR_DATA_CONFIRM,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

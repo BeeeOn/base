@@ -11,6 +11,7 @@
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponseWithAck.h"
+#include "gwmessage/GWSensorDataConfirm.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -31,6 +32,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateGatewayAccepted);
 	CPPUNIT_TEST(testDeriveResponse);
 	CPPUNIT_TEST(testGetAckFromResponse);
+	CPPUNIT_TEST(testParseSensorDataConfirm);
+	CPPUNIT_TEST(testCreateSensorDataConfirm);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -42,6 +45,9 @@ public:
 	void testCreateGatewayAccepted();
 	void testDeriveResponse();
 	void testGetAckFromResponse();
+	void testParseSensorDataConfirm();
+	void testCreateSensorDataConfirm();
+
 protected:
 	string jsonReformat(const string &json);
 };
@@ -197,6 +203,35 @@ void GWMessageTest::testGetAckFromResponse()
 	CPPUNIT_ASSERT_EQUAL(GWMessageType::GENERIC_ACK, ack->type().raw());
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", ack->id().toString());
 	CPPUNIT_ASSERT_EQUAL(GWResponse::SUCCESS, ack->status());
+}
+
+void GWMessageTest::testParseSensorDataConfirm()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "sensor_data_confirm",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SENSOR_DATA_CONFIRM, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSensorDataConfirm>().isNull());
+
+	GWSensorDataConfirm::Ptr confirm = message.cast<GWSensorDataConfirm>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", confirm->id().toString() );
+}
+
+void GWMessageTest::testCreateSensorDataConfirm()
+{
+	GWSensorDataConfirm::Ptr message(new GWSensorDataConfirm);
+	message->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "sensor_data_confirm",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
+		})"),
+		message->toString()
+	);
 }
 
 }
