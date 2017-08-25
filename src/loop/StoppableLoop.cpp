@@ -13,7 +13,7 @@ StoppableLoop::~StoppableLoop()
 
 StoppableLoopAdapter::StoppableLoopAdapter(
 		SharedPtr<StoppableRunnable> runnable):
-	m_stopTimeout(10000),
+	m_stopTimeout(10 * Timespan::SECONDS),
 	m_runnable(runnable),
 	m_thread(NULL)
 {
@@ -26,12 +26,12 @@ StoppableLoopAdapter::~StoppableLoopAdapter()
 	doStop();
 }
 
-void StoppableLoopAdapter::setStopTimeout(long ms)
+void StoppableLoopAdapter::setStopTimeout(const Timespan &timeout)
 {
-	if (ms <= 0)
-		throw InvalidArgumentException("stopTimeout must be greater then 0");
+	if (timeout < 1 * Timespan::MILLISECONDS)
+		throw InvalidArgumentException("stopTimeout must be at least 1 ms");
 
-	m_stopTimeout = ms;
+	m_stopTimeout = timeout;
 }
 
 void StoppableLoopAdapter::start()
@@ -60,7 +60,7 @@ void StoppableLoopAdapter::doStop()
 		m_runnable->stop();
 
 	try {
-		m_thread->join(m_stopTimeout);
+		m_thread->join(m_stopTimeout.totalMilliseconds());
 		delete m_thread;
 	} catch (const TimeoutException &e) {
 		/*

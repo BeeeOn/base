@@ -2,6 +2,7 @@
 #define BEEEON_STOPPABLE_LOOP_H
 
 #include <Poco/SharedPtr.h>
+#include <Poco/Timespan.h>
 
 #include "util/Loggable.h"
 #include "loop/StoppableRunnable.h"
@@ -39,13 +40,13 @@ public:
 	void start() override;
 	void stop() override;
 
-	void setStopTimeout(long ms);
+	void setStopTimeout(const Poco::Timespan &timeout);
 
 protected:
 	void doStop();
 
 private:
-	long m_stopTimeout;
+	Poco::Timespan m_stopTimeout;
 	Poco::SharedPtr<StoppableRunnable> m_runnable;
 	Poco::Thread *m_thread;
 };
