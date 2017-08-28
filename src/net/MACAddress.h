@@ -58,6 +58,8 @@ public:
 
 	static MACAddress parse(const std::string &str, const char separator = ':');
 
+	static const MACAddress ZERO;
+
 private:
 	std::vector<unsigned char> m_bytes;
 };

@@ -20,6 +20,7 @@ class MACAddressTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testOperators);
 	CPPUNIT_TEST(testSeparator);
 	CPPUNIT_TEST(testInto);
+	CPPUNIT_TEST(testZERO);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void setUp();
@@ -32,6 +33,7 @@ public:
 	void testOperators();
 	void testSeparator();
 	void testInto();
+	void testZERO();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MACAddressTest);
@@ -127,6 +129,19 @@ void MACAddressTest::testInto()
 	CPPUNIT_ASSERT_EQUAL(0x33, bytes[3]);
 	CPPUNIT_ASSERT_EQUAL(0x22, bytes[4]);
 	CPPUNIT_ASSERT_EQUAL(0x11, bytes[5]);
+}
+
+void MACAddressTest::testZERO()
+{
+	unsigned char bytes[6];
+	MACAddress::ZERO.into(bytes);
+
+	CPPUNIT_ASSERT_EQUAL(0x00, bytes[0]);
+	CPPUNIT_ASSERT_EQUAL(0x00, bytes[1]);
+	CPPUNIT_ASSERT_EQUAL(0x00, bytes[2]);
+	CPPUNIT_ASSERT_EQUAL(0x00, bytes[3]);
+	CPPUNIT_ASSERT_EQUAL(0x00, bytes[4]);
+	CPPUNIT_ASSERT_EQUAL(0x00, bytes[5]);
 }
 
 }
