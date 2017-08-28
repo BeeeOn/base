@@ -8,6 +8,7 @@ namespace BeeeOn {
 
 class MACAddress {
 public:
+	MACAddress(const unsigned char bytes[6]);
 	MACAddress(const std::vector<unsigned char> &bytes);
 
 	MACAddress(const uint64_t numMac);
@@ -24,6 +25,11 @@ public:
 	{
 		return m_bytes;
 	}
+
+	/**
+	 * Copy the raw MAC address bytes into the given array.
+	 */
+	void into(unsigned char bytes[6]) const;
 
 	operator uint64_t() const
 	{
@@ -51,6 +57,8 @@ public:
 	}
 
 	static MACAddress parse(const std::string &str, const char separator = ':');
+
+	static const MACAddress ZERO;
 
 private:
 	std::vector<unsigned char> m_bytes;

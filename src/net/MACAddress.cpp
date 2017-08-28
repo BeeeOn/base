@@ -11,9 +11,19 @@ using namespace std;
 using Poco::NumberFormatter;
 using Poco::RegularExpression;
 
+const MACAddress MACAddress::ZERO({0, 0, 0, 0, 0, 0});
+
+MACAddress::MACAddress(const unsigned char bytes[6])
+{
+	for (int i = 0; i < 6; ++i)
+		m_bytes.push_back(bytes[i]);
+}
+
 MACAddress::MACAddress(const vector<unsigned char> &bytes) :
 	m_bytes(bytes)
 {
+	if (m_bytes.size() != 6)
+		throw InvalidArgumentException("invalid count of MAC address bytes");
 }
 
 MACAddress::MACAddress(const uint64_t numMac) :
@@ -42,6 +52,12 @@ uint64_t MACAddress::toNumber() const
 	}
 
 	return num;
+}
+
+void MACAddress::into(unsigned char bytes[6]) const
+{
+	for (unsigned int i = 0; i < m_bytes.size(); ++i)
+		bytes[i] = m_bytes[i];
 }
 
 string MACAddress::toString() const
