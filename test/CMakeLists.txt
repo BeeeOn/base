@@ -46,6 +46,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
+	${PROJECT_SOURCE_DIR}/util/EventSourceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/FailDetectorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/HashedLockTest.cpp
 	${PROJECT_SOURCE_DIR}/util/IncompleteTimestampTest.cpp
