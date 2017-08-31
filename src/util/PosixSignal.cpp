@@ -3,7 +3,10 @@
 #include <csignal>
 #include <cstring>
 
+#include <map>
+
 #include <Poco/Exception.h>
+#include <Poco/Mutex.h>
 
 #include "util/PosixSignal.h"
 
@@ -61,4 +64,41 @@ void PosixSignal::send(long pid, const string name)
 void PosixSignal::ignore(const string &name)
 {
 	ignore(byName(name));
+}
+
+void PosixSignal::handle(const std::string &name, Handler handler)
+{
+	handle(byName(name), handler);
+}
+
+/**
+ * Map of registered signal handlers.
+ */
+static map<int, PosixSignal::Handler> g_handlers;
+
+/**
+ * Lock for accessing the g_handlers map.
+ */
+static Mutex g_lock;
+
+static void handleSignal(const int sig)
+{
+	ScopedLockWithUnlock<Mutex> guard(g_lock);
+
+	const auto it = g_handlers.find(sig);
+	if (it == g_handlers.end())
+		return;
+
+	const PosixSignal::Handler handler = it->second;
+	guard.unlock();
+
+	handler(sig);
+}
+
+void PosixSignal::handle(const unsigned int num, Handler handler)
+{
+	Mutex::ScopedLock guard(g_lock);
+
+	g_handlers.emplace(num, handler);
+	signal(num, &handleSignal);
 }

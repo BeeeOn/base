@@ -1,6 +1,7 @@
 #ifndef BEEEON_POSIX_SIGNAL_H
 #define BEEEON_POSIX_SIGNAL_H
 
+#include <functional>
 #include <string>
 
 namespace BeeeOn {
@@ -13,6 +14,8 @@ private:
 	PosixSignal();
 
 public:
+	typedef std::function<void(unsigned int)> Handler;
+
 	/**
 	 * Send signal to a process of the given pid.
 	 * @param pid Process ID
@@ -26,6 +29,13 @@ public:
 	 */
 	static void ignore(const std::string &name);
 
+	/**
+	 * Install a handler for the given signal name.
+	 * @param name Name of the signal to handle
+	 * @param handler Handler to be used
+	 */
+	static void handle(const std::string &name, Handler handler);
+
 protected:
 	/**
 	 * Translate name of a signal to its internal representation.
@@ -34,6 +44,7 @@ protected:
 
 	static void send(long pid, unsigned int num);
 	static void ignore(unsigned int num);
+	static void handle(unsigned int num, Handler handler);
 };
 
 }
