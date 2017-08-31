@@ -126,6 +126,8 @@ int DIDaemon::main(const std::vector<std::string> &)
 		return EXIT_OK;
 	}
 
+	ErrorHandler::set(&m_errorHandler);
+
 	logStartup();
 
 	testPocoCompatibility();
@@ -381,4 +383,24 @@ void DIDaemon::notifyStarted() const
 	} catch (const Exception &e) {
 		logger().log(e, __FILE__, __LINE__);
 	}
+}
+
+DIDaemon::UnhandledErrorHandler::~UnhandledErrorHandler()
+{
+}
+
+void DIDaemon::UnhandledErrorHandler::exception(const Exception &e)
+{
+	logger().log(e, __FILE__, __LINE__);
+	logger().critical(e.displayText(), __FILE__, __LINE__);
+}
+
+void DIDaemon::UnhandledErrorHandler::exception(const std::exception &e)
+{
+	logger().critical(e.what(), __FILE__, __LINE__);
+}
+
+void DIDaemon::UnhandledErrorHandler::exception()
+{
+	logger().critical("unhandled unknown error", __FILE__, __LINE__);
 }
