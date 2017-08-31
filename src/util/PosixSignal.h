@@ -5,11 +5,19 @@
 
 namespace BeeeOn {
 
+/**
+ * @brief The class implements working with POSIX signals.
+ */
 class PosixSignal {
 private:
 	PosixSignal();
 
 public:
+	/**
+	 * Send signal to a process of the given pid.
+	 * @param pid Process ID
+	 * @param name Name of the signal to send (e.g. SIGUSR1)
+	 */
 	static void send(long pid, const std::string name);
 
 protected:
