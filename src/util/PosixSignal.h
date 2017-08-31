@@ -20,6 +20,12 @@ public:
 	 */
 	static void send(long pid, const std::string name);
 
+	/**
+	 * Ignore the selected signal to not influence the current process (SIG_IGN).
+	 * @param name Name of the signal to be ignored
+	 */
+	static void ignore(const std::string &name);
+
 protected:
 	/**
 	 * Translate name of a signal to its internal representation.
@@ -27,6 +33,7 @@ protected:
 	static unsigned int byName(const std::string &name);
 
 	static void send(long pid, unsigned int num);
+	static void ignore(unsigned int num);
 };
 
 }

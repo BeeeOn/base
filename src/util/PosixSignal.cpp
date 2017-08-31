@@ -26,6 +26,13 @@ void PosixSignal::send(long pid, unsigned int num)
 		throw IllegalStateException(string("failed to send signal ") + strerror(errno));
 }
 
+void PosixSignal::ignore(const unsigned int num)
+{
+	signal(num, SIG_IGN);
+	if (errno)
+		throw InvalidArgumentException(strerror(errno));
+}
+
 unsigned int PosixSignal::byName(const string &name)
 {
 	if (name == "SIGTERM")
@@ -49,4 +56,9 @@ unsigned int PosixSignal::byName(const string &name)
 void PosixSignal::send(long pid, const string name)
 {
 	send(pid, byName(name));
+}
+
+void PosixSignal::ignore(const string &name)
+{
+	ignore(byName(name));
 }
