@@ -21,6 +21,11 @@ public:
 	static void send(long pid, const std::string name);
 
 protected:
+	/**
+	 * Translate name of a signal to its internal representation.
+	 */
+	static unsigned int byName(const std::string &name);
+
 	static void send(long pid, unsigned int num);
 };
 

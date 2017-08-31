@@ -26,26 +26,27 @@ void PosixSignal::send(long pid, unsigned int num)
 		throw IllegalStateException(string("failed to send signal ") + strerror(errno));
 }
 
-void PosixSignal::send(long pid, const string name)
+unsigned int PosixSignal::byName(const string &name)
 {
-	unsigned int num = 0;
-
 	if (name == "SIGTERM")
-		num = SIGTERM;
+		return SIGTERM;
 	else if (name == "SIGINT")
-		num = SIGINT;
+		return SIGINT;
 	else if (name == "SIGKILL")
-		num = SIGKILL;
+		return SIGKILL;
 	else if (name == "SIGUSR1")
-		num = SIGUSR1;
+		return SIGUSR1;
 	else if (name == "SIGUSR2")
-		num = SIGUSR2;
+		return SIGUSR2;
 	else if (name == "SIGCONT")
-		num = SIGCONT;
+		return SIGCONT;
 	else if (name == "SIGHUP")
-		num = SIGHUP;
+		return SIGHUP;
 	else
 		throw InvalidArgumentException("unrecognized signal name");
+}
 
-	send(pid, num);
+void PosixSignal::send(long pid, const string name)
+{
+	send(pid, byName(name));
 }
