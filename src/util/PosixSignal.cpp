@@ -7,6 +7,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Mutex.h>
+#include <Poco/Thread.h>
 
 #include "util/PosixSignal.h"
 
@@ -27,6 +28,11 @@ void PosixSignal::send(long pid, unsigned int num)
 
 	if (kill(epid, num) < 0)
 		throw IllegalStateException(string("failed to send signal ") + strerror(errno));
+}
+
+void PosixSignal::send(const Thread &thread, unsigned int num)
+{
+	pthread_kill(thread.tid(), num);
 }
 
 void PosixSignal::ignore(const unsigned int num)
@@ -59,6 +65,11 @@ unsigned int PosixSignal::byName(const string &name)
 void PosixSignal::send(long pid, const string name)
 {
 	send(pid, byName(name));
+}
+
+void PosixSignal::send(const Thread &thread, const string &name)
+{
+	send(thread, byName(name));
 }
 
 void PosixSignal::ignore(const string &name)

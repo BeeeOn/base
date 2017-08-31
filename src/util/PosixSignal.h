@@ -4,6 +4,12 @@
 #include <functional>
 #include <string>
 
+namespace Poco {
+
+class Thread;
+
+}
+
 namespace BeeeOn {
 
 /**
@@ -22,6 +28,16 @@ public:
 	 * @param name Name of the signal to send (e.g. SIGUSR1)
 	 */
 	static void send(long pid, const std::string name);
+
+	/**
+	 * Send signal to a thread owning by this process. We assume that the Poco::Thread
+	 * is using pthread internally. The implementation calls pthread_kill() to send
+	 * the signal to the proper thread.
+	 *
+	 * @param thread Thread to send the signal to
+	 * @param name Name of the signal to send
+	 */
+	static void send(const Poco::Thread &thread, const std::string &name);
 
 	/**
 	 * Ignore the selected signal to not influence the current process (SIG_IGN).
@@ -43,6 +59,7 @@ protected:
 	static unsigned int byName(const std::string &name);
 
 	static void send(long pid, unsigned int num);
+	static void send(const Poco::Thread &thread, unsigned int num);
 	static void ignore(unsigned int num);
 	static void handle(unsigned int num, Handler handler);
 };
