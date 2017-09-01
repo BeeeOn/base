@@ -23,15 +23,15 @@ public:
 			/**
 			 * The sensor/actuator is located inside (a building).
 			 */
-			TYPE_INNER,
+			TYPE_INNER = 1,
 			/**
 			 * The sensor enables to set (to modify) value only from sensor.
 			 */
-			TYPE_MANUAL_ONLY,
+			TYPE_MANUAL_ONLY = 2,
 			/**
 			 * The sensor/actuator is located outside.
 			 */
-			TYPE_OUTER,
+			TYPE_OUTER = 3,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
