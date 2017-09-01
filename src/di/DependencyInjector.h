@@ -33,6 +33,7 @@ class InstanceInfo;
  *   + attribute name   - name of the property to inject
  *   + attribute ref    - value to set is a reference to an instance by name
  *   + attribute text   - value to set is a string
+ *   + attribute time   - value to set is a timespan
  *   + attribute number - value to set is an integer
  *   + attribute list   - value to set is a list of strings
  *   + attribute if-yes - optional condition to avoid applying the "set"
@@ -41,6 +42,7 @@ class InstanceInfo;
  *   + attribute name   - name of the property to inject
  *   + attribute ref    - value to add is a reference to an instance by name
  *   + attribute text   - value to add is a string
+ *   + attribute time   - value to add is a timespan
  *   + attribute number - value to add is an integer
  *   + attribute if-yes - optional condition to avoid applying the "add"
  *
@@ -69,6 +71,7 @@ class InstanceInfo;
  *  	<instance name="main" class="BeeeOn::Main">
  *		<set name="userService" ref="userService" />
  *		<set name="listenPort"  number="8080" />
+ *		<set name="timeout"     time="5 s" />
  *		<add name="listeners"   ref="loginListener" />
  *		<add name="listeners"   ref="errorListener" />
  *		<set name="whitelist"   list="192.168.5.5,192.168.15.1" />
@@ -159,6 +162,10 @@ private:
 			const std::string &key,
 			const std::string &name);
 	bool tryInjectText(const InstanceInfo &info,
+			DIWrapper *target,
+			const std::string &key,
+			const std::string &name);
+	bool tryInjectTime(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);

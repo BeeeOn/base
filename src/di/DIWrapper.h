@@ -10,6 +10,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Logger.h>
 #include <Poco/Dynamic/Var.h>
+#include <Poco/Timespan.h>
 
 #include "util/Loggable.h"
 
@@ -106,6 +107,30 @@ public:
 	}
 
 	void call(DIWrapper &b, const std::string &text) override;
+private:
+	Setter m_setter;
+};
+
+/**
+ * Interface to implementations of time setters.
+ */
+struct DIWTimeSetter : public DIWMethodHelper {
+	virtual ~DIWTimeSetter();
+	virtual void call(DIWrapper &b, const Poco::Timespan &time) = 0;
+};
+
+template <typename T, typename B>
+class DIWTimespanSetter final : public DIWTimeSetter {
+public:
+	typedef void (B::*Setter)(const Poco::Timespan &);
+
+	DIWTimespanSetter(Setter setter):
+		m_setter(setter)
+	{
+	}
+
+	void call(DIWrapper &b, const Poco::Timespan &time) override;
+
 private:
 	Setter m_setter;
 };
@@ -322,6 +347,8 @@ protected:
 			int value) = 0;
 	virtual void injectText(const std::string &name,
 			const std::string &value) = 0;
+	virtual void injectTime(const std::string &name,
+			const Poco::Timespan &value) = 0;
 	virtual void injectList(const std::string &name,
 			const std::list<Poco::Dynamic::Var> &l) = 0;
 	virtual void injectMap(const std::string &name,
@@ -353,6 +380,7 @@ protected:
 	void injectRef(const std::string &name, DIWrapper &wrapper) override;
 	void injectNumber(const std::string &name, int value) override;
 	void injectText(const std::string &name, const std::string &value) override;
+	void injectTime(const std::string &name, const Poco::Timespan &value) override;
 	void injectList(const std::string &name,
 			const std::list<Poco::Dynamic::Var> &l) override;
 	void injectMap(const std::string &name,
@@ -379,6 +407,9 @@ protected:
 
 	template <typename B>
 	void textSetter(const std::string &name, void (B::*setter)(const char));
+
+	template <typename B>
+	void timeSetter(const std::string &name, void (B::*setter)(const Poco::Timespan &));
 
 	template <typename B>
 	void listSetter(const std::string &name,
@@ -437,6 +468,13 @@ void DIWCharSetter<T, B>::call(DIWrapper &b, const std::string &text)
 
 	B &base = extractInstance<T, B>(b);
 	(base.*m_setter)(text.at(0));
+}
+
+template <typename T, typename B>
+void DIWTimespanSetter<T, B>::call(DIWrapper &b, const Poco::Timespan &time)
+{
+	B &base = extractInstance<T, B>(b);
+	(base.*m_setter)(time);
 }
 
 template <typename T, typename B>
@@ -634,6 +672,22 @@ void AbstractDIWrapper<T>::injectText(
 }
 
 template <typename T>
+void AbstractDIWrapper<T>::injectTime(
+		const std::string &name,
+		const Poco::Timespan &value)
+{
+	auto entry = m_method.find(name);
+	if (entry == m_method.end()) {
+		throw Poco::NotFoundException("missing time property "
+				+ name + " for type "
+				+ typeid(T).name());
+	}
+
+	DIWTimeSetter &setter = dynamic_cast<DIWTimeSetter &>(*(entry->second));
+	setter.call(*this, value);
+}
+
+template <typename T>
 void AbstractDIWrapper<T>::injectList(
 		const std::string &name,
 		const std::list<Poco::Dynamic::Var> &value)
@@ -744,6 +798,14 @@ void AbstractDIWrapper<T>::textSetter(
 }
 
 template <typename T> template <typename B>
+void AbstractDIWrapper<T>::timeSetter(
+		const std::string &name,
+		void (B::*setter)(const Poco::Timespan &))
+{
+	installMethod(name, new DIWTimespanSetter<T, B>(setter));
+}
+
+template <typename T> template <typename B>
 void AbstractDIWrapper<T>::listSetter(
 		const std::string &name,
 		void (B::*setter)(const std::list<std::string> &))
@@ -842,6 +904,8 @@ BEEEON_WRAPPER(cls, cls##DIW)
 	numberSetter(name, method);
 #define BEEEON_OBJECT_TEXT(name, method) \
 	textSetter(name, method);
+#define BEEEON_OBJECT_TIME(name, method) \
+	timeSetter(name, method);
 #define BEEEON_OBJECT_LIST(name, method) \
 	listSetter(name, method);
 #define BEEEON_OBJECT_MAP(name, method) \

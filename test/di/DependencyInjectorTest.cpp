@@ -1,4 +1,5 @@
 #include <Poco/AutoPtr.h>
+#include <Poco/Timespan.h>
 #include <Poco/Util/XMLConfiguration.h>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -72,6 +73,11 @@ public:
 		m_index = n;
 	}
 
+	void setTimespan(const Timespan &time)
+	{
+		m_timespan = time;
+	}
+
 	void setList(const list<string> &l)
 	{
 		m_list.clear();
@@ -89,6 +95,7 @@ public:
 	string m_name;
 	string m_other;
 	int m_index;
+	Timespan m_timespan;
 	vector<string> m_list;
 	map<string, string> m_map;
 };
@@ -100,6 +107,7 @@ BEEEON_OBJECT_REF("self", &FakeObject::setSelf)
 BEEEON_OBJECT_TEXT("name", &FakeObject::setName)
 BEEEON_OBJECT_NUMBER("index", &FakeObject::setIndex)
 BEEEON_OBJECT_TEXT("other", &FakeObject::setOther)
+BEEEON_OBJECT_TIME("timespan", &FakeObject::setTimespan)
 BEEEON_OBJECT_LIST("list", &FakeObject::setList)
 BEEEON_OBJECT_MAP("map", &FakeObject::setMap)
 BEEEON_OBJECT_END(BeeeOn, FakeObject)
@@ -132,6 +140,8 @@ void DependencyInjectorTest::setUp()
 	m_config->setString("instance[1].set[5].pair[2][@text]", "2");
 	m_config->setString("instance[1].set[5].pair[3][@key]",  "c");
 	m_config->setString("instance[1].set[5].pair[3][@text]", "3");
+	m_config->setString("instance[1].set[6][@name]", "timespan");
+	m_config->setString("instance[1].set[6][@time]", "5 s");
 	m_config->setString("instance[2][@name]", "variable");
 	m_config->setString("instance[2][@class]", "BeeeOn::FakeObject");
 	m_config->setString("instance[2].set[1][@name]", "name");
@@ -179,6 +189,7 @@ void DependencyInjectorTest::testSimple()
 	CPPUNIT_ASSERT(fake->m_self == fake);
 	CPPUNIT_ASSERT(fake->m_name.compare("fake") == 0);
 	CPPUNIT_ASSERT(fake->m_index == 5);
+	CPPUNIT_ASSERT(Timespan(5 * Timespan::SECONDS) == fake->m_timespan);
 	CPPUNIT_ASSERT_EQUAL(3, fake->m_list.size());
 	CPPUNIT_ASSERT_EQUAL("a", fake->m_list[0]);
 	CPPUNIT_ASSERT_EQUAL("b", fake->m_list[1]);

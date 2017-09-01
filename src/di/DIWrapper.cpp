@@ -56,6 +56,11 @@ DIWTextSetter::~DIWTextSetter()
 {
 }
 
+DIWTimeSetter::~DIWTimeSetter()
+{
+}
+
+
 DIWRefSetter::~DIWRefSetter()
 {
 }
