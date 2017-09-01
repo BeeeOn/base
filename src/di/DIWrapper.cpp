@@ -3,6 +3,7 @@
 #include <Poco/Exception.h>
 
 #include "di/DIWrapper.h"
+#include "util/ClassInfo.h"
 
 using namespace std;
 using namespace Poco;
@@ -25,7 +26,7 @@ DIWCastException::DIWCastException(
 		const type_info &from,
 		const type_info &to):
 	m_text(string("could not cast ")
-		+ from.name() + " to " + to.name())
+		+ ClassInfo(from).name() + " to " + ClassInfo(to).name())
 {
 }
 
