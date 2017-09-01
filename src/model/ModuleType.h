@@ -113,6 +113,11 @@ public:
 			 */
 			TYPE_PRESSURE,
 			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
+			TYPE_RSSI,
+			/**
 			 * Value 0: no security alert
 			 * Value 1: security alert is active
 			 *
