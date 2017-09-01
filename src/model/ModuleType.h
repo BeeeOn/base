@@ -23,15 +23,15 @@ public:
 			/**
 			 * The sensor/actuator is located inside (a building).
 			 */
-			TYPE_INNER,
+			TYPE_INNER = 1,
 			/**
 			 * The sensor enables to set (to modify) value only from sensor.
 			 */
-			TYPE_MANUAL_ONLY,
+			TYPE_MANUAL_ONLY = 2,
 			/**
 			 * The sensor/actuator is located outside.
 			 */
-			TYPE_OUTER,
+			TYPE_OUTER = 3,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
@@ -43,96 +43,101 @@ public:
 			 * Value 0: unreachable
 			 * Value 1: reachable
 			 */
-			TYPE_AVAILABILITY,
+			TYPE_AVAILABILITY = 1,
 			/**
 			 * Range: 0..100
 			 * Unit: %
 			 */
-			TYPE_BATTERY,
+			TYPE_BATTERY = 2,
 			/**
 			 * It defines specific bitmap module
 			 * type which is stored in m_customID.
 			 */
-			TYPE_BITMAP,
+			TYPE_BITMAP = 3,
 			/**
 			 * Range: 0..100
 			 * Unit: %
 			 */
-			TYPE_BRIGHTNESS,
+			TYPE_BRIGHTNESS = 4,
 			/**
 			 * Min: 0
 			 * Unit: one part per million (ppm)
 			 */
-			TYPE_CO2,
+			TYPE_CO2 = 5,
 			/**
 			 * It defines specific enum module
 			 * type which is stored in m_customID.
 			 */
-			TYPE_ENUM,
+			TYPE_ENUM = 6,
 			/**
 			 * Value 0: no fire detected
 			 * Value 1: fire detected
 			 */
-			TYPE_FIRE,
+			TYPE_FIRE = 7,
 			/**
 			 * Range: 0..100
 			 * Unit: %
 			 */
-			TYPE_HUMIDITY,
+			TYPE_HUMIDITY = 8,
 			/**
 			 * Range: 0..100000
 			 * Unit: lux
 			 */
-			TYPE_LUMINANCE,
+			TYPE_LUMINANCE = 9,
 			/**
 			 * Value 0: no motion detected
 			 * Value 1: motion detected
 			 */
-			TYPE_MOTION,
+			TYPE_MOTION = 10,
 			/**
 			 * Unit: dB
 			 */
-			TYPE_NOISE,
+			TYPE_NOISE = 11,
 			/**
 			 * Value 0: open
 			 * Value 1: closed
 			 */
-			TYPE_OPEN_CLOSE,
+			TYPE_OPEN_CLOSE = 12,
 			/**
 			 * Value 0: off
 			 * Value 1: on
 			 */
-			TYPE_ON_OFF,
+			TYPE_ON_OFF = 13,
 			/**
 			 * Range: 0..100
 			 * Unit: %
 			 */
-			TYPE_PERFORMANCE,
+			TYPE_PERFORMANCE = 14,
 			/**
 			 * Unit: hPa
 			 */
-			TYPE_PRESSURE,
+			TYPE_PRESSURE = 15,
+			/**
+			 * Range: 0..100
+			 * Unit: %
+			 */
+			TYPE_RSSI = 16,
 			/**
 			 * Value 0: no security alert
 			 * Value 1: security alert is active
 			 *
 			 */
-			TYPE_SECURITY_ALERT,
+			TYPE_SECURITY_ALERT = 17,
 			/**
 			 * Value 0: no shake detect
 			 * Value 1: shake detect
 			 */
-			TYPE_SHAKE,
+			TYPE_SHAKE = 18,
 			/**
 			 * Unit: °C
 			 */
-			TYPE_TEMPERATURE,
+			TYPE_TEMPERATURE = 19,
 			/**
 			 * Ultraviolet light
 			 * Unit: UV index
 			 * Range: 0..11
 			 */
-			TYPE_ULTRAVIOLET,
+			TYPE_ULTRAVIOLET = 20,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
