@@ -403,9 +403,6 @@ protected:
 	void textSetter(const std::string &name, void (B::*setter)(const std::string &));
 
 	template <typename B>
-	void textSetter(const std::string &name, void (B::*setter)(const char *));
-
-	template <typename B>
 	void textSetter(const std::string &name, void (B::*setter)(const char));
 
 	template <typename B>
