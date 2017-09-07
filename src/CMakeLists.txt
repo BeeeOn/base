@@ -19,6 +19,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
 	${PROJECT_SOURCE_DIR}/di/DIXmlLoader.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWAck.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWDeviceAcceptRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWDeviceListRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWDeviceListResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWGatewayAccepted.cpp
@@ -27,12 +28,16 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessageType.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueResponse.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWListenRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceRequest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWPingRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataConfirm.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataExport.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWSetValueRequest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWUnpairRequest.cpp
 	${PROJECT_SOURCE_DIR}/io/AutoClose.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStream.cpp

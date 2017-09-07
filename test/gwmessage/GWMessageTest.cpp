@@ -20,6 +20,11 @@
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWDeviceListRequest.h"
+#include "gwmessage/GWListenRequest.h"
+#include "gwmessage/GWPingRequest.h"
+#include "gwmessage/GWUnpairRequest.h"
+#include "gwmessage/GWSetValueRequest.h"
+#include "gwmessage/GWDeviceAcceptRequest.h"
 #include "model/GlobalID.h"
 #include "util/JsonUtil.h"
 
@@ -51,6 +56,16 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateLastValue);
 	CPPUNIT_TEST(testParseDeviceList);
 	CPPUNIT_TEST(testCreateDeviceList);
+	CPPUNIT_TEST(testParseListen);
+	CPPUNIT_TEST(testCreateListen);
+	CPPUNIT_TEST(testParsePing);
+	CPPUNIT_TEST(testCreatePing);
+	CPPUNIT_TEST(testParseUnpair);
+	CPPUNIT_TEST(testCreateUnpair);
+	CPPUNIT_TEST(testParseSetValue);
+	CPPUNIT_TEST(testCreateSetValue);
+	CPPUNIT_TEST(testParseDeviceAccept);
+	CPPUNIT_TEST(testCreateDeviceAccept);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParseEmpty();
@@ -73,6 +88,16 @@ public:
 	void testCreateLastValue();
 	void testParseDeviceList();
 	void testCreateDeviceList();
+	void testParseListen();
+	void testCreateListen();
+	void testParsePing();
+	void testCreatePing();
+	void testParseUnpair();
+	void testCreateUnpair();
+	void testParseSetValue();
+	void testCreateSetValue();
+	void testParseDeviceAccept();
+	void testCreateDeviceAccept();
 protected:
 	string jsonReformat(const string &json);
 };
@@ -647,6 +672,180 @@ void GWMessageTest::testCreateDeviceList()
 			"message_type": "device_list_request",
 			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
 			"device_prefix": "Fitprotocol"
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseListen()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "listen_request",
+			"duration" : 30
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::LISTEN_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWListenRequest>().isNull());
+
+	GWListenRequest::Ptr request = message.cast<GWListenRequest>();
+	CPPUNIT_ASSERT(request->duration() == Timespan(30, 0));
+}
+
+void GWMessageTest::testCreateListen()
+{
+	GWListenRequest::Ptr request(new GWListenRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDuration(Timespan(60, 0));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "listen_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"duration": 60
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParsePing()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "ping_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::PING_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWPingRequest>().isNull());
+
+	GWPingRequest::Ptr request = message.cast<GWPingRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+}
+
+void GWMessageTest::testCreatePing()
+{
+	GWPingRequest::Ptr request(new GWPingRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "ping_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseUnpair()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "unpair_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::UNPAIR_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWUnpairRequest>().isNull());
+
+	GWUnpairRequest::Ptr request = message.cast<GWUnpairRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+}
+
+void GWMessageTest::testCreateUnpair()
+{
+	GWUnpairRequest::Ptr request(new GWUnpairRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "unpair_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseSetValue()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "set_value_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"module_id" : 0,
+			"value" : 3.5,
+			"timeout" : 10
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SET_VALUE_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSetValueRequest>().isNull());
+
+	GWSetValueRequest::Ptr request = message.cast<GWSetValueRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL("0", request->moduleID().toString());
+	CPPUNIT_ASSERT(3.5);
+	CPPUNIT_ASSERT(request->timeout() == Timespan(10, 0));
+}
+
+void GWMessageTest::testCreateSetValue()
+{
+	GWSetValueRequest::Ptr request1(new GWSetValueRequest);
+	request1->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request1->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+	request1->setModuleID(0);
+	request1->setValue(3.5);
+	request1->setTimeout(Timespan(10, 0));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "set_value_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"module_id" : 0,
+			"value" : 3.5,
+			"timeout" : 10
+		})"),
+		request1->toString()
+	);
+
+	GWSetValueRequest::Ptr request2(new GWSetValueRequest);
+	CPPUNIT_ASSERT_THROW(request2->setValue(NAN), InvalidArgumentException);
+}
+
+void GWMessageTest::testParseDeviceAccept()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "device_accept_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::DEVICE_ACCEPT_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWDeviceAcceptRequest>().isNull());
+
+	GWDeviceAcceptRequest::Ptr request = message.cast<GWDeviceAcceptRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+}
+
+void GWMessageTest::testCreateDeviceAccept()
+{
+	GWDeviceAcceptRequest::Ptr request(new GWDeviceAcceptRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "device_accept_request",
+			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id": "0xfe01020304050607"
 		})"),
 		request->toString()
 	);
