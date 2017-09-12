@@ -403,9 +403,6 @@ protected:
 	void textSetter(const std::string &name, void (B::*setter)(const std::string &));
 
 	template <typename B>
-	void textSetter(const std::string &name, void (B::*setter)(const char *));
-
-	template <typename B>
 	void textSetter(const std::string &name, void (B::*setter)(const char));
 
 	template <typename B>
@@ -496,7 +493,7 @@ Poco::SharedPtr<I> DIWRefSetter::extractTarget(DIWrapper &i) const
 {
 	DIWCast *cast = DIWCast::find(typeid(I), i);
 	if (cast == NULL)
-		throw DIWCastException(typeid(I), i.type());
+		throw DIWCastException(i.type(), typeid(I));
 
 	Poco::SharedPtr<I> inject;
 	cast->cast(i.raw(), reinterpret_cast<void *>(&inject));
