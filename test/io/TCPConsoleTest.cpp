@@ -23,6 +23,8 @@ namespace BeeeOn {
 #define TIMEOUT_SECS  4
 #define TIMEOUT_MSECS (TIMEOUT_SECS * 1000)
 
+static const Timespan CONSOLE_TIMEOUT = 4 * Timespan::SECONDS;
+
 class TCPConsoleTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(TCPConsoleTest);
 	CPPUNIT_TEST(testReadLine);
@@ -61,8 +63,8 @@ void TCPConsoleTest::setupConsole(TCPConsole &console) const
 		)
 	);
 
-	console.setSendTimeout(TIMEOUT_MSECS);
-	console.setRecvTimeout(TIMEOUT_MSECS);
+	console.setSendTimeout(CONSOLE_TIMEOUT);
+	console.setRecvTimeout(CONSOLE_TIMEOUT);
 }
 
 /**

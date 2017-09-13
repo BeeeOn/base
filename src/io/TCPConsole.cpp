@@ -11,9 +11,9 @@ BEEEON_OBJECT_BEGIN(BeeeOn, TCPConsole)
 BEEEON_OBJECT_CASTABLE(Console)
 BEEEON_OBJECT_TEXT("address", &TCPConsole::setAddress)
 BEEEON_OBJECT_NUMBER("port", &TCPConsole::setPort)
-BEEEON_OBJECT_NUMBER("sendTimeout", &TCPConsole::setSendTimeout)
-BEEEON_OBJECT_NUMBER("recvTimeout", &TCPConsole::setRecvTimeout)
-BEEEON_OBJECT_NUMBER("pollTimeout", &TCPConsole::setPollTimeout)
+BEEEON_OBJECT_TIME("sendTimeout", &TCPConsole::setSendTimeout)
+BEEEON_OBJECT_TIME("recvTimeout", &TCPConsole::setRecvTimeout)
+BEEEON_OBJECT_TIME("pollTimeout", &TCPConsole::setPollTimeout)
 BEEEON_OBJECT_NUMBER("backlog", &TCPConsole::setBacklog)
 BEEEON_OBJECT_TEXT("eol", &TCPConsole::setEol)
 BEEEON_OBJECT_TEXT("skipEol", &TCPConsole::setSkipEol)
@@ -97,28 +97,25 @@ void TCPConsole::setPort(int port)
 	m_port = port;
 }
 
-void TCPConsole::setSendTimeout(int ms)
+void TCPConsole::setSendTimeout(const Timespan &timeout)
 {
-	if (ms < 0)
+	if (timeout < 0)
 		throw InvalidArgumentException("sendTimeout must be non-negative");
 
-	m_sendTimeout = Timespan(ms * Timespan::MILLISECONDS);
+	m_sendTimeout = timeout;
 }
 
-void TCPConsole::setRecvTimeout(int ms)
+void TCPConsole::setRecvTimeout(const Timespan &timeout)
 {
-	if (ms < 0)
+	if (timeout < 0)
 		throw InvalidArgumentException("recvTimeout must be non-negative");
 
-	m_recvTimeout = Timespan(ms * Timespan::MILLISECONDS);
+	m_recvTimeout = timeout;
 }
 
-void TCPConsole::setPollTimeout(int ms)
+void TCPConsole::setPollTimeout(const Timespan &timeout)
 {
-	if (ms < 0)
-		ms = -1; // blocking poll
-
-	m_pollTimeout = Timespan(ms * Timespan::MILLISECONDS);
+	m_pollTimeout = timeout;
 }
 
 void TCPConsole::setBacklog(int backlog)
