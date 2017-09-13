@@ -190,6 +190,14 @@ protected:
 			double &value) const;
 
 	/**
+	 * Obtain attribute value as int by the given name.
+	 * Returns false when no such attribute exists.
+	 */
+	bool getAttributeAsInt(const Poco::XML::Attributes &attrList,
+			const Poco::XML::XMLString &name,
+			int &value) const;
+
+	/**
 	 * Throw exception with the given error message.
 	 */
 	void error(const std::string &message) const;

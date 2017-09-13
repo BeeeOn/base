@@ -361,6 +361,19 @@ bool SAXHelper::getAttributeAsDouble(const Attributes &attrList,
 	return true;
 }
 
+bool SAXHelper::getAttributeAsInt(const Attributes &attrList,
+		const XMLString &name,
+		int &value) const
+{
+	XMLString content;
+
+	if (!getAndTrimAttribute(attrList, name, content))
+		return false;
+
+	value = NumberParser::parse(content);
+	return true;
+}
+
 void SAXHelper::startPrefixMapping(
 		const XMLString &, const XMLString &)
 {
