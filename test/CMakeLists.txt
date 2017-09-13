@@ -44,7 +44,6 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
-	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EventSourceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/FailDetectorTest.cpp
@@ -53,7 +52,6 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/JsonUtilTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParserTest.cpp
-	${PROJECT_SOURCE_DIR}/util/TypesSAXHandlerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/UnsafePtrTest.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTraceTest.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp

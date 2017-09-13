@@ -58,22 +58,17 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/math/SimpleCalc.cpp
 	${PROJECT_SOURCE_DIR}/model/CustomTypeID.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
-	${PROJECT_SOURCE_DIR}/model/DeviceInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePrefix.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayID.cpp
 	${PROJECT_SOURCE_DIR}/model/GlobalID.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleID.cpp
-	${PROJECT_SOURCE_DIR}/model/ModuleInfo.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleType.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorValue.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorData.cpp
 	${PROJECT_SOURCE_DIR}/model/SimpleID.cpp
-	${PROJECT_SOURCE_DIR}/model/TypeInfo.cpp
 	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRange.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddress.cpp
-	${PROJECT_SOURCE_DIR}/provider/DeviceInfoProvider.cpp
-	${PROJECT_SOURCE_DIR}/provider/TypeInfoProvider.cpp
 	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLClient.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
@@ -91,7 +86,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/CryptoConfig.cpp
 	${PROJECT_SOURCE_DIR}/util/CryptoParams.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
-	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/FailDetector.cpp
 	${PROJECT_SOURCE_DIR}/util/FileLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
@@ -106,7 +100,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParser.cpp
-	${PROJECT_SOURCE_DIR}/util/TypesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 )
