@@ -3,6 +3,7 @@
 
 #include <Poco/SharedPtr.h>
 #include <Poco/ThreadPool.h>
+#include <Poco/Timespan.h>
 
 #include "util/Loggable.h"
 
@@ -15,7 +16,7 @@ public:
 
 	void setMinThreads(int min);
 	void setMaxThreads(int max);
-	void setThreadIdleTime(int ms);
+	void setThreadIdleTime(const Poco::Timespan &time);
 
 	Poco::ThreadPool &pool();
 
@@ -25,7 +26,7 @@ protected:
 private:
 	int m_minThreads;
 	int m_maxThreads;
-	int m_threadIdleTime;
+	Poco::Timespan m_threadIdleTime;
 	Poco::SharedPtr<Poco::ThreadPool> m_pool;
 };
 

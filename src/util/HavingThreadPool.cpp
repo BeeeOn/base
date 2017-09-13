@@ -9,7 +9,7 @@ using namespace BeeeOn;
 HavingThreadPool::HavingThreadPool():
 	m_minThreads(1),
 	m_maxThreads(16),
-	m_threadIdleTime(100)
+	m_threadIdleTime(5 * Timespan::SECONDS)
 {
 }
 
@@ -33,18 +33,12 @@ void HavingThreadPool::setMaxThreads(int max)
 	m_maxThreads = max;
 }
 
-void HavingThreadPool::setThreadIdleTime(int ms)
+void HavingThreadPool::setThreadIdleTime(const Timespan &time)
 {
-	if (ms <= 0)
-		throw InvalidArgumentException("threadIdleTime must be greater then zero");
+	if (time.totalSeconds() <= 0)
+		throw InvalidArgumentException("threadIdleTime must be at least 1 second");
 
-	if (ms > 0 && ms < 1000) {
-		logger().warning("threadIdleTime's granularity is 1000 ms, treating "
-				+ to_string(ms) + " as zero",
-				__FILE__, __LINE__);
-	}
-
-	m_threadIdleTime = ms / 1000;
+	m_threadIdleTime = time;
 }
 
 void HavingThreadPool::initPool()
@@ -59,7 +53,7 @@ void HavingThreadPool::initPool()
 		m_pool = new ThreadPool(
 			m_minThreads,
 			m_maxThreads,
-			m_threadIdleTime
+			m_threadIdleTime.totalSeconds()
 		);
 	}
 }
