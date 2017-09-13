@@ -9,7 +9,7 @@ using namespace BeeeOn;
 HavingThreadPool::HavingThreadPool():
 	m_minThreads(1),
 	m_maxThreads(16),
-	m_threadIdleTime(100)
+	m_threadIdleTime(5)
 {
 }
 
