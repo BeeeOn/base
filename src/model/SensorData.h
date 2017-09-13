@@ -28,6 +28,11 @@ public:
 
 	void insertValue(const SensorValue &value);
 
+	size_t size() const;
+
+	SensorValue& at(size_t index);
+	const SensorValue& at(size_t index) const;
+
 	std::vector<SensorValue>::iterator begin();
 	std::vector<SensorValue>::iterator end();
 
@@ -36,6 +41,9 @@ public:
 
 	bool operator !=(const SensorData &data) const;
 	bool operator ==(const SensorData &data) const;
+
+	SensorValue& operator [](size_t index);
+	const SensorValue& operator [](size_t index) const;
 
 private:
 	DeviceID m_deviceID;

@@ -53,6 +53,31 @@ vector<SensorValue>::const_iterator SensorData::end() const
 	return m_values.end();
 }
 
+size_t SensorData::size() const
+{
+	return m_values.size();
+}
+
+const SensorValue& SensorData::at(size_t index) const
+{
+	if (index >= m_values.size()) {
+		throw Poco::RangeException(
+			"SensorValue index is out of range");
+	}
+
+	return m_values.at(index);
+}
+
+SensorValue &SensorData::at(size_t index)
+{
+	if (index >= m_values.size()) {
+		throw Poco::RangeException(
+			"SensorValue index is out of range");
+	}
+
+	return m_values.at(index);
+}
+
 bool SensorData::operator !=(const SensorData &data) const
 {
 	return !(*this == data);
@@ -65,3 +90,12 @@ bool SensorData::operator ==(const SensorData &data) const
 		&& m_values == data.m_values;
 }
 
+SensorValue& SensorData::operator [](size_t index)
+{
+	return at(index);
+}
+
+const SensorValue& SensorData::operator [](size_t index) const
+{
+	return at(index);
+}
