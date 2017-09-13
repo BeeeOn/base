@@ -3,6 +3,7 @@
 #include <Poco/Ascii.h>
 #include <Poco/String.h>
 #include <Poco/Logger.h>
+#include <Poco/NumberParser.h>
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 #include <Poco/SAX/Locator.h>
@@ -344,6 +345,19 @@ bool SAXHelper::getAndTrimAttribute(const Attributes &attrList,
 	value = attrList.getValue(index);
 	trimInPlace(value);
 
+	return true;
+}
+
+bool SAXHelper::getAttributeAsDouble(const Attributes &attrList,
+		const XMLString &name,
+		double &value) const
+{
+	XMLString content;
+
+	if (!getAndTrimAttribute(attrList, name, content))
+		return false;
+
+	value = NumberParser::parseFloat(content);
 	return true;
 }
 
