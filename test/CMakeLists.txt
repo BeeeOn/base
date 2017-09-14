@@ -35,6 +35,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleTypeTest.cpp
+	${PROJECT_SOURCE_DIR}/model/SensorDataTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
