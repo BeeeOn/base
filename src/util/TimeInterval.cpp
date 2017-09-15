@@ -26,6 +26,11 @@ TimeInterval::~TimeInterval()
 {
 }
 
+TimeInterval TimeInterval::past(const Timespan &range, const Timestamp &end)
+{
+	return TimeInterval(end - range, end);
+}
+
 bool TimeInterval::isEmpty() const
 {
 	return m_start == m_end;
