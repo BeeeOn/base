@@ -51,6 +51,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/IncompleteTimestampTest.cpp
 	${PROJECT_SOURCE_DIR}/util/JsonUtilTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
+	${PROJECT_SOURCE_DIR}/util/TimeIntervalTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/UnsafePtrTest.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTraceTest.cpp
