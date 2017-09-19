@@ -1,6 +1,7 @@
 #ifndef BEEEON_TIME_INTERVAL_H
 #define BEEEON_TIME_INTERVAL_H
 
+#include <Poco/Timespan.h>
 #include <Poco/Timestamp.h>
 
 namespace BeeeOn {
@@ -19,6 +20,23 @@ public:
 	TimeInterval(const Poco::Timestamp &start,
 			const Poco::Timestamp &end);
 	~TimeInterval();
+
+	/**
+	 * Create interval for past range from the given end reference
+	 * timepoint. Examples:
+	 *
+	 * <pre>
+	 * TimeInterval last5Min = TimeInterval::past(5 * Timespan::MINUTES);
+	 * TimeInterval lastHourOfYear = TimeInterval::past(
+	 * 		1 * TimeInterval::HOURS,
+	 * 		Timestamp::fromEpochTime(1483225200));
+	 * <pre>
+	 *
+	 * The last5Min is interval lasting 5 minutes just before now.
+	 * The lastHourOfYear is an interval representing the last hour of year 2016.
+	 */
+	static TimeInterval past(const Poco::Timespan &range,
+			const Poco::Timestamp &end = Poco::Timestamp());
 
 	/**
 	 * The time interval is empty (start == end).
