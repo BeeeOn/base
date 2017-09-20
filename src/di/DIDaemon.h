@@ -3,10 +3,13 @@
 
 #include <string>
 
+#include <Poco/ErrorHandler.h>
+#include <Poco/Exception.h>
 #include <Poco/Util/ServerApplication.h>
 #include <Poco/Util/Option.h>
 
 #include "util/About.h"
+#include "util/Loggable.h"
 
 namespace Poco {
 namespace Util {
@@ -27,6 +30,15 @@ public:
 		const About &about = About());
 
 protected:
+	class UnhandledErrorHandler : public Poco::ErrorHandler, Loggable {
+	public:
+		virtual ~UnhandledErrorHandler();
+
+		void exception(const Poco::Exception &e) override;
+		void exception(const std::exception &e) override;
+		void exception() override;
+	};
+
 	void initialize(Poco::Util::Application &self) override;
 	int main(const std::vector<std::string> &args) override;
 	void defineOptions(Poco::Util::OptionSet &options) override;
@@ -51,6 +63,7 @@ private:
 	bool m_helpRequested = false;
 	bool m_versionRequested = false;
 	About m_about;
+	UnhandledErrorHandler m_errorHandler;
 	Poco::Util::Option m_helpOption;
 	Poco::Util::Option m_versionOption;
 	Poco::Util::Option m_debugStartupOption;
