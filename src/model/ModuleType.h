@@ -23,22 +23,22 @@ public:
 			/**
 			 * The sensor/actuator is located inside (a building).
 			 */
-			TYPE_INNER = 1,
+			ATTR_INNER = 1,
 			/**
 			 * The sensor enables to set (to modify) value only from sensor.
 			 * This attribute makes sense only in combination with
-			 * the TYPE_CONTROLLABLE.
+			 * the ATTR_CONTROLLABLE.
 			 */
-			TYPE_MANUAL_ONLY = 2,
+			ATTR_MANUAL_ONLY = 2,
 			/**
 			 * The sensor/actuator is located outside.
 			 */
-			TYPE_OUTER = 3,
+			ATTR_OUTER = 3,
 			/**
 			 * The sensor of this type is controllable (it is an
 			 * actuator).
 			 */
-			TYPE_CONTROLLABLE = 4,
+			ATTR_CONTROLLABLE = 4,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();

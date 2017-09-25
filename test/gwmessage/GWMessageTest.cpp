@@ -471,8 +471,8 @@ void GWMessageTest::testParseNewDevice()
 
 	const set<ModuleType::Attribute> &attributes = types.rbegin()->attributes();
 	CPPUNIT_ASSERT(attributes.size() == 3);
-	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::TYPE_OUTER) != attributes.end());
-	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::TYPE_MANUAL_ONLY) != attributes.end());
+	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::ATTR_OUTER) != attributes.end());
+	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::ATTR_MANUAL_ONLY) != attributes.end());
 }
 
 void GWMessageTest::testCreateNewDevice()
@@ -485,14 +485,14 @@ void GWMessageTest::testCreateNewDevice()
 	request->setRefreshTime(Timespan(30, 0));
 
 	set<ModuleType::Attribute> attributes1;
-	attributes1.emplace(ModuleType::Attribute::TYPE_INNER);
+	attributes1.emplace(ModuleType::Attribute::ATTR_INNER);
 	ModuleType type1(ModuleType::Type::fromRaw(
 		ModuleType::Type::TYPE_HUMIDITY), attributes1);
 
 	set<ModuleType::Attribute> attributes2;
-	attributes2.emplace(ModuleType::Attribute::TYPE_MANUAL_ONLY);
-	attributes2.emplace(ModuleType::Attribute::TYPE_OUTER);
-	attributes2.emplace(ModuleType::Attribute::TYPE_CONTROLLABLE);
+	attributes2.emplace(ModuleType::Attribute::ATTR_MANUAL_ONLY);
+	attributes2.emplace(ModuleType::Attribute::ATTR_OUTER);
+	attributes2.emplace(ModuleType::Attribute::ATTR_CONTROLLABLE);
 	ModuleType type2(ModuleType::Type::fromRaw(
 		ModuleType::Type::TYPE_PRESSURE), attributes2);
 
