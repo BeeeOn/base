@@ -170,6 +170,9 @@ public:
 	static ModuleType parse(std::string input);
 
 protected:
+	static bool hasCombination(
+		const std::set<Attribute> &attributes,
+		const std::set<Attribute> &check);
 	static void assureValidAttributes(
 		const std::set<Attribute> &attributes);
 

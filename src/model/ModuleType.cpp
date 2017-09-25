@@ -114,8 +114,25 @@ set<ModuleType::Attribute> ModuleType::attributes() const
 	return m_attributes;
 }
 
+bool ModuleType::hasCombination(
+	const set<Attribute> &attributes,
+	const set<Attribute> &check)
+{
+	for (const auto &one : check) {
+		if (attributes.find(one) == attributes.end())
+			return false;
+	}
+
+	return true;
+}
+
 void ModuleType::assureValidAttributes(const set<Attribute> &attributes)
 {
+	if (hasCombination(attributes,
+			{Attribute::TYPE_INNER, Attribute::TYPE_OUTER})) {
+		throw InvalidArgumentException(
+			"inner and outer cannot be set at once");
+	}
 }
 
 bool ModuleType::isControllable() const

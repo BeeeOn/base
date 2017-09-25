@@ -136,6 +136,7 @@ void ModuleTypeTest::testInvalidAttributeDuplication()
 
 void ModuleTypeTest::testAttributesConflicts()
 {
+	CPPUNIT_ASSERT_THROW(ModuleType::parse("temperature,inner,outer"), InvalidArgumentException);
 }
 
 }
