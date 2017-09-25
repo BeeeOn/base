@@ -133,6 +133,13 @@ void ModuleType::assureValidAttributes(const set<Attribute> &attributes)
 		throw InvalidArgumentException(
 			"inner and outer cannot be set at once");
 	}
+
+	if (attributes.find(Attribute::TYPE_MANUAL_ONLY) != attributes.end()) {
+		if (attributes.find(Attribute::TYPE_CONTROLLABLE) == attributes.end()) {
+			throw InvalidArgumentException(
+				"manual-only attribute requires attribute controllable");
+		}
+	}
 }
 
 bool ModuleType::isControllable() const

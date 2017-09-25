@@ -137,6 +137,10 @@ void ModuleTypeTest::testInvalidAttributeDuplication()
 void ModuleTypeTest::testAttributesConflicts()
 {
 	CPPUNIT_ASSERT_THROW(ModuleType::parse("temperature,inner,outer"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(ModuleType::parse("temperature,manual-only"), InvalidArgumentException);
+	CPPUNIT_ASSERT_NO_THROW(
+		ModuleType::parse("temperature,manual-only,controllable")
+	);
 }
 
 }

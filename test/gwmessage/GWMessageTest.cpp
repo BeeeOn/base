@@ -446,7 +446,8 @@ void GWMessageTest::testParseNewDevice()
 					"type" : "pressure",
 					"attributes" : [
 						{"attribute" : "outer"},
-						{"attribute" : "manual-only"}
+						{"attribute" : "manual-only"},
+						{"attribute" : "controllable"}
 					]
 				}
 			]
@@ -469,7 +470,7 @@ void GWMessageTest::testParseNewDevice()
 	CPPUNIT_ASSERT_EQUAL("pressure", types.rbegin()->type().toString());
 
 	const set<ModuleType::Attribute> &attributes = types.rbegin()->attributes();
-	CPPUNIT_ASSERT(attributes.size() == 2);
+	CPPUNIT_ASSERT(attributes.size() == 3);
 	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::TYPE_OUTER) != attributes.end());
 	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::TYPE_MANUAL_ONLY) != attributes.end());
 }
@@ -491,6 +492,7 @@ void GWMessageTest::testCreateNewDevice()
 	set<ModuleType::Attribute> attributes2;
 	attributes2.emplace(ModuleType::Attribute::TYPE_MANUAL_ONLY);
 	attributes2.emplace(ModuleType::Attribute::TYPE_OUTER);
+	attributes2.emplace(ModuleType::Attribute::TYPE_CONTROLLABLE);
 	ModuleType type2(ModuleType::Type::fromRaw(
 		ModuleType::Type::TYPE_PRESSURE), attributes2);
 
@@ -519,7 +521,8 @@ void GWMessageTest::testCreateNewDevice()
 					"type" : "pressure",
 					"attributes" : [
 						{"attribute" : "manual-only"},
-						{"attribute" : "outer"}
+						{"attribute" : "outer"},
+						{"attribute" : "controllable"}
 					]
 				}
 			]

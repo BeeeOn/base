@@ -26,6 +26,8 @@ public:
 			TYPE_INNER = 1,
 			/**
 			 * The sensor enables to set (to modify) value only from sensor.
+			 * This attribute makes sense only in combination with
+			 * the TYPE_CONTROLLABLE.
 			 */
 			TYPE_MANUAL_ONLY = 2,
 			/**
