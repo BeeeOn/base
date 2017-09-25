@@ -51,6 +51,7 @@ ModuleType::ModuleType(const ModuleType::Type &type,
 	m_type(type),
 	m_attributes(attributes)
 {
+	assureValidAttributes(attributes);
 }
 
 ModuleType::ModuleType(const ModuleType::Type &type):
@@ -79,6 +80,8 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 	m_attributes(attributes),
 	m_customID(customID)
 {
+	assureValidAttributes(attributes);
+
 	switch (m_type) {
 	case ModuleType::Type::TYPE_ENUM:
 		break;
@@ -102,12 +105,17 @@ ModuleType::Type ModuleType::type() const
 
 void ModuleType::setAttributes(const set<ModuleType::Attribute> &attributes)
 {
+	assureValidAttributes(attributes);
 	m_attributes = attributes;
 }
 
 set<ModuleType::Attribute> ModuleType::attributes() const
 {
 	return m_attributes;
+}
+
+void ModuleType::assureValidAttributes(const set<Attribute> &attributes)
+{
 }
 
 bool ModuleType::isControllable() const
@@ -154,6 +162,8 @@ ModuleType ModuleType::parse(string input)
 
 		attributes.insert(current);
 	}
+
+	assureValidAttributes(attributes);
 
 	RegularExpression::MatchVec matches;
 	RegularExpression re("(enum|bitmap):(.+)");

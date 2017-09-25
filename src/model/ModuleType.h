@@ -169,6 +169,10 @@ public:
 
 	static ModuleType parse(std::string input);
 
+protected:
+	static void assureValidAttributes(
+		const std::set<Attribute> &attributes);
+
 private:
 	Type m_type;
 	std::set<Attribute> m_attributes;

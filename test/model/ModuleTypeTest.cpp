@@ -17,6 +17,7 @@ class ModuleTypeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testInvalidArgumentType);
 	CPPUNIT_TEST(testInvalidArgumentAttribute);
 	CPPUNIT_TEST(testInvalidAttributeDuplication);
+	CPPUNIT_TEST(testAttributesConflicts);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -25,6 +26,7 @@ public:
 	void testInvalidArgumentType();
 	void testInvalidArgumentAttribute();
 	void testInvalidAttributeDuplication();
+	void testAttributesConflicts();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTypeTest);
@@ -130,6 +132,10 @@ void ModuleTypeTest::testInvalidArgumentAttribute()
 void ModuleTypeTest::testInvalidAttributeDuplication()
 {
 	CPPUNIT_ASSERT_THROW(ModuleType::parse("humidity,inner,inner"), InvalidArgumentException);
+}
+
+void ModuleTypeTest::testAttributesConflicts()
+{
 }
 
 }
