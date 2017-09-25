@@ -59,6 +59,16 @@ void ModuleTypeTest::testParse()
 		CPPUNIT_ASSERT_EQUAL("inner", item.toString());
 
 	CPPUNIT_ASSERT_EQUAL(1, customType2.attributes().size());
+
+	const ModuleType &customType3 = ModuleType::parse("humidity,controllable");
+
+	CPPUNIT_ASSERT_EQUAL("humidity", customType3.type().toString());
+	CPPUNIT_ASSERT(customType3.isControllable());
+
+	for (auto &item : customType3.attributes())
+		CPPUNIT_ASSERT_EQUAL("controllable", item.toString());
+
+	CPPUNIT_ASSERT_EQUAL(1, customType3.attributes().size());
 }
 
 void ModuleTypeTest::testParseInvalidEnum()

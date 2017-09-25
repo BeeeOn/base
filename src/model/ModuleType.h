@@ -32,6 +32,11 @@ public:
 			 * The sensor/actuator is located outside.
 			 */
 			TYPE_OUTER = 3,
+			/**
+			 * The sensor of this type is controllable (it is an
+			 * actuator).
+			 */
+			TYPE_CONTROLLABLE = 4,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
@@ -156,6 +161,8 @@ public:
 
 	void setAttributes(const std::set<Attribute> &attributes);
 	std::set<Attribute> attributes() const;
+
+	bool isControllable() const;
 
 	void setCustomTypeID(CustomTypeID id);
 	CustomTypeID customTypeID() const;

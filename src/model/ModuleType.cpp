@@ -13,6 +13,7 @@ EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum:
 		{ModuleType::AttributeEnum::TYPE_INNER, "inner"},
 		{ModuleType::AttributeEnum::TYPE_MANUAL_ONLY, "manual-only"},
 		{ModuleType::AttributeEnum::TYPE_OUTER, "outer"},
+		{ModuleType::AttributeEnum::TYPE_CONTROLLABLE, "controllable"},
 	};
 
 	return valueMap;
@@ -107,6 +108,11 @@ void ModuleType::setAttributes(const set<ModuleType::Attribute> &attributes)
 set<ModuleType::Attribute> ModuleType::attributes() const
 {
 	return m_attributes;
+}
+
+bool ModuleType::isControllable() const
+{
+	return m_attributes.find(Attribute::TYPE_CONTROLLABLE) != m_attributes.end();
 }
 
 void ModuleType::setCustomTypeID(CustomTypeID id)
