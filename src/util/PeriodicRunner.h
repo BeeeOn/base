@@ -45,6 +45,7 @@ private:
 private:
 	Poco::TimerCallback<PeriodicRunner> m_invoke;
 	Callback m_callback;
+	Poco::Timespan m_interval;
 };
 
 }

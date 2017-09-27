@@ -19,6 +19,7 @@ void PeriodicRunner::start(const Callback &callback)
 	Timer::stop();
 
 	m_callback = callback;
+	Timer::setPeriodicInterval(m_interval.totalMilliseconds());
 	Timer::start(m_invoke);
 }
 
@@ -32,7 +33,7 @@ void PeriodicRunner::setInterval(const Timespan &interval)
 	if (interval.totalMilliseconds() <= 0)
 		throw InvalidArgumentException("too small interval for period invocations");
 
-	Timer::setPeriodicInterval(interval.totalMilliseconds());
+	m_interval = interval;
 }
 
 void PeriodicRunner::onStart(Timer &)
