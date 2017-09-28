@@ -13,6 +13,7 @@ EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum:
 		{ModuleType::AttributeEnum::TYPE_INNER, "inner"},
 		{ModuleType::AttributeEnum::TYPE_MANUAL_ONLY, "manual-only"},
 		{ModuleType::AttributeEnum::TYPE_OUTER, "outer"},
+		{ModuleType::AttributeEnum::TYPE_CONTROLLABLE, "controllable"},
 	};
 
 	return valueMap;
@@ -50,6 +51,7 @@ ModuleType::ModuleType(const ModuleType::Type &type,
 	m_type(type),
 	m_attributes(attributes)
 {
+	assureValidAttributes(attributes);
 }
 
 ModuleType::ModuleType(const ModuleType::Type &type):
@@ -78,6 +80,8 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 	m_attributes(attributes),
 	m_customID(customID)
 {
+	assureValidAttributes(attributes);
+
 	switch (m_type) {
 	case ModuleType::Type::TYPE_ENUM:
 		break;
@@ -101,12 +105,46 @@ ModuleType::Type ModuleType::type() const
 
 void ModuleType::setAttributes(const set<ModuleType::Attribute> &attributes)
 {
+	assureValidAttributes(attributes);
 	m_attributes = attributes;
 }
 
 set<ModuleType::Attribute> ModuleType::attributes() const
 {
 	return m_attributes;
+}
+
+bool ModuleType::hasCombination(
+	const set<Attribute> &attributes,
+	const set<Attribute> &check)
+{
+	for (const auto &one : check) {
+		if (attributes.find(one) == attributes.end())
+			return false;
+	}
+
+	return true;
+}
+
+void ModuleType::assureValidAttributes(const set<Attribute> &attributes)
+{
+	if (hasCombination(attributes,
+			{Attribute::TYPE_INNER, Attribute::TYPE_OUTER})) {
+		throw InvalidArgumentException(
+			"inner and outer cannot be set at once");
+	}
+
+	if (attributes.find(Attribute::TYPE_MANUAL_ONLY) != attributes.end()) {
+		if (attributes.find(Attribute::TYPE_CONTROLLABLE) == attributes.end()) {
+			throw InvalidArgumentException(
+				"manual-only attribute requires attribute controllable");
+		}
+	}
+}
+
+bool ModuleType::isControllable() const
+{
+	return m_attributes.find(Attribute::TYPE_CONTROLLABLE) != m_attributes.end();
 }
 
 void ModuleType::setCustomTypeID(CustomTypeID id)
@@ -148,6 +186,8 @@ ModuleType ModuleType::parse(string input)
 
 		attributes.insert(current);
 	}
+
+	assureValidAttributes(attributes);
 
 	RegularExpression::MatchVec matches;
 	RegularExpression re("(enum|bitmap):(.+)");

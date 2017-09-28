@@ -17,6 +17,7 @@ class ModuleTypeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testInvalidArgumentType);
 	CPPUNIT_TEST(testInvalidArgumentAttribute);
 	CPPUNIT_TEST(testInvalidAttributeDuplication);
+	CPPUNIT_TEST(testAttributesConflicts);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -25,6 +26,7 @@ public:
 	void testInvalidArgumentType();
 	void testInvalidArgumentAttribute();
 	void testInvalidAttributeDuplication();
+	void testAttributesConflicts();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTypeTest);
@@ -59,6 +61,16 @@ void ModuleTypeTest::testParse()
 		CPPUNIT_ASSERT_EQUAL("inner", item.toString());
 
 	CPPUNIT_ASSERT_EQUAL(1, customType2.attributes().size());
+
+	const ModuleType &customType3 = ModuleType::parse("humidity,controllable");
+
+	CPPUNIT_ASSERT_EQUAL("humidity", customType3.type().toString());
+	CPPUNIT_ASSERT(customType3.isControllable());
+
+	for (auto &item : customType3.attributes())
+		CPPUNIT_ASSERT_EQUAL("controllable", item.toString());
+
+	CPPUNIT_ASSERT_EQUAL(1, customType3.attributes().size());
 }
 
 void ModuleTypeTest::testParseInvalidEnum()
@@ -120,6 +132,15 @@ void ModuleTypeTest::testInvalidArgumentAttribute()
 void ModuleTypeTest::testInvalidAttributeDuplication()
 {
 	CPPUNIT_ASSERT_THROW(ModuleType::parse("humidity,inner,inner"), InvalidArgumentException);
+}
+
+void ModuleTypeTest::testAttributesConflicts()
+{
+	CPPUNIT_ASSERT_THROW(ModuleType::parse("temperature,inner,outer"), InvalidArgumentException);
+	CPPUNIT_ASSERT_THROW(ModuleType::parse("temperature,manual-only"), InvalidArgumentException);
+	CPPUNIT_ASSERT_NO_THROW(
+		ModuleType::parse("temperature,manual-only,controllable")
+	);
 }
 
 }
