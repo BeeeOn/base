@@ -6,6 +6,8 @@
 #include <Poco/Timer.h>
 #include <Poco/Timespan.h>
 
+#include "util/Loggable.h"
+
 namespace BeeeOn {
 
 /**
@@ -14,7 +16,7 @@ namespace BeeeOn {
  * The class simplifies coding of simple periodical tasks like generation
  * of statistics, sampling data, etc.
  */
-class PeriodicRunner : Poco::Timer {
+class PeriodicRunner : Poco::Timer, protected Loggable {
 public:
 	typedef std::function<void()> Callback;
 
@@ -45,6 +47,7 @@ private:
 private:
 	Poco::TimerCallback<PeriodicRunner> m_invoke;
 	Callback m_callback;
+	Poco::Timespan m_interval;
 };
 
 }

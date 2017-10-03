@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 
 #include "util/PeriodicRunner.h"
 
@@ -19,6 +20,7 @@ void PeriodicRunner::start(const Callback &callback)
 	Timer::stop();
 
 	m_callback = callback;
+	Timer::setPeriodicInterval(m_interval.totalMilliseconds());
 	Timer::start(m_invoke);
 }
 
@@ -32,10 +34,21 @@ void PeriodicRunner::setInterval(const Timespan &interval)
 	if (interval.totalMilliseconds() <= 0)
 		throw InvalidArgumentException("too small interval for period invocations");
 
-	Timer::setPeriodicInterval(interval.totalMilliseconds());
+	m_interval = interval;
 }
 
 void PeriodicRunner::onStart(Timer &)
 {
-	m_callback();
+	try {
+		m_callback();
+	}
+	catch (const Exception &e) {
+		logger().log(e, __FILE__, __LINE__);
+	}
+	catch (const std::exception &e) {
+		logger().critical(e.what(), __FILE__, __LINE__);
+	}
+	catch (...) {
+		logger().critical("unknown error", __FILE__, __LINE__);
+	}
 }
