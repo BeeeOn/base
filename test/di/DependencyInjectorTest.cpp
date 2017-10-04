@@ -22,6 +22,7 @@ class DependencyInjectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testAliasToAliasFails);
 	CPPUNIT_TEST(testExternalVariables);
 	CPPUNIT_TEST(testEarly);
+	CPPUNIT_TEST(testCircularDependency);
 	CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -38,6 +39,7 @@ public:
 	void testAliasToAliasFails();
 	void testExternalVariables();
 	void testEarly();
+	void testCircularDependency();
 
 private:
 	AutoPtr<XMLConfiguration> m_config;
@@ -277,6 +279,100 @@ void DependencyInjectorTest::testEarly()
 	CPPUNIT_ASSERT(!early1.isNull());
 
 	CPPUNIT_ASSERT(early0 != early1);
+}
+
+class CircularDependencyObject {
+public:
+	CircularDependencyObject():
+		m_other(NULL),
+		m_destroyed(NULL)
+	{
+	}
+
+	~CircularDependencyObject()
+	{
+		if (m_destroyed)
+			*m_destroyed = true;
+	}
+
+	void setOther(SharedPtr<CircularDependencyObject> other)
+	{
+		m_other = other;
+	}
+
+	void cleanup()
+	{
+		m_other = NULL;
+	}
+
+	SharedPtr<CircularDependencyObject> m_other;
+	bool *m_destroyed;
+};
+
+}
+
+BEEEON_OBJECT_BEGIN(BeeeOn, CircularDependencyObject)
+BEEEON_OBJECT_REF("other", &CircularDependencyObject::setOther)
+BEEEON_OBJECT_HOOK("cleanup", &CircularDependencyObject::cleanup)
+BEEEON_OBJECT_END(BeeeOn, CircularDependencyObject)
+
+namespace BeeeOn {
+
+/**
+ * Show that two objects that holds a shared pointer to each other
+ * blocks each other's destruction. The solution is to avoid using
+ * shared pointer or to define the cleanup hook. The cleanup hook
+ * is used in this test to make sure that the objects do not block
+ * each other from destruction.
+ */
+void DependencyInjectorTest::testCircularDependency()
+{
+	AutoPtr<XMLConfiguration> m_config(new XMLConfiguration);
+
+	m_config->loadEmpty("empty");
+	m_config->setString("instance[1][@name]", "first");
+	m_config->setString("instance[1][@class]", "BeeeOn::CircularDependencyObject");
+	m_config->setString("instance[1].set[1][@name]", "other");
+	m_config->setString("instance[1].set[1][@ref]", "second");
+	m_config->setString("instance[2][@name]", "second");
+	m_config->setString("instance[2][@class]", "BeeeOn::CircularDependencyObject");
+	m_config->setString("instance[2].set[1][@name]", "other");
+	m_config->setString("instance[2].set[1][@ref]", "first");
+
+	SharedPtr<CircularDependencyObject> first;
+	SharedPtr<CircularDependencyObject> second;
+
+	bool firstDestroyed = false;
+	bool secondDestroyed = false;
+
+	{
+		DependencyInjector injector(m_config);
+
+		first = injector.create<CircularDependencyObject>("first");
+		// 3 references: DependencyInjector, second, and this method
+		CPPUNIT_ASSERT_EQUAL(3, first.referenceCount());
+
+		second = injector.create<CircularDependencyObject>("second");
+		// 3 references: DependencyInjector, first, and this method
+		CPPUNIT_ASSERT_EQUAL(3, second.referenceCount());
+
+		first->m_destroyed = &firstDestroyed;
+		second->m_destroyed = &secondDestroyed;
+	}
+
+	CPPUNIT_ASSERT(!firstDestroyed);
+	CPPUNIT_ASSERT(!secondDestroyed);
+
+	// DependencyInjector has dropped references
+	// "cleanup" hook dropped the circular ones
+	CPPUNIT_ASSERT_EQUAL(1, first.referenceCount());
+	CPPUNIT_ASSERT_EQUAL(1, second.referenceCount());
+
+	first = NULL;
+	CPPUNIT_ASSERT(firstDestroyed);
+
+	second = NULL;
+	CPPUNIT_ASSERT(secondDestroyed);
 }
 
 }

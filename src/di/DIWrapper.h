@@ -8,11 +8,8 @@
 #include <map>
 
 #include <Poco/SharedPtr.h>
-#include <Poco/Logger.h>
 #include <Poco/Dynamic/Var.h>
 #include <Poco/Timespan.h>
-
-#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -354,6 +351,7 @@ protected:
 	virtual void injectMap(const std::string &name,
 			const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &l) = 0;
 	virtual void callHook(const std::string &name) = 0;
+	virtual bool hasHook(const std::string &name) const = 0;
 };
 
 /**
@@ -361,7 +359,7 @@ protected:
  * instance as Poco::SharedPtr<T>.
  */
 template <typename T>
-class AbstractDIWrapper : public DIWrapper, Loggable {
+class AbstractDIWrapper : public DIWrapper {
 	friend DependencyInjector;
 public:
 	AbstractDIWrapper();
@@ -386,6 +384,7 @@ protected:
 	void injectMap(const std::string &name,
 		       const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) override;
 	void callHook(const std::string &name) override;
+	bool hasHook(const std::string &name) const override;
 
 	template <typename B, typename I>
 	void refSetter(const std::string &name, void (B::*setter)(I *));
@@ -583,7 +582,6 @@ void DIWHookHandler<T, B>::call(DIWrapper &b)
 
 template <typename T>
 AbstractDIWrapper<T>::AbstractDIWrapper():
-	Loggable(typeid(T)),
 	m_instance(new T)
 {
 }
@@ -720,19 +718,17 @@ template <typename T>
 void AbstractDIWrapper<T>::callHook(const std::string &name)
 {
 	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		if (logger().debug()) {
-			logger().debug("no such hook '"
-				+ name + "' defined for "
-				+ typeid(T).name(),
-				__FILE__, __LINE__);
-		}
-
-		return;
-	}
+	if (entry == m_method.end())
+		throw Poco::NotFoundException("no such hook " + name);
 
 	DIWHook &handler = dynamic_cast<DIWHook &>(*(entry->second));
 	handler.call(*this);
+}
+
+template <typename T>
+bool AbstractDIWrapper<T>::hasHook(const std::string &name) const
+{
+	return m_method.find(name) != m_method.end();
 }
 
 template <typename T>

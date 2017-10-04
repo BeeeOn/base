@@ -1,5 +1,7 @@
 #include <string>
 
+#include <Poco/Logger.h>
+
 #include "di/Injectable.h"
 #include "loop/LoopRunner.h"
 

@@ -141,6 +141,7 @@ private:
 	void createEarly();
 
 	void destroyOne(DIWrapper *one) const;
+	void cleanup(const WrapperVector vec) const;
 	WrapperVector tryDestroy(const WrapperVector vec) const;
 	void destroyRest(const WrapperVector vec) const;
 
