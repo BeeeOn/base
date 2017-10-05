@@ -5,4 +5,4 @@ add_subdirectory(src)
 add_subdirectory(test)
 
 install(FILES dtd/factory.dtd
-	DESTINATION etc/beeeon)
+	DESTINATION "share/beeeon/dtd")
