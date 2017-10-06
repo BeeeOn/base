@@ -99,10 +99,3 @@ else()
 		${LIBS}
 	)
 endif()
-
-install(TARGETS test-suite-base BeeeOnBaseTest
-	RUNTIME DESTINATION share/beeeon/test-suite
-	ARCHIVE DESTINATION lib
-	LIBRARY DESTINATION lib
-	CONFIGURATIONS Debug
-)
