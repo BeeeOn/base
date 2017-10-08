@@ -1,6 +1,8 @@
 #ifndef BEEEON_GLOBAL_ID_H
 #define BEEEON_GLOBAL_ID_H
 
+#include <vector>
+
 #include <Poco/UUID.h>
 #include <Poco/UUIDGenerator.h>
 
@@ -46,6 +48,9 @@ public:
 		gid.m_uuid.parse(s);
 		return gid;
 	}
+
+	static GlobalID fromBytes(const std::vector<uint8_t> &in);
+	std::vector<uint8_t> toBytes() const;
 
 	unsigned int hash() const;
 
