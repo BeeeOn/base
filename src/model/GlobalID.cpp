@@ -12,8 +12,8 @@ using namespace Poco;
 unsigned int GlobalID::hash() const
 {
 	union {
-		char b[16];
-		uint32_t u32[4];
+		char b[BYTES_SIZE];
+		uint32_t u32[WORDS_SIZE];
 	};
 	m_uuid.copyTo(b);
 
@@ -22,7 +22,7 @@ unsigned int GlobalID::hash() const
 
 GlobalID GlobalID::fromBytes(const vector<uint8_t> &in)
 {
-	if (in.size() < 16)
+	if (in.size() < BYTES_SIZE)
 		throw InvalidArgumentException("invalid count " + to_string(in.size()) + " of bytes for UUID");
 
 	UUID uuid;
@@ -33,7 +33,7 @@ GlobalID GlobalID::fromBytes(const vector<uint8_t> &in)
 
 vector<uint8_t> GlobalID::toBytes() const
 {
-	vector<uint8_t> buff(16);
+	vector<uint8_t> buff(BYTES_SIZE);
 	m_uuid.copyTo(reinterpret_cast<char *>(buff.data()));
 
 	return buff;

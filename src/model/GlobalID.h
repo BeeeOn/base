@@ -10,6 +10,11 @@ namespace BeeeOn {
 
 class GlobalID {
 public:
+	enum {
+		BYTES_SIZE = 16,
+		WORDS_SIZE = 4,
+	};
+
 	struct Hash {
 		unsigned int operator() (const GlobalID &id)
 		{
