@@ -10,6 +10,7 @@
 #include "util/AsyncExecutor.h"
 #include "util/ClassInfo.h"
 #include "util/Loggable.h"
+#include "util/Once.h"
 
 namespace BeeeOn {
 
@@ -89,8 +90,14 @@ void EventSource<Listener>::addListener(typename Listener::Ptr listener)
 template <typename Listener> template <typename Event, typename Method>
 void EventSource<Listener>::fireEvent(const Event &e, const Method &m)
 {
-	if (m_executor.isNull())
-		throw Poco::IllegalStateException("no async executor is set");
+	static Once once;
+
+	if (m_executor.isNull()) {
+		once.execute([&]() {
+			poco_warning(logger(), "no async executor is set");
+		});
+		return;
+	}
 
 	auto copy = m_listeners;
 
