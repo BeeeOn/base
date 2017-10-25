@@ -10,10 +10,10 @@ using namespace std;
 EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum::valueMap()
 {
 	static EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap valueMap = {
-		{ModuleType::AttributeEnum::TYPE_INNER, "inner"},
-		{ModuleType::AttributeEnum::TYPE_MANUAL_ONLY, "manual-only"},
-		{ModuleType::AttributeEnum::TYPE_OUTER, "outer"},
-		{ModuleType::AttributeEnum::TYPE_CONTROLLABLE, "controllable"},
+		{ModuleType::AttributeEnum::ATTR_INNER, "inner"},
+		{ModuleType::AttributeEnum::ATTR_MANUAL_ONLY, "manual-only"},
+		{ModuleType::AttributeEnum::ATTR_OUTER, "outer"},
+		{ModuleType::AttributeEnum::ATTR_CONTROLLABLE, "controllable"},
 	};
 
 	return valueMap;
@@ -129,13 +129,13 @@ bool ModuleType::hasCombination(
 void ModuleType::assureValidAttributes(const set<Attribute> &attributes)
 {
 	if (hasCombination(attributes,
-			{Attribute::TYPE_INNER, Attribute::TYPE_OUTER})) {
+			{Attribute::ATTR_INNER, Attribute::ATTR_OUTER})) {
 		throw InvalidArgumentException(
 			"inner and outer cannot be set at once");
 	}
 
-	if (attributes.find(Attribute::TYPE_MANUAL_ONLY) != attributes.end()) {
-		if (attributes.find(Attribute::TYPE_CONTROLLABLE) == attributes.end()) {
+	if (attributes.find(Attribute::ATTR_MANUAL_ONLY) != attributes.end()) {
+		if (attributes.find(Attribute::ATTR_CONTROLLABLE) == attributes.end()) {
 			throw InvalidArgumentException(
 				"manual-only attribute requires attribute controllable");
 		}
@@ -144,7 +144,7 @@ void ModuleType::assureValidAttributes(const set<Attribute> &attributes)
 
 bool ModuleType::isControllable() const
 {
-	return m_attributes.find(Attribute::TYPE_CONTROLLABLE) != m_attributes.end();
+	return m_attributes.find(Attribute::ATTR_CONTROLLABLE) != m_attributes.end();
 }
 
 void ModuleType::setCustomTypeID(CustomTypeID id)
