@@ -19,17 +19,38 @@ public:
 	virtual ~Translator();
 
 	/**
-	 * Format the message identified by given key.
+	 * Format the message identified by given key. This method should be
+	 * used only for translations where it is sure that the translation
+	 * exists otherwise a messy string could be returned easily.
 	 * The method calls formatImpl internally.
 	 */
 	template <typename... Rest>
-	std::string format(
+	std::string formatSure(
 		const std::string &key,
 		const Rest & ... rest)
 	{
 		std::vector<Poco::Dynamic::Var> tmp;
 		formatCollect(tmp, rest...);
-		return formatImpl(key, tmp);
+		const auto &result = formatImpl(key, tmp);
+		return result.empty()? key : result;
+	}
+
+	/**
+	 * Format the message identified by given key. If the key is not
+	 * found, it returns the given def formatted via formatFallback().
+	 * The method calls formatImpl internally.
+	 */
+	template <typename... Rest>
+	std::string format(
+		const std::string &key,
+		const std::string &def,
+		const Rest & ... rest)
+	{
+		std::vector<Poco::Dynamic::Var> tmp;
+		formatCollect(tmp, rest...);
+		const auto &result = formatImpl(key, tmp);
+		return result.empty() ?
+			formatFallback(def, tmp) : result;
 	}
 
 protected:
@@ -64,6 +85,14 @@ protected:
 		const std::string &key,
 		const std::vector<Poco::Dynamic::Var> &args) = 0;
 
+	/**
+	 * It uses the def as a fallback format. The fallback assumes using
+	 * of the Poco::format() where the Poco::Dynamic::Var is converted
+	 * to Poco::Any on fly.
+	 */
+	std::string formatFallback(
+		const std::string &def,
+		const std::vector<Poco::Dynamic::Var> &args) const;
 };
 
 class TranslatorFactory {
