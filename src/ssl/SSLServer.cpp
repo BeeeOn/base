@@ -7,6 +7,7 @@
 #include "di/Injectable.h"
 #include "ssl/SSLServer.h"
 #include "ssl/RejectCertificateHandler.h"
+#include "util/CryptoParams.h"
 
 using namespace std;
 using namespace Poco;
@@ -22,6 +23,11 @@ SSLServer::~SSLServer()
 {
 }
 
+void SSLServer::setSessionID(const string &id)
+{
+	m_sessionID = id;
+}
+
 Context::Ptr SSLServer::createContext()
 {
 	Context::Ptr context = new Context(
@@ -35,7 +41,14 @@ Context::Ptr SSLServer::createContext()
 		m_cipherList
 	);
 
-	context->enableSessionCache(m_sessionCache);
+	if (trim(m_sessionID).empty()) {
+		logger().notice("SSL session ID not set, generating a random one",
+				__FILE__, __LINE__);
+
+		m_sessionID = CryptoParams::randomString(16);
+	}
+
+	context->enableSessionCache(m_sessionCache, m_sessionID);
 	return context;
 }
 
@@ -49,6 +62,7 @@ BEEEON_OBJECT_TEXT("verificationMode", &SSLFacility::setVerificationMode)
 BEEEON_OBJECT_NUMBER("verificationDepth", &SSLFacility::setVerificationDepth)
 BEEEON_OBJECT_TEXT("cipherList", &SSLFacility::setCipherList)
 BEEEON_OBJECT_TEXT("sessionCache", &SSLFacility::setSessionCache)
+BEEEON_OBJECT_TEXT("sessionID", &SSLServer::setSessionID)
 BEEEON_OBJECT_TEXT("disabledProtocols", &SSLFacility::setDisabledProtocols)
 BEEEON_OBJECT_HOOK("done", &SSLFacility::initContext)
 BEEEON_OBJECT_END(BeeeOn, SSLServer)
