@@ -1,3 +1,4 @@
+#include <Poco/Logger.h>
 #include <Poco/String.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/NumberParser.h>
@@ -15,7 +16,8 @@ using namespace Poco::Net;
 using namespace BeeeOn;
 
 SSLServer::SSLServer():
-	m_certHandler(new BetterRejectCertificateHandler(true))
+	m_certHandler(new BetterRejectCertificateHandler(true)),
+	m_preferServerCiphers(false)
 {
 }
 
@@ -26,6 +28,11 @@ SSLServer::~SSLServer()
 void SSLServer::setSessionID(const string &id)
 {
 	m_sessionID = id;
+}
+
+void SSLServer::setPreferServerCiphers(bool prefer)
+{
+	m_preferServerCiphers = prefer;
 }
 
 Context::Ptr SSLServer::createContext()
@@ -49,6 +56,14 @@ Context::Ptr SSLServer::createContext()
 	}
 
 	context->enableSessionCache(m_sessionCache, m_sessionID);
+
+	if (m_preferServerCiphers) {
+		logger().notice("prefering server ciphers over the client ones",
+				__FILE__, __LINE__);
+
+		context->preferServerCiphers();
+	}
+
 	return context;
 }
 
@@ -64,5 +79,6 @@ BEEEON_OBJECT_TEXT("cipherList", &SSLFacility::setCipherList)
 BEEEON_OBJECT_TEXT("sessionCache", &SSLFacility::setSessionCache)
 BEEEON_OBJECT_TEXT("sessionID", &SSLServer::setSessionID)
 BEEEON_OBJECT_TEXT("disabledProtocols", &SSLFacility::setDisabledProtocols)
+BEEEON_OBJECT_NUMBER("preferServerCiphers", &SSLServer::setPreferServerCiphers)
 BEEEON_OBJECT_HOOK("done", &SSLFacility::initContext)
 BEEEON_OBJECT_END(BeeeOn, SSLServer)
