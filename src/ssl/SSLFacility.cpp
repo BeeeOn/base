@@ -70,7 +70,8 @@ SSLFacility::SSLFacility():
 	m_verificationDepth(9),
 	m_cipherList("ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"),
 	m_sessionCache(false),
-	m_disabledProtocols(-1)
+	m_disabledProtocols(-1),
+	m_extendedCertificateVerification(true)
 {
 	initializeSSL();
 
@@ -106,6 +107,8 @@ void SSLFacility::initContext()
 				+ NumberFormatter::formatHex(POCO_VERSION, 10, true),
 				__FILE__, __LINE__);
 #endif
+	
+	m_context->enableExtendedCertificateVerification(m_extendedCertificateVerification);
 
 	logger().information("SSL context initialized",
 				__FILE__, __LINE__);
@@ -120,6 +123,7 @@ void SSLFacility::initContext()
 	logger().debug("cihperList: " + m_cipherList);
 	logger().debug("sessionCache: " + to_string(m_sessionCache));
 	logger().debug("disableProtocols: " + NumberFormatter::formatHex(m_disabledProtocols, 10, true));
+	logger().debug("extendedCertificateVerification: " + to_string(m_extendedCertificateVerification));
 }
 
 Context::Ptr SSLFacility::context()
@@ -212,4 +216,9 @@ void SSLFacility::setDisabledProtocols(const string &protocols)
 	}
 
 	m_disabledProtocols = disable;
+}
+
+void SSLFacility::setExtendedCertificateVerification(bool enable)
+{
+	m_extendedCertificateVerification = enable;
 }

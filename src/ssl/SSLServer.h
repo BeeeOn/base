@@ -13,12 +13,17 @@ public:
 	SSLServer();
 	~SSLServer();
 
+	void setSessionID(const std::string &id);
+	void setPreferServerCiphers(bool prefer);
+
 protected:
 	Poco::Net::Context::Ptr createContext() override;
 
 protected:
 	Poco::SharedPtr<Poco::Net::InvalidCertificateHandler>
 		m_certHandler;
+	std::string m_sessionID;
+	bool m_preferServerCiphers;
 };
 
 }

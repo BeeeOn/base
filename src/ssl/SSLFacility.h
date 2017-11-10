@@ -87,6 +87,7 @@ public:
 	void setCipherList(const std::string &list);
 	void setSessionCache(const std::string &enable);
 	void setDisabledProtocols(const std::string &protocols);
+	void setExtendedCertificateVerification(bool enable);
 
 	Poco::Net::Context::Ptr context();
 	void initContext();
@@ -110,6 +111,7 @@ protected:
 	std::string m_cipherList;
 	bool m_sessionCache;
 	unsigned int m_disabledProtocols;
+	bool m_extendedCertificateVerification;
 };
 
 }
