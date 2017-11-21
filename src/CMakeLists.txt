@@ -88,6 +88,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/CryptoConfig.cpp
 	${PROJECT_SOURCE_DIR}/util/CryptoParams.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMM.cpp
+	${PROJECT_SOURCE_DIR}/util/ExponentialBackOff.cpp
 	${PROJECT_SOURCE_DIR}/util/FailDetector.cpp
 	${PROJECT_SOURCE_DIR}/util/FileLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
