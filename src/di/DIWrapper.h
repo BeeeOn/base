@@ -158,6 +158,21 @@ private:
 };
 
 template <typename T, typename B>
+class DIWDoubleSetter final : public DIWNumberSetter {
+public:
+	typedef void (B::*Setter)(double value);
+
+	DIWDoubleSetter(Setter setter):
+		m_setter(setter)
+	{
+	}
+
+	void call(DIWrapper &b, double value) override;
+private:
+	Setter m_setter;
+};
+
+template <typename T, typename B>
 class DIWBoolSetter final : public DIWNumberSetter {
 public:
 	typedef void (B::*Setter)(bool value);
@@ -398,6 +413,9 @@ protected:
 	void numberSetter(const std::string &name, void (B::*setter)(int));
 
 	template <typename B>
+	void numberSetter(const std::string &name, void (B::*setter)(double));
+
+	template <typename B>
 	void numberSetter(const std::string &name, void (B::*setter)(bool));
 
 	template <typename B>
@@ -488,6 +506,13 @@ void DIWIntSetter<T, B>::call(DIWrapper &b, double value)
 		throw DIWWrongInputException("given number is not an integer");
 
 	(base.*m_setter)((int) value);
+}
+
+template <typename T, typename B>
+void DIWDoubleSetter<T, B>::call(DIWrapper &b, double value)
+{
+	B &base = extractInstance<T, B>(b);
+	(base.*m_setter)(value);
 }
 
 template <typename T, typename B>
@@ -774,6 +799,14 @@ void AbstractDIWrapper<T>::numberSetter(
 		void (B::*setter)(int))
 {
 	installMethod(name, new DIWIntSetter<T, B>(setter));
+}
+
+template <typename T> template <typename B>
+void AbstractDIWrapper<T>::numberSetter(
+		const std::string &name,
+		void (B::*setter)(double))
+{
+	installMethod(name, new DIWDoubleSetter<T, B>(setter));
 }
 
 template <typename T> template <typename B>

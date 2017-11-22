@@ -1,5 +1,6 @@
 #include <cfloat>
 #include <climits>
+#include <cmath>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <Poco/Logger.h>
@@ -50,6 +51,11 @@ public:
 		m_offset = v;
 	}
 
+	void setFactor(double f)
+	{
+		m_factor = f;
+	}
+
 	void setSelf(DITest *self)
 	{
 		m_self = self;
@@ -81,6 +87,7 @@ public:
 	std::string m_name;
 	char m_char = '0';
 	int m_offset = 0;
+	double m_factor = std::nan("");
 	DITest *m_self = NULL;
 	Timespan m_timespan;
 	vector<string> m_list;
@@ -97,6 +104,7 @@ BEEEON_OBJECT_BEGIN(BeeeOn, DITest)
 BEEEON_OBJECT_TEXT("name", &DITest::setName)
 BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITest::setOffset)
+BEEEON_OBJECT_NUMBER("factor", &DITest::setFactor)
 BEEEON_OBJECT_REF("self", &DITest::setSelf)
 BEEEON_OBJECT_TIME("timespan", &DITest::setTimespan)
 BEEEON_OBJECT_LIST("list", &DITest::setList)
@@ -109,6 +117,7 @@ BEEEON_OBJECT_CASTABLE(DITest)
 BEEEON_OBJECT_TEXT("name", &DITestChild::setName)
 BEEEON_OBJECT_TEXT("char", &DITest::setChar)
 BEEEON_OBJECT_NUMBER("offset", &DITestChild::setOffset)
+BEEEON_OBJECT_NUMBER("factor", &DITestChild::setFactor)
 BEEEON_OBJECT_REF("self", &DITestChild::setSelf)
 BEEEON_OBJECT_TIME("timespan", &DITestChild::setTimespan)
 BEEEON_OBJECT_LIST("list", &DITestChild::setList)
@@ -140,6 +149,7 @@ void DIWrapperTest::testCreate()
 	CPPUNIT_ASSERT(test->m_name.empty());
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+	CPPUNIT_ASSERT(std::isnan(test->m_factor));
 	CPPUNIT_ASSERT(test->m_self == NULL);
 	CPPUNIT_ASSERT(test->m_timespan == 0);
 	CPPUNIT_ASSERT(test->m_list.empty());
@@ -148,6 +158,7 @@ void DIWrapperTest::testCreate()
 	ACCESS_CALL(wrapper, injectText)("name", "TEST NAME");
 	ACCESS_CALL(wrapper, injectText)("char", "X");
 	ACCESS_CALL(wrapper, injectNumber)("offset", 16);
+	ACCESS_CALL(wrapper, injectNumber)("factor", 1.5);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
 	ACCESS_CALL(wrapper, injectTime)("timespan", 10 * Timespan::HOURS);
 	ACCESS_CALL(wrapper, injectList)("list", {"a", "b", "c"});
@@ -158,6 +169,7 @@ void DIWrapperTest::testCreate()
 	CPPUNIT_ASSERT_EQUAL("TEST NAME", test->m_name);
 	CPPUNIT_ASSERT_EQUAL('X', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(16, test->m_offset);
+	CPPUNIT_ASSERT_EQUAL(1.5, test->m_factor);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
 	CPPUNIT_ASSERT(Timespan(10 * Timespan::HOURS) == test->m_timespan);
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
@@ -237,6 +249,7 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	CPPUNIT_ASSERT(test->m_name.empty());
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+	CPPUNIT_ASSERT(std::isnan(test->m_factor));
 	CPPUNIT_ASSERT(test->m_self == NULL);
 	CPPUNIT_ASSERT(test->m_timespan == 0);
 	CPPUNIT_ASSERT(test->m_list.empty());
@@ -245,6 +258,7 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	ACCESS_CALL(*wrapper, injectText)("name", "TEST NAME2");
 	ACCESS_CALL(*wrapper, injectText)("char", "Z");
 	ACCESS_CALL(*wrapper, injectNumber)("offset", 18);
+	ACCESS_CALL(*wrapper, injectNumber)("factor", 1.5);
 	ACCESS_CALL(*wrapper, injectRef)("self", *w);
 	ACCESS_CALL(*wrapper, injectTime)("timespan", 5 * Timespan::SECONDS);
 	ACCESS_CALL(*wrapper, injectList)("list", {"a", "b", "c"});
@@ -255,6 +269,7 @@ void DIWrapperTest::testPolymorphicBehaviour()
 	CPPUNIT_ASSERT_EQUAL("TEST NAME2", test->m_name);
 	CPPUNIT_ASSERT_EQUAL('Z', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(18, test->m_offset);
+	CPPUNIT_ASSERT_EQUAL(1.5, test->m_factor);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
 	CPPUNIT_ASSERT(Timespan(5 * Timespan::SECONDS) == test->m_timespan);
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
@@ -277,6 +292,7 @@ void DIWrapperTest::testInheritanceOfTarget()
 	CPPUNIT_ASSERT(test->m_name.empty());
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
+	CPPUNIT_ASSERT(std::isnan(test->m_factor));
 	CPPUNIT_ASSERT(test->m_self == NULL);
 	CPPUNIT_ASSERT(test->m_timespan == 0);
 	CPPUNIT_ASSERT(test->m_list.empty());
@@ -285,6 +301,7 @@ void DIWrapperTest::testInheritanceOfTarget()
 	ACCESS_CALL(wrapper, injectText)("name", "TEST NAME3");
 	ACCESS_CALL(wrapper, injectText)("char", "Y");
 	ACCESS_CALL(wrapper, injectNumber)("offset", 19);
+	ACCESS_CALL(wrapper, injectNumber)("factor", 5.2);
 	ACCESS_CALL(wrapper, injectRef)("self", wrapper);
 	ACCESS_CALL(wrapper, injectTime)("timespan", 16 * Timespan::DAYS);
 	ACCESS_CALL(wrapper, injectList)("list", {"a", "b", "c"});
@@ -295,6 +312,7 @@ void DIWrapperTest::testInheritanceOfTarget()
 	CPPUNIT_ASSERT_EQUAL("TEST NAME3", test->m_name);
 	CPPUNIT_ASSERT_EQUAL('Y', test->m_char);
 	CPPUNIT_ASSERT_EQUAL(19, test->m_offset);
+	CPPUNIT_ASSERT_EQUAL(5.2, test->m_factor);
 	CPPUNIT_ASSERT(test.get() == test->m_self);
 	CPPUNIT_ASSERT(Timespan(16 * Timespan::DAYS) == test->m_timespan);
 	CPPUNIT_ASSERT_EQUAL("a", test->m_list[0]);
