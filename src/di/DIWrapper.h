@@ -137,7 +137,7 @@ private:
  */
 struct DIWNumberSetter : public DIWMethodHelper {
 	virtual ~DIWNumberSetter();
-	virtual void call(DIWrapper &b, long value) = 0;
+	virtual void call(DIWrapper &b, double value) = 0;
 };
 
 template <typename T, typename B>
@@ -150,7 +150,7 @@ public:
 	{
 	}
 
-	void call(DIWrapper &b, long value) override;
+	void call(DIWrapper &b, double value) override;
 private:
 	Setter m_setter;
 };
@@ -165,7 +165,7 @@ public:
 	{
 	}
 
-	void call(DIWrapper &b, long value) override;
+	void call(DIWrapper &b, double value) override;
 private:
 	Setter m_setter;
 };
@@ -341,7 +341,7 @@ protected:
 	virtual void injectRef(const std::string &name,
 			DIWrapper &wrapper) = 0;
 	virtual void injectNumber(const std::string &name,
-			int value) = 0;
+			double value) = 0;
 	virtual void injectText(const std::string &name,
 			const std::string &value) = 0;
 	virtual void injectTime(const std::string &name,
@@ -376,7 +376,7 @@ public:
 
 protected:
 	void injectRef(const std::string &name, DIWrapper &wrapper) override;
-	void injectNumber(const std::string &name, int value) override;
+	void injectNumber(const std::string &name, double value) override;
 	void injectText(const std::string &name, const std::string &value) override;
 	void injectTime(const std::string &name, const Poco::Timespan &value) override;
 	void injectList(const std::string &name,
@@ -474,14 +474,14 @@ void DIWTimespanSetter<T, B>::call(DIWrapper &b, const Poco::Timespan &time)
 }
 
 template <typename T, typename B>
-void DIWIntSetter<T, B>::call(DIWrapper &b, long value)
+void DIWIntSetter<T, B>::call(DIWrapper &b, double value)
 {
 	B &base = extractInstance<T, B>(b);
 	(base.*m_setter)((int) value);
 }
 
 template <typename T, typename B>
-void DIWBoolSetter<T, B>::call(DIWrapper &b, long value)
+void DIWBoolSetter<T, B>::call(DIWrapper &b, double value)
 {
 	B &base = extractInstance<T, B>(b);
 	(base.*m_setter)(value != 0? true : false);
@@ -636,7 +636,7 @@ void AbstractDIWrapper<T>::injectRef(
 template <typename T>
 void AbstractDIWrapper<T>::injectNumber(
 		const std::string &name,
-		int value)
+		double value)
 {
 	auto entry = m_method.find(name);
 	if (entry == m_method.end()) {
