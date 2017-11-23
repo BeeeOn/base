@@ -14,6 +14,7 @@
 #include <Poco/Net/SocketStream.h>
 
 #include "io/Console.h"
+#include "ssl/SSLServer.h"
 #include "util/Loggable.h"
 
 namespace Poco {
@@ -66,6 +67,7 @@ public:
 	void setRecvTimeout(const Poco::Timespan &timeout);
 	void setPollTimeout(const Poco::Timespan &timeout);
 	void setBacklog(int backlog);
+	void setSSLConfig(Poco::SharedPtr<SSLServer> config);
 
 	void startListen();
 	void close() override;
@@ -82,6 +84,7 @@ private:
 	Poco::Timespan m_pollTimeout;
 	unsigned int m_backlog;
 	Poco::SharedPtr<Poco::Net::ServerSocket> m_serverSocket;
+	Poco::SharedPtr<SSLServer> m_sslConfig;
 	Poco::FastMutex m_lock;
 	Poco::AtomicCounter m_close;
 };
