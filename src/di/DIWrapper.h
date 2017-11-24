@@ -971,6 +971,9 @@ BEEEON_WRAPPER(cls, cls##DIW)
 	_BEEEON_VA_SELECT(BEEEON_OBJECT_BEGIN, __VA_ARGS__)
 #define BEEEON_OBJECT_CASTABLE(to) \
 	static_assert(                                  \
+		!std::is_same<Self, to>::value,         \
+		"Redundant cast to itself for " #to);   \
+	static_assert(                                  \
 		std::has_virtual_destructor<to>::value, \
 		#to " is missing a virtual destructor");\
 	DIWCast::add(new DIWCastImpl<Self, to>);
