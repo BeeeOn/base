@@ -1,6 +1,7 @@
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 
+#include <Poco/Net/SecureServerSocket.h>
 #include <Poco/Net/ServerSocket.h>
 #include <Poco/Net/SocketAddress.h>
 
@@ -18,6 +19,7 @@ BEEEON_OBJECT_NUMBER("backlog", &TCPConsole::setBacklog)
 BEEEON_OBJECT_TEXT("eol", &TCPConsole::setEol)
 BEEEON_OBJECT_TEXT("skipEol", &TCPConsole::setSkipEol)
 BEEEON_OBJECT_TEXT("prompt", &TCPConsole::setPrompt)
+BEEEON_OBJECT_REF("sslConfig", &TCPConsole::setSSLConfig)
 BEEEON_OBJECT_HOOK("done", &TCPConsole::startListen)
 BEEEON_OBJECT_END(BeeeOn, TCPConsole)
 
@@ -126,6 +128,11 @@ void TCPConsole::setBacklog(int backlog)
 	m_backlog = backlog;
 }
 
+void TCPConsole::setSSLConfig(SharedPtr<SSLServer> config)
+{
+	m_sslConfig = config;
+}
+
 void TCPConsole::startListen()
 {
 	FastMutex::ScopedLock guard(m_lock);
@@ -137,7 +144,11 @@ void TCPConsole::startListenUnlocked()
 	if (!m_serverSocket.isNull())
 		return;
 
-	m_serverSocket = new ServerSocket;
+	if (m_sslConfig.isNull())
+		m_serverSocket = new ServerSocket;
+	else
+		m_serverSocket = new SecureServerSocket(m_sslConfig->context());
+
 	m_close = false;
 
 	SocketAddress address(m_address, m_port);
