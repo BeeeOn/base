@@ -36,6 +36,13 @@ public:
 	std::string displayName() const;
 	std::string toString() const;
 
+	bool operator <(const Locale &other) const
+	{
+		return lessThan(other);
+	}
+
+	bool lessThan(const Locale &other) const;
+
 	Poco::SharedPtr<LocaleImpl> impl() const;
 
 	static Locale system();

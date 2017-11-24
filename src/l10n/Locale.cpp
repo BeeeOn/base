@@ -29,6 +29,11 @@ string Locale::toString() const
 	return m_impl->toString();
 }
 
+bool Locale::lessThan(const Locale &other) const
+{
+	return toString() < other.toString();
+}
+
 SharedPtr<LocaleImpl> Locale::impl() const
 {
 	return m_impl;
