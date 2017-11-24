@@ -65,6 +65,8 @@ private:
 struct DIWMethodHelper {
 	virtual ~DIWMethodHelper();
 
+	virtual std::string id() const = 0;
+
 	/**
 	 * Get instance of the given wrapper.
 	 */
@@ -77,6 +79,12 @@ struct DIWMethodHelper {
  */
 struct DIWTextSetter : public DIWMethodHelper {
 	virtual ~DIWTextSetter();
+
+	std::string id() const override
+	{
+		return "text";
+	}
+
 	virtual void call(DIWrapper &b, const std::string &text) = 0;
 };
 
@@ -115,6 +123,12 @@ private:
  */
 struct DIWTimeSetter : public DIWMethodHelper {
 	virtual ~DIWTimeSetter();
+
+	std::string id() const override
+	{
+		return "time";
+	}
+
 	virtual void call(DIWrapper &b, const Poco::Timespan &time) = 0;
 };
 
@@ -139,6 +153,12 @@ private:
  */
 struct DIWNumberSetter : public DIWMethodHelper {
 	virtual ~DIWNumberSetter();
+
+	std::string id() const override
+	{
+		return "number";
+	}
+
 	virtual void call(DIWrapper &b, double value) = 0;
 };
 
@@ -192,6 +212,12 @@ private:
  */
 struct DIWRefSetter : public DIWMethodHelper {
 	virtual ~DIWRefSetter();
+
+	std::string id() const override
+	{
+		return "ref";
+	}
+
 	virtual void call(DIWrapper &b, DIWrapper &i) = 0;
 
 protected:
@@ -237,6 +263,12 @@ private:
 
 struct DIWListSetter : public DIWMethodHelper {
 	virtual ~DIWListSetter();
+
+	std::string id() const override
+	{
+		return "list";
+	}
+
 	virtual void call(DIWrapper &b, const std::list<Poco::Dynamic::Var> &l) = 0;
 };
 
@@ -257,6 +289,12 @@ private:
 
 struct DIWMapSetter : public DIWMethodHelper {
 	virtual ~DIWMapSetter();
+
+	std::string id() const override
+	{
+		return "map";
+	}
+
 	virtual void call(DIWrapper &b,
 			  const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) = 0;
 };
@@ -305,6 +343,12 @@ struct DIWCastImpl final : public DIWCast {
  */
 struct DIWHook : public DIWMethodHelper {
 	virtual ~DIWHook();
+
+	std::string id() const override
+	{
+		return "hook";
+	}
+
 	virtual void call(DIWrapper &b) = 0;
 };
 
