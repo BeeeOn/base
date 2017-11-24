@@ -337,6 +337,12 @@ struct DIWCastImpl final : public DIWCast {
 	bool wouldCast(const std::type_info &info) override;
 	bool isSame(DIWrapper &wrapper) override;
 	void cast(void *raw, void *dest) override;
+
+	static_assert(
+		std::is_base_of<To, From>::value,
+		"Invalid cast, there is no inheritance defined"
+	);
+
 };
 
 /**
@@ -973,6 +979,9 @@ BEEEON_WRAPPER(cls, cls##DIW)
 	static_assert(                                  \
 		!std::is_same<Self, to>::value,         \
 		"Redundant cast to itself for " #to);   \
+	static_assert(                                  \
+		std::is_base_of<to, Self>::value,       \
+		"Cannot cast to " #to);                 \
 	static_assert(                                  \
 		std::has_virtual_destructor<to>::value, \
 		#to " is missing a virtual destructor");\
