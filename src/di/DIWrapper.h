@@ -717,8 +717,16 @@ void AbstractDIWrapper<T>::injectGeneric(
 				+ typeid(T).name());
 	}
 
-	Setter &setter = dynamic_cast<Setter &>(*(entry->second));
-	setter.call(*this, value);
+	Setter *setter = dynamic_cast<Setter *>(entry->second);
+	if (setter == NULL) {
+		throw DIWWrongInputException(
+			"injecting property "
+			+ property
+			+ " via method "
+			+ entry->second->id());
+	}
+
+	setter->call(*this, value);
 }
 
 template <typename T>
