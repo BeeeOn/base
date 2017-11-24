@@ -1,6 +1,8 @@
 #ifndef BEEEON_DI_WRAPPER_H
 #define BEEEON_DI_WRAPPER_H
 
+#include <climits>
+#include <cmath>
 #include <list>
 #include <string>
 #include <typeinfo>
@@ -477,6 +479,14 @@ template <typename T, typename B>
 void DIWIntSetter<T, B>::call(DIWrapper &b, double value)
 {
 	B &base = extractInstance<T, B>(b);
+
+	if (value > INT_MAX)
+		throw DIWWrongInputException("too big integer value");
+	if (value < INT_MIN)
+		throw DIWWrongInputException("too small integer value");
+	if (((double) ((int) value)) != value)
+		throw DIWWrongInputException("given number is not an integer");
+
 	(base.*m_setter)((int) value);
 }
 

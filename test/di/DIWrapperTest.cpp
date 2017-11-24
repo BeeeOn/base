@@ -1,3 +1,5 @@
+#include <cfloat>
+#include <climits>
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <Poco/Logger.h>
@@ -15,6 +17,7 @@ class DIWrapperTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DIWrapperTest);
 	CPPUNIT_TEST(testCreate);
 	CPPUNIT_TEST(testInjectTooLongChar);
+	CPPUNIT_TEST(testInjectInvalidInt);
 	CPPUNIT_TEST(testPolymorphicBehaviour);
 	CPPUNIT_TEST(testInheritanceOfTarget);
 	CPPUNIT_TEST(testSetSharedPtr);
@@ -22,6 +25,7 @@ class DIWrapperTest : public CppUnit::TestFixture {
 public:
 	void testCreate();
 	void testInjectTooLongChar();
+	void testInjectInvalidInt();
 	void testPolymorphicBehaviour();
 	void testInheritanceOfTarget();
 	void testSetSharedPtr();
@@ -184,6 +188,40 @@ void DIWrapperTest::testInjectTooLongChar()
 		DIWWrongInputException
 	);
 	CPPUNIT_ASSERT_EQUAL('0', test->m_char);
+}
+
+void DIWrapperTest::testInjectInvalidInt()
+{
+	DITestDIW wrapper;
+
+	SharedPtr<DITest> test = wrapper.instance();
+
+	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+
+	CPPUNIT_ASSERT_THROW(
+		ACCESS_CALL(wrapper, injectNumber)("offset", 1.5),
+		DIWWrongInputException
+	);
+	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+
+	CPPUNIT_ASSERT_THROW(
+		ACCESS_CALL(wrapper, injectNumber)("offset", ((double) INT_MAX) + 1),
+		DIWWrongInputException
+	);
+	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+
+	CPPUNIT_ASSERT_THROW(
+		ACCESS_CALL(wrapper, injectNumber)("offset", ((double) INT_MIN) - 1),
+		DIWWrongInputException
+	);
+
+	CPPUNIT_ASSERT_THROW(
+		// 2 ^ DBL_MANT_DIG is the last value that can be exactly
+		// represented by 64 bit int and thus it must always fail here
+		ACCESS_CALL(wrapper, injectNumber)("offset", (((uint64_t) 1) << DBL_MANT_DIG) + 1),
+		DIWWrongInputException
+	);
+	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
 }
 
 void DIWrapperTest::testPolymorphicBehaviour()
