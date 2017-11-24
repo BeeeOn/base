@@ -521,6 +521,13 @@ private:
 template <typename T, typename B>
 B &DIWMethodHelper::extractInstance(DIWrapper &w)
 {
+	static_assert(
+		std::is_polymorphic<T>::value
+		&&
+		std::is_base_of<B, T>::value,
+		"Dynamic casting is impossible here"
+	);
+
 	AbstractDIWrapper<T> &wrapper = dynamic_cast<AbstractDIWrapper<T> &>(w);
 	Poco::SharedPtr<T> instance = wrapper.instance();
 	return dynamic_cast<B &>(*instance.get());
