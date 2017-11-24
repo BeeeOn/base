@@ -38,6 +38,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION(DIWrapperTest);
 
 class DITest {
 public:
+	virtual ~DITest()
+	{
+	}
+
 	void setName(const std::string &name)
 	{
 		m_name = name;
@@ -343,6 +347,10 @@ void DIWrapperTest::testInheritanceOfTarget()
 
 class DIAnother {
 public:
+	virtual ~DIAnother()
+	{
+	}
+
 	void setTest(SharedPtr<DITest> test)
 	{
 		m_test = test;

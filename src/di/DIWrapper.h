@@ -940,6 +940,11 @@ static name##Factory name##Factory;
 	static_assert(                                         \
 		std::is_default_constructible<cls>::value,     \
 		#cls " is missing a default constructor");     \
+	static_assert(                                         \
+		!std::is_polymorphic<cls>::value               \
+		||                                             \
+		std::has_virtual_destructor<cls>::value,       \
+		#cls " is missing a virtual destructor");      \
 	struct wrapper final : public AbstractDIWrapper<cls> { \
 		friend cls;                                    \
 		using Self = cls;                              \
@@ -965,6 +970,9 @@ BEEEON_WRAPPER(cls, cls##DIW)
 #define BEEEON_OBJECT_BEGIN(...) \
 	_BEEEON_VA_SELECT(BEEEON_OBJECT_BEGIN, __VA_ARGS__)
 #define BEEEON_OBJECT_CASTABLE(to) \
+	static_assert(                                  \
+		std::has_virtual_destructor<to>::value, \
+		#to " is missing a virtual destructor");\
 	DIWCast::add(new DIWCastImpl<Self, to>);
 #define BEEEON_OBJECT_REF(name, method) \
 	refSetter(name, method);
