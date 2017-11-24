@@ -332,7 +332,7 @@ bool DependencyInjector::tryInjectNumber(
 	if (m_conf->has(key + "[@number]")) {
 		SimpleCalc calc;
 		const string &tmp = m_conf->getString(key + "[@number]");
-		const int value = static_cast<int>(calc.evaluate(tmp));
+		const double value = calc.evaluate(tmp);
 
 		logger().debug("injecting number " + to_string(value)
 				+ " as " + name + " into " + info.name());
