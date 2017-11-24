@@ -8,6 +8,7 @@
 #include <typeinfo>
 #include <list>
 #include <map>
+#include <type_traits>
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Dynamic/Var.h>
@@ -936,6 +937,9 @@ public:                                                 \
 static name##Factory name##Factory;
 
 #define BEEEON_WRAPPER(cls, wrapper) \
+	static_assert(                                         \
+		std::is_default_constructible<cls>::value,     \
+		#cls " is missing a default constructor");     \
 	struct wrapper final : public AbstractDIWrapper<cls> { \
 		friend cls;                                    \
 		using Self = cls;                              \
