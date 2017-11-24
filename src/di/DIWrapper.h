@@ -444,6 +444,12 @@ protected:
 			const std::list<Poco::Dynamic::Var> &l) override;
 	void injectMap(const std::string &name,
 		       const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &m) override;
+
+	template <typename Setter, typename Target>
+	void injectGeneric(const std::string &name,
+			Target &value,
+			const std::string &property);
+
 	void callHook(const std::string &name) override;
 	bool hasHook(const std::string &name) const override;
 
@@ -697,19 +703,30 @@ const std::type_info &AbstractDIWrapper<T>::type()
 }
 
 template <typename T>
-void AbstractDIWrapper<T>::injectRef(
+template <typename Setter, typename Target>
+void AbstractDIWrapper<T>::injectGeneric(
 		const std::string &name,
-		DIWrapper &wrapper)
+		Target &value,
+		const std::string &property)
 {
 	auto entry = m_method.find(name);
 	if (entry == m_method.end()) {
-		throw Poco::NotFoundException("missing ref property "
+		throw Poco::NotFoundException("missing "
+				+ property + " property "
 				+ name + " for type "
 				+ typeid(T).name());
 	}
 
-	DIWRefSetter &setter = dynamic_cast<DIWRefSetter &>(*(entry->second));
-	setter.call(*this, wrapper);
+	Setter &setter = dynamic_cast<Setter &>(*(entry->second));
+	setter.call(*this, value);
+}
+
+template <typename T>
+void AbstractDIWrapper<T>::injectRef(
+		const std::string &name,
+		DIWrapper &wrapper)
+{
+	injectGeneric<DIWRefSetter>(name, wrapper, "ref");
 }
 
 template <typename T>
@@ -717,16 +734,7 @@ void AbstractDIWrapper<T>::injectNumber(
 		const std::string &name,
 		double value)
 {
-	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		throw Poco::NotFoundException("missing number property "
-				+ name + " for type "
-				+ typeid(T).name());
-	}
-
-
-	DIWNumberSetter &setter = dynamic_cast<DIWNumberSetter &>(*(entry->second));
-	setter.call(*this, value);
+	injectGeneric<DIWNumberSetter>(name, value, "number");
 }
 
 template <typename T>
@@ -734,15 +742,7 @@ void AbstractDIWrapper<T>::injectText(
 		const std::string &name,
 		const std::string &value)
 {
-	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		throw Poco::NotFoundException("missing text property "
-				+ name + " for type "
-				+ typeid(T).name());
-	}
-
-	DIWTextSetter &setter = dynamic_cast<DIWTextSetter &>(*(entry->second));
-	setter.call(*this, value);
+	injectGeneric<DIWTextSetter>(name, value, "text");
 }
 
 template <typename T>
@@ -750,15 +750,7 @@ void AbstractDIWrapper<T>::injectTime(
 		const std::string &name,
 		const Poco::Timespan &value)
 {
-	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		throw Poco::NotFoundException("missing time property "
-				+ name + " for type "
-				+ typeid(T).name());
-	}
-
-	DIWTimeSetter &setter = dynamic_cast<DIWTimeSetter &>(*(entry->second));
-	setter.call(*this, value);
+	injectGeneric<DIWTimeSetter>(name, value, "time");
 }
 
 template <typename T>
@@ -766,15 +758,7 @@ void AbstractDIWrapper<T>::injectList(
 		const std::string &name,
 		const std::list<Poco::Dynamic::Var> &value)
 {
-	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		throw Poco::NotFoundException("missing list property "
-				+ name + " for type "
-				+ typeid(T).name());
-	}
-
-	DIWListSetter &setter = dynamic_cast<DIWListSetter &>(*(entry->second));
-	setter.call(*this, value);
+	injectGeneric<DIWListSetter>(name, value, "list");
 }
 
 template <typename T>
@@ -782,15 +766,7 @@ void AbstractDIWrapper<T>::injectMap(
 		const std::string &name,
 		const std::map<Poco::Dynamic::Var, Poco::Dynamic::Var> &value)
 {
-	auto entry = m_method.find(name);
-	if (entry == m_method.end()) {
-		throw Poco::NotFoundException("missing map property "
-				+ name + " for type "
-				+ typeid(T).name());
-	}
-
-	DIWMapSetter &setter = dynamic_cast<DIWMapSetter &>(*(entry->second));
-	setter.call(*this, value);
+	injectGeneric<DIWMapSetter>(name, value, "map");
 }
 
 template <typename T>
