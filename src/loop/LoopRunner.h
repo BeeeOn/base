@@ -11,7 +11,7 @@
 
 namespace BeeeOn {
 
-class LoopRunner : public Loggable {
+class LoopRunner : public StoppableLoop, public Loggable {
 public:
 	LoopRunner();
 	~LoopRunner();
@@ -20,8 +20,8 @@ public:
 	void addLoop(Poco::SharedPtr<StoppableLoop> loop);
 	void setAutoStart(bool enable);
 
-	void start();
-	void stop();
+	void start() override;
+	void stop() override;
 	void autoStart();
 
 protected:
