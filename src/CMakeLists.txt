@@ -106,22 +106,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 )
 
-file(GLOB TRANSACTION_SOURCES
-	${PROJECT_SOURCE_DIR}/transaction/NoTransactionFactory.cpp
-	${PROJECT_SOURCE_DIR}/transaction/NullTransactionManager.cpp
-	${PROJECT_SOURCE_DIR}/transaction/ThreadLocalTransactionManager.cpp
-	${PROJECT_SOURCE_DIR}/transaction/Transactional.cpp
-	${PROJECT_SOURCE_DIR}/transaction/TransactionManager.cpp
-)
-
 include_directories(
 	${PROJECT_SOURCE_DIR}
 )
 
 add_library(BeeeOnBase SHARED ${SOURCES})
-add_library(BeeeOnTransaction SHARED ${TRANSACTION_SOURCES})
-
-install(TARGETS BeeeOnBase BeeeOnTransaction
-	LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
-	ARCHIVE DESTINATION "${AR_INSTALL_DIR}"
-)
