@@ -24,6 +24,7 @@ public:
 		PREFIX_JABLOTRON = 0x09,
 		PREFIX_IQRF = 0xa9,
 		PREFIX_LEDS = 0xaa,
+		PREFIX_PHILIPS_HUE = 0xab,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();
