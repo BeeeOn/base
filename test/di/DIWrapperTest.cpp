@@ -19,6 +19,7 @@ class DIWrapperTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreate);
 	CPPUNIT_TEST(testInjectTooLongChar);
 	CPPUNIT_TEST(testInjectInvalidInt);
+	CPPUNIT_TEST(testInjectRefAsText);
 	CPPUNIT_TEST(testPolymorphicBehaviour);
 	CPPUNIT_TEST(testInheritanceOfTarget);
 	CPPUNIT_TEST(testSetSharedPtr);
@@ -27,6 +28,7 @@ public:
 	void testCreate();
 	void testInjectTooLongChar();
 	void testInjectInvalidInt();
+	void testInjectRefAsText();
 	void testPolymorphicBehaviour();
 	void testInheritanceOfTarget();
 	void testSetSharedPtr();
@@ -234,6 +236,21 @@ void DIWrapperTest::testInjectInvalidInt()
 		DIWWrongInputException
 	);
 	CPPUNIT_ASSERT_EQUAL(0, test->m_offset);
+}
+
+
+void DIWrapperTest::testInjectRefAsText()
+{
+	DITestDIW wrapper;
+
+	SharedPtr<DITest> test = wrapper.instance();
+
+	CPPUNIT_ASSERT(test->m_self == NULL);
+
+	CPPUNIT_ASSERT_THROW(
+		ACCESS_CALL(wrapper, injectText)("self", "test"),
+		DIWWrongInputException
+	);
 }
 
 void DIWrapperTest::testPolymorphicBehaviour()
