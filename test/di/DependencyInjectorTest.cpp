@@ -55,6 +55,10 @@ public:
 	{
 	}
 
+	virtual ~FakeObject()
+	{
+	}
+
 	void setSelf(FakeObject *self)
 	{
 		m_self = self;
@@ -289,7 +293,7 @@ public:
 	{
 	}
 
-	~CircularDependencyObject()
+	virtual ~CircularDependencyObject()
 	{
 		if (m_destroyed)
 			*m_destroyed = true;
