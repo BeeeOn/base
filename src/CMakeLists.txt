@@ -113,3 +113,8 @@ include_directories(
 )
 
 add_library(BeeeOnBase SHARED ${SOURCES})
+
+install(TARGETS BeeeOnBase
+       LIBRARY DESTINATION "${LIB_INSTALL_DIR}"
+       ARCHIVE DESTINATION "${AR_INSTALL_DIR}"
+)
