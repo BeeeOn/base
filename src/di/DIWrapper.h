@@ -993,18 +993,20 @@ BEEEON_WRAPPER(cls, cls##DIW)
 		std::has_virtual_destructor<to>::value, \
 		#to " is missing a virtual destructor");\
 	DIWCast::add(new DIWCastImpl<Self, to>);
+#define BEEEON_OBJECT_PROPERTY(name, method) \
+	setter(name, method);
 #define BEEEON_OBJECT_REF(name, method) \
-	setter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_NUMBER(name, method) \
-	setter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_TEXT(name, method) \
-	setter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_TIME(name, method) \
-	setter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_LIST(name, method) \
-	setter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_MAP(name, method) \
-	setter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_HOOK(name, method) \
 	hookHandler(name, method);
 
