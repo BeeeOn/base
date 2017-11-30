@@ -5,12 +5,12 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, ExponentialBackOffFactory)
 BEEEON_OBJECT_CASTABLE(BackOffFactory)
-BEEEON_OBJECT_TIME("initialInterval", &ExponentialBackOffFactory::setInitialInterval)
-BEEEON_OBJECT_TIME("maxInterval", &ExponentialBackOffFactory::setMaxInterval)
-BEEEON_OBJECT_TIME("maxElapsedTime", &ExponentialBackOffFactory::setMaxElapsedTime)
-BEEEON_OBJECT_NUMBER("randomizationFactor",
+BEEEON_OBJECT_PROPERTY("initialInterval", &ExponentialBackOffFactory::setInitialInterval)
+BEEEON_OBJECT_PROPERTY("maxInterval", &ExponentialBackOffFactory::setMaxInterval)
+BEEEON_OBJECT_PROPERTY("maxElapsedTime", &ExponentialBackOffFactory::setMaxElapsedTime)
+BEEEON_OBJECT_PROPERTY("randomizationFactor",
 		&ExponentialBackOffFactory::setRandomizationFactor)
-BEEEON_OBJECT_NUMBER("multiplier", &ExponentialBackOffFactory::setMultiplier)
+BEEEON_OBJECT_PROPERTY("multiplier", &ExponentialBackOffFactory::setMultiplier)
 BEEEON_OBJECT_END(BeeeOn, ExponentialBackOffFactory)
 
 using namespace Poco;
