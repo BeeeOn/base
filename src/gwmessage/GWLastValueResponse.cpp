@@ -25,7 +25,7 @@ void GWLastValueResponse::setValue(const double value)
 
 double GWLastValueResponse::value() const
 {
-	return JsonUtil::extract<double>(json(), "value");
+	return json()->getValue<double>("value");
 }
 
 void GWLastValueResponse::setValid(const bool valid)
