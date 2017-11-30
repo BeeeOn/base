@@ -8,7 +8,6 @@
 #include "math/SimpleCalc.h"
 #include "util/ClassInfo.h"
 #include "util/TimespanParser.h"
-#include "Debug.h"
 
 using namespace std;
 using namespace Poco;
@@ -226,8 +225,6 @@ void DependencyInjector::createEarly()
 
 DIWrapper *DependencyInjector::create(const string &name, bool disown)
 {
-	TRACE_METHOD();
-
 	DIWrapper *existing = find(name);
 	if (existing != NULL) {
 		logger().debug("instance " + name + " reused",
