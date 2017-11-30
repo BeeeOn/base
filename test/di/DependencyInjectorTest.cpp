@@ -109,13 +109,13 @@ public:
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FakeObject)
-BEEEON_OBJECT_REF("self", &FakeObject::setSelf)
-BEEEON_OBJECT_TEXT("name", &FakeObject::setName)
-BEEEON_OBJECT_NUMBER("index", &FakeObject::setIndex)
-BEEEON_OBJECT_TEXT("other", &FakeObject::setOther)
-BEEEON_OBJECT_TIME("timespan", &FakeObject::setTimespan)
-BEEEON_OBJECT_LIST("list", &FakeObject::setList)
-BEEEON_OBJECT_MAP("map", &FakeObject::setMap)
+BEEEON_OBJECT_PROPERTY("self", &FakeObject::setSelf)
+BEEEON_OBJECT_PROPERTY("name", &FakeObject::setName)
+BEEEON_OBJECT_PROPERTY("index", &FakeObject::setIndex)
+BEEEON_OBJECT_PROPERTY("other", &FakeObject::setOther)
+BEEEON_OBJECT_PROPERTY("timespan", &FakeObject::setTimespan)
+BEEEON_OBJECT_PROPERTY("list", &FakeObject::setList)
+BEEEON_OBJECT_PROPERTY("map", &FakeObject::setMap)
 BEEEON_OBJECT_END(BeeeOn, FakeObject)
 
 namespace BeeeOn {
@@ -316,7 +316,7 @@ public:
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, CircularDependencyObject)
-BEEEON_OBJECT_REF("other", &CircularDependencyObject::setOther)
+BEEEON_OBJECT_PROPERTY("other", &CircularDependencyObject::setOther)
 BEEEON_OBJECT_HOOK("cleanup", &CircularDependencyObject::cleanup)
 BEEEON_OBJECT_END(BeeeOn, CircularDependencyObject)
 

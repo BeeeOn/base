@@ -107,27 +107,27 @@ struct DITestChild : public DITest {
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DITest)
-BEEEON_OBJECT_TEXT("name", &DITest::setName)
-BEEEON_OBJECT_TEXT("char", &DITest::setChar)
-BEEEON_OBJECT_NUMBER("offset", &DITest::setOffset)
-BEEEON_OBJECT_NUMBER("factor", &DITest::setFactor)
-BEEEON_OBJECT_REF("self", &DITest::setSelf)
-BEEEON_OBJECT_TIME("timespan", &DITest::setTimespan)
-BEEEON_OBJECT_LIST("list", &DITest::setList)
-BEEEON_OBJECT_MAP("map", &DITest::setMap)
+BEEEON_OBJECT_PROPERTY("name", &DITest::setName)
+BEEEON_OBJECT_PROPERTY("char", &DITest::setChar)
+BEEEON_OBJECT_PROPERTY("offset", &DITest::setOffset)
+BEEEON_OBJECT_PROPERTY("factor", &DITest::setFactor)
+BEEEON_OBJECT_PROPERTY("self", &DITest::setSelf)
+BEEEON_OBJECT_PROPERTY("timespan", &DITest::setTimespan)
+BEEEON_OBJECT_PROPERTY("list", &DITest::setList)
+BEEEON_OBJECT_PROPERTY("map", &DITest::setMap)
 BEEEON_OBJECT_HOOK("call", &DITest::call)
 BEEEON_OBJECT_END(BeeeOn, DITest)
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DITestChild)
 BEEEON_OBJECT_CASTABLE(DITest)
-BEEEON_OBJECT_TEXT("name", &DITestChild::setName)
-BEEEON_OBJECT_TEXT("char", &DITest::setChar)
-BEEEON_OBJECT_NUMBER("offset", &DITestChild::setOffset)
-BEEEON_OBJECT_NUMBER("factor", &DITestChild::setFactor)
-BEEEON_OBJECT_REF("self", &DITestChild::setSelf)
-BEEEON_OBJECT_TIME("timespan", &DITestChild::setTimespan)
-BEEEON_OBJECT_LIST("list", &DITestChild::setList)
-BEEEON_OBJECT_MAP("map", &DITestChild::setMap)
+BEEEON_OBJECT_PROPERTY("name", &DITestChild::setName)
+BEEEON_OBJECT_PROPERTY("char", &DITest::setChar)
+BEEEON_OBJECT_PROPERTY("offset", &DITestChild::setOffset)
+BEEEON_OBJECT_PROPERTY("factor", &DITestChild::setFactor)
+BEEEON_OBJECT_PROPERTY("self", &DITestChild::setSelf)
+BEEEON_OBJECT_PROPERTY("timespan", &DITestChild::setTimespan)
+BEEEON_OBJECT_PROPERTY("list", &DITestChild::setList)
+BEEEON_OBJECT_PROPERTY("map", &DITestChild::setMap)
 BEEEON_OBJECT_HOOK("call", &DITestChild::call)
 BEEEON_OBJECT_END(BeeeOn, DITestChild)
 
@@ -362,7 +362,7 @@ public:
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, DIAnother)
-BEEEON_OBJECT_REF("test", &DIAnother::setTest)
+BEEEON_OBJECT_PROPERTY("test", &DIAnother::setTest)
 BEEEON_OBJECT_END(BeeeOn, DIAnother)
 
 namespace BeeeOn {
