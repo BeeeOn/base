@@ -101,7 +101,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
-	${PROJECT_SOURCE_DIR}/util/Template.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParser.cpp
 	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
