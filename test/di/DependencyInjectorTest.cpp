@@ -16,6 +16,7 @@ namespace BeeeOn {
 class DependencyInjectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DependencyInjectorTest);
 	CPPUNIT_TEST(testSimple);
+	CPPUNIT_TEST(testCastToBase);
 	CPPUNIT_TEST(testAlias);
 	CPPUNIT_TEST(testAliasLoop);
 	CPPUNIT_TEST(testAliasToAliasFails);
@@ -33,6 +34,7 @@ public:
 	void setUp();
 	void tearDown();
 	void testSimple();
+	void testCastToBase();
 	void testAlias();
 	void testAliasLoop();
 	void testAliasToAliasFails();
@@ -46,7 +48,14 @@ private:
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DependencyInjectorTest);
 
-class FakeObject {
+class FakeParent {
+public:
+	virtual ~FakeParent()
+	{
+	}
+};
+
+class FakeObject : public FakeParent {
 public:
 	FakeObject():
 		m_self(NULL),
@@ -108,6 +117,7 @@ public:
 }
 
 BEEEON_OBJECT_BEGIN(BeeeOn, FakeObject)
+BEEEON_OBJECT_CASTABLE(FakeParent)
 BEEEON_OBJECT_PROPERTY("self", &FakeObject::setSelf)
 BEEEON_OBJECT_PROPERTY("name", &FakeObject::setName)
 BEEEON_OBJECT_PROPERTY("index", &FakeObject::setIndex)
@@ -202,6 +212,22 @@ void DependencyInjectorTest::testSimple()
 	CPPUNIT_ASSERT_EQUAL("1", fake->m_map["a"]);
 	CPPUNIT_ASSERT_EQUAL("2", fake->m_map["b"]);
 	CPPUNIT_ASSERT_EQUAL("3", fake->m_map["c"]);
+}
+
+void DependencyInjectorTest::testCastToBase()
+{
+	DependencyInjector injector(m_config);
+
+	SharedPtr<FakeParent> parent;
+
+	parent = injector.find<FakeParent>("simple");
+	CPPUNIT_ASSERT(parent.isNull());
+
+	parent = injector.create<FakeParent>("simple");
+	CPPUNIT_ASSERT(!parent.isNull());
+
+	SharedPtr<FakeObject> object = parent.cast<FakeObject>();
+	CPPUNIT_ASSERT(!object.isNull());
 }
 
 /**

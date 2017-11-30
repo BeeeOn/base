@@ -119,7 +119,7 @@ public:
 		if (wrapper == NULL)
 			return NULL;
 
-		return dynamic_cast<AbstractDIWrapper<T> &>(*wrapper).instance();
+		return cast<T>(*wrapper);
 	}
 
 	DIWrapper *find(const std::string &name);
@@ -131,10 +131,23 @@ public:
 		if (wrapper == NULL)
 			return NULL;
 
-		return dynamic_cast<AbstractDIWrapper<T> &>(*wrapper).instance();
+		return cast<T>(*wrapper);
 	}
 
 private:
+	template <typename T>
+	Poco::SharedPtr<T> cast(DIWrapper &wrapper)
+	{
+		DIWCast *cast = DIWCast::find(typeid(T), wrapper);
+		if (cast == NULL)
+			throw DIWCastException(wrapper.type(), typeid(T));
+
+		Poco::SharedPtr<T> instance;
+		cast->cast(wrapper.raw(), reinterpret_cast<void *>(&instance));
+
+		return instance;
+	}
+
 	/**
 	 * Create instances that should be always created.
 	 */
