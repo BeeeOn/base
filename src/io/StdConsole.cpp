@@ -5,9 +5,9 @@
 
 BEEEON_OBJECT_BEGIN(BeeeOn, StdConsole)
 BEEEON_OBJECT_CASTABLE(Console)
-BEEEON_OBJECT_TEXT("eol", &StdConsole::setEol)
-BEEEON_OBJECT_TEXT("skipEol", &StdConsole::setSkipEol)
-BEEEON_OBJECT_TEXT("prompt", &StdConsole::setPrompt)
+BEEEON_OBJECT_PROPERTY("eol", &StdConsole::setEol)
+BEEEON_OBJECT_PROPERTY("skipEol", &StdConsole::setSkipEol)
+BEEEON_OBJECT_PROPERTY("prompt", &StdConsole::setPrompt)
 BEEEON_OBJECT_END(BeeeOn, StdConsole)
 
 using namespace std;

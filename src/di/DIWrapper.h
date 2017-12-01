@@ -461,35 +461,35 @@ protected:
 	bool hasHook(const std::string &name) const override;
 
 	template <typename B, typename I>
-	void refSetter(const std::string &name, void (B::*setter)(I *));
+	void setter(const std::string &name, void (B::*setter)(I *));
 
 	template <typename B, typename I>
-	void refSetter(const std::string &name, void (B::*setter)(Poco::SharedPtr<I>));
+	void setter(const std::string &name, void (B::*setter)(Poco::SharedPtr<I>));
 
 	template <typename B>
-	void numberSetter(const std::string &name, void (B::*setter)(int));
+	void setter(const std::string &name, void (B::*setter)(int));
 
 	template <typename B>
-	void numberSetter(const std::string &name, void (B::*setter)(double));
+	void setter(const std::string &name, void (B::*setter)(double));
 
 	template <typename B>
-	void numberSetter(const std::string &name, void (B::*setter)(bool));
+	void setter(const std::string &name, void (B::*setter)(bool));
 
 	template <typename B>
-	void textSetter(const std::string &name, void (B::*setter)(const std::string &));
+	void setter(const std::string &name, void (B::*setter)(const std::string &));
 
 	template <typename B>
-	void textSetter(const std::string &name, void (B::*setter)(const char));
+	void setter(const std::string &name, void (B::*setter)(const char));
 
 	template <typename B>
-	void timeSetter(const std::string &name, void (B::*setter)(const Poco::Timespan &));
+	void setter(const std::string &name, void (B::*setter)(const Poco::Timespan &));
 
 	template <typename B>
-	void listSetter(const std::string &name,
+	void setter(const std::string &name,
 		void (B::*setter)(const std::list<std::string> &));
 
 	template <typename B>
-	void mapSetter(const std::string &name,
+	void setter(const std::string &name,
 		void (B::*setter)(const std::map<std::string, std::string> &));
 
 	template <typename B>
@@ -820,7 +820,7 @@ void AbstractDIWrapper<T>::installMethod(const std::string &name, DIWMethodHelpe
 }
 
 template <typename T> template <typename B, typename I>
-void AbstractDIWrapper<T>::refSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(I *))
 {
@@ -828,7 +828,7 @@ void AbstractDIWrapper<T>::refSetter(
 }
 
 template <typename T> template <typename B, typename I>
-void AbstractDIWrapper<T>::refSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(Poco::SharedPtr<I>))
 {
@@ -836,7 +836,7 @@ void AbstractDIWrapper<T>::refSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::numberSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(int))
 {
@@ -844,7 +844,7 @@ void AbstractDIWrapper<T>::numberSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::numberSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(double))
 {
@@ -852,7 +852,7 @@ void AbstractDIWrapper<T>::numberSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::numberSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(bool))
 {
@@ -860,7 +860,7 @@ void AbstractDIWrapper<T>::numberSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::textSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(const std::string &))
 {
@@ -868,7 +868,7 @@ void AbstractDIWrapper<T>::textSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::textSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(const char))
 {
@@ -876,7 +876,7 @@ void AbstractDIWrapper<T>::textSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::timeSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(const Poco::Timespan &))
 {
@@ -884,7 +884,7 @@ void AbstractDIWrapper<T>::timeSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::listSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(const std::list<std::string> &))
 {
@@ -892,7 +892,7 @@ void AbstractDIWrapper<T>::listSetter(
 }
 
 template <typename T> template <typename B>
-void AbstractDIWrapper<T>::mapSetter(
+void AbstractDIWrapper<T>::setter(
 		const std::string &name,
 		void (B::*setter)(const std::map<std::string, std::string> &))
 {
@@ -993,18 +993,20 @@ BEEEON_WRAPPER(cls, cls##DIW)
 		std::has_virtual_destructor<to>::value, \
 		#to " is missing a virtual destructor");\
 	DIWCast::add(new DIWCastImpl<Self, to>);
+#define BEEEON_OBJECT_PROPERTY(name, method) \
+	setter(name, method);
 #define BEEEON_OBJECT_REF(name, method) \
-	refSetter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_NUMBER(name, method) \
-	numberSetter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_TEXT(name, method) \
-	textSetter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_TIME(name, method) \
-	timeSetter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_LIST(name, method) \
-	listSetter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_MAP(name, method) \
-	mapSetter(name, method);
+	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_HOOK(name, method) \
 	hookHandler(name, method);
 

@@ -10,9 +10,9 @@ using namespace BeeeOn;
 using namespace Poco;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LoopRunner)
-BEEEON_OBJECT_REF("runnables", &LoopRunner::addRunnable)
-BEEEON_OBJECT_REF("loops", &LoopRunner::addLoop)
-BEEEON_OBJECT_NUMBER("autoStart", &LoopRunner::setAutoStart)
+BEEEON_OBJECT_PROPERTY("runnables", &LoopRunner::addRunnable)
+BEEEON_OBJECT_PROPERTY("loops", &LoopRunner::addLoop)
+BEEEON_OBJECT_PROPERTY("autoStart", &LoopRunner::setAutoStart)
 BEEEON_OBJECT_HOOK("done", &LoopRunner::autoStart)
 BEEEON_OBJECT_END(BeeeOn, LoopRunner)
 

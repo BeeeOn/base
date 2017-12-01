@@ -6,9 +6,9 @@
 #include "util/CryptoParams.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, CryptoConfig)
-BEEEON_OBJECT_TEXT("algorithm", &CryptoConfig::setAlgorithm)
-BEEEON_OBJECT_TEXT("passphrase", &CryptoConfig::setPassphrase)
-BEEEON_OBJECT_NUMBER("interationCount", &CryptoConfig::setIterationCount)
+BEEEON_OBJECT_PROPERTY("algorithm", &CryptoConfig::setAlgorithm)
+BEEEON_OBJECT_PROPERTY("passphrase", &CryptoConfig::setPassphrase)
+BEEEON_OBJECT_PROPERTY("interationCount", &CryptoConfig::setIterationCount)
 BEEEON_OBJECT_END(BeeeOn, CryptoConfig)
 
 using namespace std;
