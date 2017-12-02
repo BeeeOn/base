@@ -50,4 +50,95 @@ private:
 
 }
 
+#define BEEEON_CATCH_CHAIN(logger)                                           \
+	catch (const Poco::Exception &e) {                                   \
+		(logger).log(e, __FILE__, __LINE__);                         \
+	}                                                                    \
+	catch (const std::exception &e) {                                    \
+		(logger).critical(e.what(), __FILE__, __LINE__);             \
+	}                                                                    \
+	catch (const char *m) {                                              \
+		(logger).fatal(m, __FILE__, __LINE__);                       \
+	}                                                                    \
+	catch (...) {                                                        \
+		(logger).fatal("unknown error occured", __FILE__, __LINE__); \
+	}
+
+#define BEEEON_CATCH_CHAIN_MESSAGE(logger, message)                          \
+	catch (const Poco::Exception &e) {                                   \
+		(logger).log(e, __FILE__, __LINE__);                         \
+		(logger).error(message, __FILE__, __LINE__);                 \
+	}                                                                    \
+	catch (const std::exception &e) {                                    \
+		(logger).critical(e.what(), __FILE__, __LINE__);             \
+		(logger).critical(message, __FILE__, __LINE__);              \
+	}                                                                    \
+	catch (const char *m) {                                              \
+		(logger).fatal(m, __FILE__, __LINE__);                       \
+		(logger).fatal(message, __FILE__, __LINE__);                 \
+	}                                                                    \
+	catch (...) {                                                        \
+		(logger).fatal("unknown error occured", __FILE__, __LINE__); \
+		(logger).fatal(message, __FILE__, __LINE__);                 \
+	}
+
+#define BEEEON_CATCH_CHAIN_RETHROW(logger)                                   \
+	catch (const Poco::Exception &e) {                                   \
+		(logger).log(e, __FILE__, __LINE__);                         \
+		e.rethrow();                                                 \
+	}                                                                    \
+	catch (const std::exception &e) {                                    \
+		(logger).critical(e.what(), __FILE__, __LINE__);             \
+		throw Poco::RuntimeException(e.what());                      \
+	}                                                                    \
+	catch (const char *m) {                                              \
+		(logger).fatal(m, __FILE__, __LINE__);                       \
+		throw Poco::RuntimeException(m);                             \
+	}                                                                    \
+	catch (...) {                                                        \
+		(logger).fatal("unknown error occured", __FILE__, __LINE__); \
+		throw Poco::RuntimeException("unknown error");               \
+	}
+
+#define BEEEON_CATCH_CHAIN_ACTION(logger, action)                            \
+	catch (const Poco::Exception &e) {                                   \
+		(logger).log(e, __FILE__, __LINE__);                         \
+		action;                                                      \
+	}                                                                    \
+	catch (const std::exception &e) {                                    \
+		(logger).critical(e.what(), __FILE__, __LINE__);             \
+		action;                                                      \
+	}                                                                    \
+	catch (const char *m) {                                              \
+		(logger).fatal(m, __FILE__, __LINE__);                       \
+		action;                                                      \
+	}                                                                    \
+	catch (...) {                                                        \
+		(logger).fatal("unknown error occured", __FILE__, __LINE__); \
+		action;                                                      \
+	}
+
+#define BEEEON_CATCH_CHAIN_ACTION_RETHROW(logger, action)                    \
+	catch (const Poco::Exception &e) {                                   \
+		(logger).log(e, __FILE__, __LINE__);                         \
+		action;                                                      \
+		e.rethrow();                                                 \
+	}                                                                    \
+	catch (const std::exception &e) {                                    \
+		(logger).critical(e.what(), __FILE__, __LINE__);             \
+		action;                                                      \
+		throw Poco::RuntimeException(e.what());                      \
+	}                                                                    \
+	catch (const char *m) {                                              \
+		(logger).fatal(m, __FILE__, __LINE__);                       \
+		action;                                                      \
+		throw Poco::RuntimeException(m);                             \
+	}                                                                    \
+	catch (...) {                                                        \
+		(logger).fatal("unknown error occured", __FILE__, __LINE__); \
+		action;                                                      \
+		throw Poco::RuntimeException("unknown error");               \
+	}
+
+
 #endif
