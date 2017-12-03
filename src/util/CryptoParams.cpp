@@ -104,13 +104,13 @@ CryptoParams CryptoParams::parse(const string &input)
 	Object::Ptr json = JsonUtil::parse(input);
 
 	if (json->has("name"))
-		params.setAlgorithm(JsonUtil::extract<string>(json, "name"));
+		params.setAlgorithm(json->getValue<string>("name"));
 
 	if (json->has("salt"))
-		params.setSalt(JsonUtil::extract<string>(json, "salt"));
+		params.setSalt(json->getValue<string>("salt"));
 
 	if (json->has("it"))
-		params.setIterationCount(JsonUtil::extract<int>(json, "it"));
+		params.setIterationCount(json->getValue<int>("it"));
 
 	return params;
 }

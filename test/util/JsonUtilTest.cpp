@@ -39,7 +39,7 @@ void JsonUtilTest::testExtractString()
 	Object::Ptr jsonObject;
 
 	jsonObject = JsonUtil::parse(R"({"state": "data"})");
-	string state = JsonUtil::extract<string>(jsonObject, "state");
+	string state = jsonObject->getValue<string>("state");
 	CPPUNIT_ASSERT(state == "data");
 }
 
@@ -52,11 +52,11 @@ void JsonUtilTest::testExtractDouble()
 	double value;
 
 	jsonObject = JsonUtil::parse(R"({"value": "11.5"})");
-	value = JsonUtil::extract<double>(jsonObject, "value");
+	value = jsonObject->getValue<double>("value");
 	CPPUNIT_ASSERT(value == 11.5);
 
 	jsonObject = JsonUtil::parse(R"({"value": 11.5})");
-	value = JsonUtil::extract<double>(jsonObject, "value");
+	value = jsonObject->getValue<double>("value");
 	CPPUNIT_ASSERT(value == 11.5);
 }
 
@@ -72,7 +72,7 @@ void JsonUtilTest::testExtractNullDouble()
 	double value;
 
 	jsonObject = JsonUtil::parse(R"({"value": null})");
-	value = JsonUtil::extract<double>(jsonObject, "value");
+	value = jsonObject->optValue<double>("value", std::nan(""));
 	CPPUNIT_ASSERT(std::isnan(value));
 }
 
@@ -85,11 +85,11 @@ void JsonUtilTest::testExtractInt()
 	int value;
 
 	jsonObject = JsonUtil::parse(R"({"value": "5"})");
-	value = JsonUtil::extract<int>(jsonObject, "value");
+	value = jsonObject->getValue<int>("value");
 	CPPUNIT_ASSERT(value == 5);
 
 	jsonObject = JsonUtil::parse(R"({"value": 5})");
-	value = JsonUtil::extract<int>(jsonObject, "value");
+	value = jsonObject->getValue<int>("value");
 	CPPUNIT_ASSERT(value == 5);
 }
 
@@ -102,7 +102,7 @@ void JsonUtilTest::testExtractInvalidIntValue()
 
 	Object::Ptr jsonObject = JsonUtil::parse(testJson);
 	CPPUNIT_ASSERT_THROW(
-		JsonUtil::extract<int>(jsonObject, "value"),
+		jsonObject->getValue<int>("value"),
 		Poco::SyntaxException);
 }
 
