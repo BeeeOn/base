@@ -9,7 +9,6 @@
 #include "gwmessage/GWMessage.h"
 #include "gwmessage/GWMessageType.h"
 #include "gwmessage/GWResponse.h"
-#include "model/GlobalID.h"
 
 namespace BeeeOn {
 
@@ -31,16 +30,6 @@ protected:
 
 public:
 	typedef Poco::SharedPtr<GWRequest> Ptr;
-
-	/**
-	 * @brief Set a unique identifier intended to match a proper response.
-	 */
-	void setID(const GlobalID &id);
-
-	/**
-	 * @brief Returns a unique identifier intended to match a proper response.
-	 */
-	GlobalID id() const;
 
 	/**
 	 * @brief Derive the appropriate response and apply the given function

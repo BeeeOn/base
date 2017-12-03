@@ -25,16 +25,6 @@ GWSensorDataConfirm::Ptr GWSensorDataExport::confirm() const
 	return confirm;
 }
 
-void GWSensorDataExport::setID(const GlobalID &id)
-{
-	json()->set("id", id.toString());
-}
-
-GlobalID GWSensorDataExport::id() const
-{
-	return GlobalID::parse(json()->getValue<string>("id"));
-}
-
 void GWSensorDataExport::setData(const vector<SensorData> &data)
 {
 	JSON::Array::Ptr dataArray(new JSON::Array);

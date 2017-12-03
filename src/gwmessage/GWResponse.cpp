@@ -23,16 +23,6 @@ GWResponse::GWResponse(const JSON::Object::Ptr object) :
 {
 }
 
-void GWResponse::setID(const GlobalID &id)
-{
-	json()->set("id", id.toString());
-}
-
-GlobalID GWResponse::id() const
-{
-	return GlobalID::parse(json()->getValue<string>("id"));
-}
-
 void GWResponse::setStatus(Status status)
 {
 	json()->set("status", static_cast<int>(status));

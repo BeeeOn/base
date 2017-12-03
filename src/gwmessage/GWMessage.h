@@ -7,6 +7,7 @@
 #include <Poco/JSON/Object.h>
 
 #include "gwmessage/GWMessageType.h"
+#include "model/GlobalID.h"
 
 namespace BeeeOn {
 
@@ -23,6 +24,18 @@ public:
 	typedef Poco::SharedPtr<GWMessage> Ptr;
 
 	virtual ~GWMessage();
+
+	/**
+	 * @brief Set unique identifier intended to match
+	 * request message with its response.
+	 */
+	void setID(const GlobalID &id);
+
+	/**
+	 * @brief Return unique identifier intended to match
+	 * request message with its response.
+	 */
+	GlobalID id() const;
 
 protected:
 	/**

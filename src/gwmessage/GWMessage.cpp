@@ -39,6 +39,16 @@ GWMessage::~GWMessage()
 {
 }
 
+GlobalID GWMessage::id() const
+{
+	return GlobalID::parse(json()->getValue<string>("id"));
+}
+
+void GWMessage::setID(const GlobalID &id)
+{
+	json()->set("id", id.toString());
+}
+
 GWMessageType GWMessage::type() const
 {
 	return GWMessageType::parse(m_json->getValue<string>(MESSAGE_TYPE_KEY));

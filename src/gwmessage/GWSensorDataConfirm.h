@@ -5,7 +5,6 @@
 #include <Poco/JSON/Object.h>
 
 #include "gwmessage/GWMessage.h"
-#include "model/GlobalID.h"
 
 namespace BeeeOn {
 
@@ -24,17 +23,6 @@ public:
 	GWSensorDataConfirm();
 	GWSensorDataConfirm(const Poco::JSON::Object::Ptr object);
 
-	/**
-	 * @brief Set a unique identifier intended to match
-	 * a proper GWSensorDataExport.
-	 */
-	void setID(const GlobalID &id);
-
-	/**
-	 * @brief Returns a unique identifier intended to match
-	 * a proper GWSensorDataExport.
-	 */
-	GlobalID id() const;
 };
 
 }

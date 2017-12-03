@@ -5,7 +5,6 @@
 #include <Poco/JSON/Object.h>
 
 #include "gwmessage/GWMessage.h"
-#include "model/GlobalID.h"
 
 namespace BeeeOn {
 
@@ -43,16 +42,6 @@ protected:
 	GWResponse(const GWMessageTypeEnum::Raw &type);
 
 public:
-	/**
-	 * @brief Set a unique identifier intended to match a proper request.
-	 */
-	void setID(const GlobalID &id);
-
-	/**
-	 * @brief Returns a unique identifier intended to match a proper request.
-	 */
-	GlobalID id() const;
-
 	void setStatus(Status status);
 	Status status() const;
 

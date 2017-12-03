@@ -8,7 +8,6 @@
 
 #include "gwmessage/GWMessage.h"
 #include "gwmessage/GWSensorDataConfirm.h"
-#include "model/GlobalID.h"
 #include "model/SensorData.h"
 
 namespace BeeeOn {
@@ -33,18 +32,6 @@ public:
 	 * @brief Creates and returns a corresponding GWSensorDataConfirm message.
 	 */
 	GWSensorDataConfirm::Ptr confirm() const;
-
-	/**
-	 * @brief Set a unique identifier intended to match
-	 * a proper GWSensorDataConfirm.
-	 */
-	void setID(const GlobalID &id);
-
-	/**
-	 * @brief Returns a unique identifier intended to match
-	 * a proper GWSensorDataConfirm.
-	 */
-	GlobalID id() const;
 
 	void setData(const std::vector<SensorData> &data);
 	std::vector<SensorData> data() const;

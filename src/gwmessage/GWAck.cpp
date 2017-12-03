@@ -19,16 +19,6 @@ GWAck::GWAck(const JSON::Object::Ptr object) :
 {
 }
 
-void GWAck::setID(const GlobalID &id)
-{
-	json()->set("id", id.toString());
-}
-
-GlobalID GWAck::id() const
-{
-	return GlobalID::parse(json()->getValue<string>("id"));
-}
-
 void GWAck::setStatus(GWResponse::Status status)
 {
 	json()->set("status", static_cast<int>(status));

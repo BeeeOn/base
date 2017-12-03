@@ -5,7 +5,6 @@
 
 #include "gwmessage/GWMessage.h"
 #include "gwmessage/GWResponse.h"
-#include "model/GlobalID.h"
 
 namespace BeeeOn {
 
@@ -28,16 +27,6 @@ protected:
 	GWAck(const GWMessageTypeEnum::Raw &type);
 
 public:
-	/**
-	 * @brief Set a unique identifier intended to match a proper response.
-	 */
-	void setID(const GlobalID &id);
-
-	/**
-	 * @brief Returns a unique identifier intended to match a proper response.
-	 */
-	GlobalID id() const;
-
 	/**
 	 * @brief Set a status intended to match a proper response.
 	 */
