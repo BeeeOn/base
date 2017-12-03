@@ -522,9 +522,9 @@ template <typename T, typename B>
 B &DIWMethodHelper::extractInstance(DIWrapper &w)
 {
 	static_assert(
-		std::is_polymorphic<T>::value
-		&&
-		std::is_base_of<B, T>::value,
+		std::is_same<B, T>::value
+		||
+		(std::is_polymorphic<T>::value && std::is_base_of<B, T>::value),
 		"Dynamic casting is impossible here"
 	);
 
