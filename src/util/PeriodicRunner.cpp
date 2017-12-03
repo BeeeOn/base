@@ -42,13 +42,5 @@ void PeriodicRunner::onStart(Timer &)
 	try {
 		m_callback();
 	}
-	catch (const Exception &e) {
-		logger().log(e, __FILE__, __LINE__);
-	}
-	catch (const std::exception &e) {
-		logger().critical(e.what(), __FILE__, __LINE__);
-	}
-	catch (...) {
-		logger().critical("unknown error", __FILE__, __LINE__);
-	}
+	BEEEON_CATCH_CHAIN(logger())
 }

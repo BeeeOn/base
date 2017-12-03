@@ -111,20 +111,9 @@ void EventSource<Listener>::fireEvent(const Event &e, const Method &m)
 			try {
 				(listener->*m)(e);
 			}
-			catch (const Poco::Exception &e) {
-				logger().log(e, __FILE__, __LINE__);
-				logger().error("failed to deliver event " + ClassInfo(e).name(),
-						__FILE__, __LINE__);
-			}
-			catch (const std::exception &e) {
-				logger().critical(e.what(), __FILE__, __LINE__);
-				logger().critical("failed to deliver event " + ClassInfo(e).name(),
-						__FILE__, __LINE__);
-			}
-			catch (...) {
-				logger().critical("unknown failure when delivering event " + ClassInfo(e).name(),
-						__FILE__, __LINE__);
-			}
+			BEEEON_CATCH_CHAIN_MESSAGE(
+				logger(),
+				"failed to deliver event " + ClassInfo(e).name())
 		}
 	});
 }
