@@ -74,13 +74,7 @@ void LoopRunner::start()
 			loop->start();
 			m_started.push_back(loop);
 		}
-		catch (...) {
-			logger().critical("failed to start loop",
-					__FILE__, __LINE__);
-
-			stopAll(m_started);
-			throw;
-		}
+		BEEEON_CATCH_CHAIN_ACTION_RETHROW(logger(), stopAll(m_started));
 	}
 
 	logger().notice("started " + to_string(m_started.size()) + " loops",

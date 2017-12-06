@@ -123,15 +123,7 @@ void DependencyInjector::cleanup(const WrapperVector vec) const
 
 				wrapper->callHook("cleanup");
 			}
-			catch (const Exception &e) {
-				logger().log(e, __FILE__, __LINE__);
-			}
-			catch (const exception &e) {
-				logger().critical(e.what(), __FILE__, __LINE__);
-			}
-			catch (...) {
-				logger().critical("unknown failure", __FILE__, __LINE__);
-			}
+			BEEEON_CATCH_CHAIN(logger())
 		}
 	}
 }
