@@ -2,21 +2,21 @@
 #include <Poco/ScopedLock.h>
 
 #include "di/Injectable.h"
-#include "util/AsyncExecutor.h"
+#include "util/SequentialAsyncExecutor.h"
 
-BEEEON_OBJECT_BEGIN(BeeeOn, AsyncExecutor)
+BEEEON_OBJECT_BEGIN(BeeeOn, SequentialAsyncExecutor)
 BEEEON_OBJECT_CASTABLE(StoppableRunnable)
-BEEEON_OBJECT_END(BeeeOn, AsyncExecutor)
+BEEEON_OBJECT_END(BeeeOn, SequentialAsyncExecutor)
 
 using namespace std;
 using namespace BeeeOn;
 
-AsyncExecutor::AsyncExecutor() :
+SequentialAsyncExecutor::SequentialAsyncExecutor() :
 	m_stopRequested(false)
 {
 }
 
-AsyncExecutor::~AsyncExecutor()
+SequentialAsyncExecutor::~SequentialAsyncExecutor()
 {
 	if (!m_taskQueue.empty()) {
 		poco_warning(logger(),
@@ -25,14 +25,14 @@ AsyncExecutor::~AsyncExecutor()
 	}
 }
 
-void AsyncExecutor::invoke(std::function<void()> f)
+void SequentialAsyncExecutor::invoke(std::function<void()> f)
 {
 	Poco::FastMutex::ScopedLock lock(m_queueMutex);
 	m_taskQueue.push(f);
 	m_wakeupEvent.set();
 }
 
-void AsyncExecutor::run()
+void SequentialAsyncExecutor::run()
 {
 	std::function<void()> task;
 
@@ -59,7 +59,7 @@ void AsyncExecutor::run()
 	}
 }
 
-void AsyncExecutor::execute(std::function<void()> task)
+void SequentialAsyncExecutor::execute(std::function<void()> task)
 {
 	try {
 		task();
@@ -75,7 +75,7 @@ void AsyncExecutor::execute(std::function<void()> task)
 	}
 }
 
-void AsyncExecutor::stop()
+void SequentialAsyncExecutor::stop()
 {
 	m_stopRequested = true;
 	m_wakeupEvent.set();

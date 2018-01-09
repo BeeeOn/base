@@ -16,14 +16,14 @@ namespace BeeeOn {
 /**
  * Class for asynchronous executing tasks.
  */
-class AsyncExecutor :
+class SequentialAsyncExecutor :
 	public StoppableRunnable,
 	public Loggable {
 public:
-	typedef Poco::SharedPtr<AsyncExecutor> Ptr;
+	typedef Poco::SharedPtr<SequentialAsyncExecutor> Ptr;
 
-	AsyncExecutor();
-	~AsyncExecutor();
+	SequentialAsyncExecutor();
+	~SequentialAsyncExecutor();
 
 	/**
 	 * Add task to queue for executing

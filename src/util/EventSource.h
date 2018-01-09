@@ -7,7 +7,7 @@
 #include <Poco/Exception.h>
 #include <Poco/SharedPtr.h>
 
-#include "util/AsyncExecutor.h"
+#include "util/SequentialAsyncExecutor.h"
 #include "util/ClassInfo.h"
 #include "util/Loggable.h"
 #include "util/Once.h"
@@ -19,7 +19,7 @@ namespace BeeeOn {
  *
  * The EventSource can be inherited or used as member of another class (preferred)
  * to provide common logic for firing events. It registers listeners and fires
- * events via the provided AsyncExecutor.
+ * events via the provided SequentialAsyncExecutor.
  */
 template <typename Listener>
 class EventSource : protected Loggable {
@@ -27,8 +27,8 @@ public:
 	EventSource();
 	virtual ~EventSource();
 
-	void setAsyncExecutor(AsyncExecutor::Ptr executor);
-	AsyncExecutor::Ptr asyncExecutor() const;
+	void setAsyncExecutor(SequentialAsyncExecutor::Ptr executor);
+	SequentialAsyncExecutor::Ptr asyncExecutor() const;
 
 	void addListener(typename Listener::Ptr listener);
 
@@ -55,7 +55,7 @@ public:
 	void fireEvent(const Event &e, const Method &m);
 
 private:
-	AsyncExecutor::Ptr m_executor;
+	SequentialAsyncExecutor::Ptr m_executor;
 	std::list<typename Listener::Ptr> m_listeners;
 };
 
@@ -70,13 +70,13 @@ EventSource<Listener>::~EventSource()
 }
 
 template <typename Listener>
-void EventSource<Listener>::setAsyncExecutor(AsyncExecutor::Ptr executor)
+void EventSource<Listener>::setAsyncExecutor(SequentialAsyncExecutor::Ptr executor)
 {
 	m_executor = executor;
 }
 
 template <typename Listener>
-AsyncExecutor::Ptr EventSource<Listener>::asyncExecutor() const
+SequentialAsyncExecutor::Ptr EventSource<Listener>::asyncExecutor() const
 {
 	return m_executor;
 }

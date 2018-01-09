@@ -77,7 +77,6 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
 	${PROJECT_SOURCE_DIR}/util/ApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParser.cpp
-	${PROJECT_SOURCE_DIR}/util/AsyncExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
 	${PROJECT_SOURCE_DIR}/util/BackOff.cpp
@@ -102,6 +101,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
+	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParser.cpp
 	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
