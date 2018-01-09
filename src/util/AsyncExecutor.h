@@ -1,11 +1,11 @@
 #pragma once
 
+#include <functional>
+#include <queue>
+
 #include <Poco/AtomicCounter.h>
 #include <Poco/Event.h>
 #include <Poco/Mutex.h>
-
-#include <functional>
-#include <queue>
 
 #include "loop/StoppableRunnable.h"
 #include "util/Loggable.h"
