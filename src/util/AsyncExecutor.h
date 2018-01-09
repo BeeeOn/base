@@ -24,7 +24,6 @@ public:
 
 	/**
 	 * Add task to queue for executing
-	 *
 	 */
 	void invoke(std::function<void()> f);
 
