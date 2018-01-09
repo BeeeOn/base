@@ -40,7 +40,6 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
-	${PROJECT_SOURCE_DIR}/util/AsyncExecutorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
@@ -56,6 +55,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/MultiExceptionTest.cpp
 	${PROJECT_SOURCE_DIR}/util/OnceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
+	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeIntervalTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/UnsafePtrTest.cpp

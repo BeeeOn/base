@@ -6,6 +6,7 @@
 
 #include "cppunit/BetterAssert.h"
 #include "util/EventSource.h"
+#include "util/SequentialAsyncExecutor.h"
 
 using namespace Poco;
 using namespace std;
@@ -45,7 +46,7 @@ struct TestingESListener {
 void EventSourceTest::testFireEvent()
 {
 	SharedPtr<TestingESListener> listener = new TestingESListener;
-	SharedPtr<AsyncExecutor> executor = new AsyncExecutor;
+	SequentialAsyncExecutor::Ptr executor = new SequentialAsyncExecutor;
 	Thread thread;
 
 	thread.start(*executor);

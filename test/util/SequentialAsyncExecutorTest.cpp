@@ -6,7 +6,7 @@
 
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "util/AsyncExecutor.h"
+#include "util/SequentialAsyncExecutor.h"
 
 #define MAX_WAIT_TIME 10000 // 10 seconds in ms
 
@@ -15,8 +15,8 @@ using namespace Poco;
 
 namespace BeeeOn {
 
-class AsyncExecutorTest : public CppUnit::TestFixture {
-	CPPUNIT_TEST_SUITE(AsyncExecutorTest);
+class SequentialAsyncExecutorTest : public CppUnit::TestFixture {
+	CPPUNIT_TEST_SUITE(SequentialAsyncExecutorTest);
 	CPPUNIT_TEST(testRunEmpty);
 	CPPUNIT_TEST(testRunTwice);
 	CPPUNIT_TEST(testOneTask);
@@ -33,16 +33,16 @@ public:
 	void testThousandTasksThenRun();
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION(AsyncExecutorTest);
+CPPUNIT_TEST_SUITE_REGISTRATION(SequentialAsyncExecutorTest);
 
 /**
  * testRunEmpty - create, start and stop executor instance without
  * inserting any tasks to find any potential memory leaks using valgrind tool.
  */
-void AsyncExecutorTest::testRunEmpty()
+void SequentialAsyncExecutorTest::testRunEmpty()
 {
 	Thread t;
-	AsyncExecutor executor;
+	SequentialAsyncExecutor executor;
 	t.start(executor);
 	executor.stop();
 	t.join();
@@ -52,10 +52,10 @@ void AsyncExecutorTest::testRunEmpty()
  * testRunTwice - create then start and stop executor twice without
  * inserting any tasks to find any potential memory leaks using valgrind tool.
  */
-void AsyncExecutorTest::testRunTwice()
+void SequentialAsyncExecutorTest::testRunTwice()
 {
 	Thread t;
-	AsyncExecutor executor;
+	SequentialAsyncExecutor executor;
 	t.start(executor);
 	executor.stop();
 	t.join();
@@ -70,10 +70,10 @@ void AsyncExecutorTest::testRunTwice()
  * wait for it to finish.
  * If task takes more then MAX_WAIT_TIME to finish its considered as failure.
  */
-void AsyncExecutorTest::testOneTask()
+void SequentialAsyncExecutorTest::testOneTask()
 {
 	Thread t;
-	AsyncExecutor executor;
+	SequentialAsyncExecutor executor;
 	Event finishEvent;
 
 	t.start(executor);
@@ -91,10 +91,10 @@ void AsyncExecutorTest::testOneTask()
  * Task should be able to finish within given time.
  * If task takes more then MAX_WAIT_TIME to finish its considered as failure.
  */
-void AsyncExecutorTest::testOneThenRun()
+void SequentialAsyncExecutorTest::testOneThenRun()
 {
 	Thread t;
-	AsyncExecutor executor;
+	SequentialAsyncExecutor executor;
 	Event finishEvent;
 
 	executor.invoke([&finishEvent]() {finishEvent.set();});
@@ -112,10 +112,10 @@ void AsyncExecutorTest::testOneThenRun()
  * Then invoke it thousand times and wait for tasks to finish.
  * If task takes more then MAX_WAIT_TIME to finish its considered as failure.
  */
-void AsyncExecutorTest::testThousandTasks()
+void SequentialAsyncExecutorTest::testThousandTasks()
 {
 	Thread t;
-	AsyncExecutor executor;
+	SequentialAsyncExecutor executor;
 	Event finishEvent;
 	int results[1000];
 
@@ -140,10 +140,10 @@ void AsyncExecutorTest::testThousandTasks()
  * After invoke-ing start its thread and wait for tasks to finish.
  * If task takes more then MAX_WAIT_TIME to finish its considered as failure.
  */
-void AsyncExecutorTest::testThousandTasksThenRun()
+void SequentialAsyncExecutorTest::testThousandTasksThenRun()
 {
 	Thread t;
-	AsyncExecutor executor;
+	SequentialAsyncExecutor executor;
 	Event finishEvent;
 	int results[1000];
 
