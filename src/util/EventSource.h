@@ -27,8 +27,8 @@ public:
 	EventSource();
 	virtual ~EventSource();
 
-	void setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor);
-	Poco::SharedPtr<AsyncExecutor> asyncExecutor() const;
+	void setAsyncExecutor(AsyncExecutor::Ptr executor);
+	AsyncExecutor::Ptr asyncExecutor() const;
 
 	void addListener(typename Listener::Ptr listener);
 
@@ -55,7 +55,7 @@ public:
 	void fireEvent(const Event &e, const Method &m);
 
 private:
-	Poco::SharedPtr<AsyncExecutor> m_executor;
+	AsyncExecutor::Ptr m_executor;
 	std::list<typename Listener::Ptr> m_listeners;
 };
 
@@ -70,13 +70,13 @@ EventSource<Listener>::~EventSource()
 }
 
 template <typename Listener>
-void EventSource<Listener>::setAsyncExecutor(Poco::SharedPtr<AsyncExecutor> executor)
+void EventSource<Listener>::setAsyncExecutor(AsyncExecutor::Ptr executor)
 {
 	m_executor = executor;
 }
 
 template <typename Listener>
-Poco::SharedPtr<AsyncExecutor> EventSource<Listener>::asyncExecutor() const
+AsyncExecutor::Ptr EventSource<Listener>::asyncExecutor() const
 {
 	return m_executor;
 }

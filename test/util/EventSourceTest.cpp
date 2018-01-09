@@ -45,7 +45,7 @@ struct TestingESListener {
 void EventSourceTest::testFireEvent()
 {
 	SharedPtr<TestingESListener> listener = new TestingESListener;
-	SharedPtr<AsyncExecutor> executor = new AsyncExecutor;
+	AsyncExecutor::Ptr executor = new AsyncExecutor;
 	Thread thread;
 
 	thread.start(*executor);
