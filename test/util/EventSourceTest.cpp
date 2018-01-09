@@ -6,6 +6,7 @@
 
 #include "cppunit/BetterAssert.h"
 #include "util/EventSource.h"
+#include "util/SequentialAsyncExecutor.h"
 
 using namespace Poco;
 using namespace std;

@@ -1,34 +1,26 @@
 #pragma once
 
-#include <functional>
 #include <queue>
 
 #include <Poco/AtomicCounter.h>
 #include <Poco/Event.h>
 #include <Poco/Mutex.h>
-#include <Poco/SharedPtr.h>
 
 #include "loop/StoppableRunnable.h"
-#include "util/Loggable.h"
+#include "util/AsyncExecutor.h"
 
 namespace BeeeOn {
 
-/**
- * Class for asynchronous executing tasks.
- */
 class SequentialAsyncExecutor :
 	public StoppableRunnable,
-	public Loggable {
+	public AsyncExecutor {
 public:
 	typedef Poco::SharedPtr<SequentialAsyncExecutor> Ptr;
 
 	SequentialAsyncExecutor();
 	~SequentialAsyncExecutor();
 
-	/**
-	 * Add task to queue for executing
-	 */
-	void invoke(std::function<void()> f);
+	void invoke(std::function<void()> f) override;
 
 	void run() override;
 	void stop() override;

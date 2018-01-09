@@ -5,6 +5,7 @@
 #include "util/SequentialAsyncExecutor.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SequentialAsyncExecutor)
+BEEEON_OBJECT_CASTABLE(AsyncExecutor)
 BEEEON_OBJECT_CASTABLE(StoppableRunnable)
 BEEEON_OBJECT_END(BeeeOn, SequentialAsyncExecutor)
 
