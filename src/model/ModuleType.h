@@ -150,6 +150,11 @@ public:
 			 * Unit: Watt
 			 */
 			TYPE_POWER = 21,
+			/**
+			 * Voltage
+			 * Unit: Volt
+			 */
+			TYPE_VOLTAGE = 22,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
