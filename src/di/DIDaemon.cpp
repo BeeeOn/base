@@ -11,7 +11,7 @@
 #include "di/DependencyInjector.h"
 #include "di/DIApplicationConfigurationLoader.h"
 #include "di/DIDaemon.h"
-#include "loop/LoopRunner.h"
+#include "loop/StoppableLoop.h"
 #include "util/AutoConfigurationExplorer.h"
 #include "util/Loggable.h"
 #include "util/PosixSignal.h"
@@ -168,7 +168,7 @@ int DIDaemon::main(const std::vector<std::string> &)
 void DIDaemon::startRunner(const string &name)
 {
 	DependencyInjector di(config().createView("factory"));
-	SharedPtr<LoopRunner> runner = di.create<LoopRunner>(name);
+	SharedPtr<StoppableLoop> runner = di.create<StoppableLoop>(name);
 
 	logger().notice("starting runner " + name,
 			__FILE__, __LINE__);

@@ -10,6 +10,7 @@ using namespace BeeeOn;
 using namespace Poco;
 
 BEEEON_OBJECT_BEGIN(BeeeOn, LoopRunner)
+BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_PROPERTY("runnables", &LoopRunner::addRunnable)
 BEEEON_OBJECT_PROPERTY("loops", &LoopRunner::addLoop)
 BEEEON_OBJECT_PROPERTY("autoStart", &LoopRunner::setAutoStart)
