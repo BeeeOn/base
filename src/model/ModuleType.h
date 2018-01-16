@@ -155,6 +155,11 @@ public:
 			 * Unit: Volt
 			 */
 			TYPE_VOLTAGE = 22,
+			/**
+			 * Current
+			 * Unit: Ampere
+			 */
+			TYPE_CURRENT = 23,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
