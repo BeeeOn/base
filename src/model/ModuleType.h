@@ -145,6 +145,21 @@ public:
 			 * Range: 0..11
 			 */
 			TYPE_ULTRAVIOLET = 20,
+			/**
+			 * Power
+			 * Unit: Watt
+			 */
+			TYPE_POWER = 21,
+			/**
+			 * Voltage
+			 * Unit: Volt
+			 */
+			TYPE_VOLTAGE = 22,
+			/**
+			 * Current
+			 * Unit: Ampere
+			 */
+			TYPE_CURRENT = 23,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();

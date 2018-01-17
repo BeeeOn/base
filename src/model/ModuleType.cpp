@@ -41,6 +41,9 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_SHAKE, "shake"},
 		{ModuleType::TypeEnum::TYPE_TEMPERATURE, "temperature"},
 		{ModuleType::TypeEnum::TYPE_ULTRAVIOLET, "ultraviolet"},
+		{ModuleType::TypeEnum::TYPE_POWER, "power"},
+		{ModuleType::TypeEnum::TYPE_VOLTAGE, "voltage"},
+		{ModuleType::TypeEnum::TYPE_CURRENT, "current"},
 	};
 
 	return valueMap;
