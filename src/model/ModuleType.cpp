@@ -25,6 +25,7 @@ EnumHelper<ModuleType::AttributeEnum::Raw>::ValueMap &ModuleType::AttributeEnum:
 EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap()
 {
 	static EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap valueMap = {
+		{ModuleType::TypeEnum::TYPE_UNKNOWN, "unknown"},
 		{ModuleType::TypeEnum::TYPE_AVAILABILITY, "availability"},
 		{ModuleType::TypeEnum::TYPE_BATTERY, "battery"},
 		{ModuleType::TypeEnum::TYPE_BITMAP, "bitmap"},
@@ -205,6 +206,7 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 ModuleType::Unit ModuleType::baseUnit() const
 {
 	switch (m_type.raw()) {
+	case Type::TYPE_UNKNOWN:
 	case Type::TYPE_BITMAP:
 	case Type::TYPE_ENUM:
 		return Unit::NONE;

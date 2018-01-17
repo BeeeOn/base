@@ -47,6 +47,13 @@ public:
 	struct TypeEnum {
 		enum Raw {
 			/**
+			 * In case we are unable to determine the type of value,
+			 * the unknown type can be used. This makes possible to
+			 * postprocess data in cloud, collector, etc. when the
+			 * information is known.
+			 */
+			TYPE_UNKNOWN = 0,
+			/**
 			 * Value 0: unreachable
 			 * Value 1: reachable
 			 */
