@@ -99,6 +99,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/MultiException.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
 	${PROJECT_SOURCE_DIR}/util/Once.cpp
+	${PROJECT_SOURCE_DIR}/util/ParallelExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/PeriodicRunner.cpp
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
