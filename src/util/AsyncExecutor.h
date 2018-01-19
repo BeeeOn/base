@@ -4,19 +4,17 @@
 
 #include <Poco/SharedPtr.h>
 
-#include "util/Loggable.h"
-
 namespace BeeeOn {
 
 /**
  * Class for asynchronous executing tasks.
  */
-class AsyncExecutor : public Loggable {
+class AsyncExecutor {
 public:
 	typedef Poco::SharedPtr<AsyncExecutor> Ptr;
 
 	AsyncExecutor();
-	~AsyncExecutor();
+	virtual ~AsyncExecutor();
 
 	/**
 	 * Add task to queue for executing

@@ -8,12 +8,14 @@
 
 #include "loop/StoppableRunnable.h"
 #include "util/AsyncExecutor.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
 class SequentialAsyncExecutor :
 	public StoppableRunnable,
-	public AsyncExecutor {
+	public AsyncExecutor,
+	Loggable {
 public:
 	typedef Poco::SharedPtr<SequentialAsyncExecutor> Ptr;
 
