@@ -68,6 +68,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/SimpleID.cpp
 	${PROJECT_SOURCE_DIR}/model/TokenID.cpp
 	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp
+	${PROJECT_SOURCE_DIR}/net/HTTPUtil.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRange.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddress.cpp
 	${PROJECT_SOURCE_DIR}/ssl/RejectCertificateHandler.cpp
