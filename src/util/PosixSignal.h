@@ -52,6 +52,14 @@ public:
 	 */
 	static void handle(const std::string &name, Handler handler);
 
+	/**
+	 * Install appropriate handlers for the most fatal signals like
+	 * SIGSEGV, SIGBUS, etc. The application would provide some more
+	 * information during the actual crash. The handlers terminates
+	 * the application by calling _exit().
+	 */
+	static void trapFatal();
+
 protected:
 	/**
 	 * Translate name of a signal to its internal representation.
