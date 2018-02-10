@@ -90,3 +90,36 @@ string Backtrace::toString(const string &indent) const
 	return "";
 #endif
 }
+
+void Backtrace::dump(int fd) const
+{
+#ifdef __GLIBC__
+	backtrace_symbols_fd(m_backtrace, m_backtrace_size, fd);
+#else
+#define NO_BACKTRACE_MSG "(no backtrace available)\n";
+	write(fd, NO_BACKTRACE_MSG, sizeof(NO_BACKTRACE_MSG));
+#endif
+	fsync(fd);
+}
+
+#ifdef __GLIBC__
+namespace BeeeOn {
+
+/**
+ * @brief Call the backtrace() function to make it
+ * async-signal-safe in the future. Calling the
+ * backtrace() leads to load the appropriate library
+ * via dlopen() which calls malloc(). This way, any
+ * other call to the backtrace() function is safe.
+ */
+class GlibcBacktraceInit {
+public:
+	GlibcBacktraceInit() {
+		void *top[1];
+		backtrace(top, 1);
+	}
+};
+
+static volatile GlibcBacktraceInit glibcBacktraceInitializer;
+}
+#endif
