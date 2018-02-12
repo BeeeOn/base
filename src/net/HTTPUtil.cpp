@@ -25,8 +25,9 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 {
 	const SocketAddress address(uri.getHost(), uri.getPort());
 
-	request.setURI(uri.getPathAndQuery());
 	request.setHost(uri.getHost(), uri.getPort());
+	if (request.getURI() == "/")
+		request.setURI(uri.getPathAndQuery());
 
 	return makeRequest(request, address, msg, sslConfig, timeout);
 }
