@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include <Poco/Logger.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
 #include <Poco/URI.h>
@@ -75,6 +76,8 @@ private:
 		Poco::SharedPtr<Poco::Net::HTTPClientSession> session,
 		Poco::Net::HTTPRequest& request,
 		const std::string& msg);
+
+	static Poco::Logger &logger();
 };
 
 }

@@ -1,6 +1,7 @@
 #include <Poco/Net/HTTPSClientSession.h>
 
 #include "net/HTTPUtil.h"
+#include "util/Loggable.h"
 
 using namespace BeeeOn;
 using namespace Poco;
@@ -51,6 +52,14 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 {
 	SharedPtr<HTTPClientSession> session;
 
+	if (logger().debug()) {
+		logger().debug(
+			string("creating http session ") +
+			(sslConfig.isNull() ? "(insecure) " : "(secure) ") +
+			host + ":" + to_string(port),
+			__FILE__, __LINE__);
+	}
+
 	if (sslConfig.isNull())
 		session = new HTTPClientSession(host, port);
 	else
@@ -66,6 +75,21 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 HTTPEntireResponse HTTPUtil::sendRequest(
 	SharedPtr<HTTPClientSession> session, HTTPRequest& request, const string& msg)
 {
+	if (logger().debug()) {
+		logger().debug(
+			"request: " +
+			request.getMethod() + ", " +
+			request.getURI() + ", " +
+			msg, __FILE__, __LINE__);
+	}
+
+	if (logger().trace()) {
+		for (auto one : request) {
+			logger().trace(
+				one.first + ": " + one.second);
+		}
+	}
+
 	if (!msg.empty())
 		session->sendRequest(request) << msg;
 	else
@@ -75,5 +99,26 @@ HTTPEntireResponse HTTPUtil::sendRequest(
 	istream& input = session->receiveResponse(response);
 	response.readBody(input);
 
+	if (logger().debug()) {
+		logger().debug(
+			"response: " +
+			to_string(response.getStatus()) + ", " +
+			response.getReason() + ", " +
+			response.getBody(),
+			__FILE__, __LINE__);
+	}
+
+	if (logger().trace()) {
+		for (auto one : response) {
+			logger().trace(
+				one.first + ": " + one.second);
+		}
+	}
+
 	return response;
+}
+
+Poco::Logger &HTTPUtil::logger()
+{
+	return Loggable::forClass(typeid(HTTPUtil));
 }
