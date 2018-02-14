@@ -37,6 +37,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_OPEN_CLOSE, "open-close"},
 		{ModuleType::TypeEnum::TYPE_PERFORMANCE, "performance"},
 		{ModuleType::TypeEnum::TYPE_PRESSURE, "pressure"},
+		{ModuleType::TypeEnum::TYPE_RSSI, "rssi"},
 		{ModuleType::TypeEnum::TYPE_SECURITY_ALERT, "security-alert"},
 		{ModuleType::TypeEnum::TYPE_SHAKE, "shake"},
 		{ModuleType::TypeEnum::TYPE_TEMPERATURE, "temperature"},
