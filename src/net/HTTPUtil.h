@@ -47,23 +47,25 @@ public:
 
 	/**
 	 * @brief Sends HTTP request to target defined by
-	 * socket address. If the timeout is negative,
+	 * host and port. If the timeout is negative,
 	 * it is not set.
 	 */
 	static HTTPEntireResponse makeRequest(
 		Poco::Net::HTTPRequest& request,
-		const Poco::Net::SocketAddress& address,
+		const std::string& host,
+		const uint16_t port,
 		const std::string& msg,
 		const Poco::Timespan& timeout = -1);
 
 	/**
 	 * @brief Sends HTTP request over SSL to target defined
-	 * by socket address. If the timeout is negative, it is
+	 * by host and port. If the timeout is negative, it is
 	 * not set.
 	 */
 	static HTTPEntireResponse makeRequest(
 		Poco::Net::HTTPRequest& request,
-		const Poco::Net::SocketAddress& address,
+		const std::string& host,
+		const uint16_t port,
 		const std::string& msg,
 		Poco::SharedPtr<SSLClient> sslConfig,
 		const Poco::Timespan& timeout = -1);

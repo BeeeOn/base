@@ -23,27 +23,28 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 	Poco::SharedPtr<SSLClient> sslConfig,
 	const Poco::Timespan& timeout)
 {
-	const SocketAddress address(uri.getHost(), uri.getPort());
-
-	request.setHost(uri.getHost(), uri.getPort());
 	if (request.getURI() == "/")
 		request.setURI(uri.getPathAndQuery());
 
-	return makeRequest(request, address, msg, sslConfig, timeout);
+	return makeRequest(request, uri.getHost(),
+		uri.getPort(), msg, sslConfig, timeout);
 }
 
 HTTPEntireResponse HTTPUtil::makeRequest(
 	Poco::Net::HTTPRequest& request,
-	const Poco::Net::SocketAddress& address,
+	const std::string& host,
+	const uint16_t port,
 	const std::string& msg,
 	const Poco::Timespan& timeout)
 {
-	return makeRequest(request, address, msg, nullptr, timeout);
+	return makeRequest(request, host,
+		port, msg, nullptr, timeout);
 }
 
 HTTPEntireResponse HTTPUtil::makeRequest(
 	Poco::Net::HTTPRequest& request,
-	const Poco::Net::SocketAddress& address,
+	const std::string& host,
+	const uint16_t port,
 	const std::string& msg,
 	Poco::SharedPtr<SSLClient> sslConfig,
 	const Poco::Timespan& timeout)
@@ -51,11 +52,10 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 	SharedPtr<HTTPClientSession> session;
 
 	if (sslConfig.isNull())
-		session = new HTTPClientSession(
-			address.host().toString(), address.port());
+		session = new HTTPClientSession(host, port);
 	else
 		session = new HTTPSClientSession(
-			address.host().toString(), address.port(), sslConfig->context());
+			host, port, sslConfig->context());
 
 	if (timeout >= 0)
 		session->setTimeout(timeout);
