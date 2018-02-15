@@ -31,10 +31,10 @@ string ConsoleSessionImpl::iosReadBytes(istream &in, const unsigned int length)
 	try {
 		in.read(buffer, length);
 		string result(buffer, length);
-		delete buffer;
+		delete[] buffer;
 		return result;
 	} catch (...) {
-		delete buffer;
+		delete[] buffer;
 		throw;
 	}
 }
