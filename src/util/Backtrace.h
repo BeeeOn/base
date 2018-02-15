@@ -6,7 +6,7 @@
 #ifdef __GLIBC__
 #define BEEEON_BACKTRACE_GLIBC(name, size) \
 	void *name[16];                    \
-	unsigned int size
+	unsigned int size;
 #else
 #define BEEEON_BACKTRACE_GLIBC(name, size)
 #endif
@@ -48,7 +48,7 @@ protected:
 	void fatal() const;
 
 private:
-BEEEON_BACKTRACE_GLIBC(m_backtrace, m_backtrace_size);
+BEEEON_BACKTRACE_GLIBC(m_backtrace, m_backtrace_size)
 };
 
 }
