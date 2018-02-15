@@ -9,6 +9,7 @@
 #include <Poco/Mutex.h>
 #include <Poco/Thread.h>
 
+#include "util/Backtrace.h"
 #include "util/PosixSignal.h"
 
 using namespace std;
@@ -112,4 +113,92 @@ void PosixSignal::handle(const unsigned int num, Handler handler)
 
 	g_handlers.emplace(num, handler);
 	signal(num, &handleSignal);
+}
+
+template <typename Number>
+static void safePrint(int fd, Number n)
+{
+	if (n == 0) {
+		write(fd, "0", 1);
+		return;
+	}
+
+	char buf[(sizeof(Number) * 8) / 3];
+	int i = sizeof(buf);
+
+	while (i > 0 && n) {
+		buf[--i] = n % 10;
+		n /= 10;
+	}
+
+	write(fd, buf + i, sizeof(buf) - i);
+}
+
+template <typename Number>
+static void safePrintHex(int fd, Number n)
+{
+	char buf[sizeof(Number) * 2];
+	memset(buf, '0', sizeof(buf));
+	int i = sizeof(buf);
+
+	while (i > 0 && n) {
+		const char c = n % 16;
+		buf[--i] = c < 10 ? ('0' + c) : ('a' + (c - 10));
+		n /= 16;
+	}
+
+	write(fd, buf, sizeof(buf));
+}
+
+static void handleFault(const int sig, siginfo_t *info, void *)
+{
+	switch (sig) {
+	case SIGILL:
+#define SIGILL_MSG "sigill at "
+		write(STDOUT_FILENO, SIGILL_MSG, sizeof(SIGILL_MSG));
+		break;
+
+	case SIGFPE:
+#define SIGFPE_MSG "sigfpe at "
+		write(STDOUT_FILENO, SIGFPE_MSG, sizeof(SIGFPE_MSG));
+		break;
+
+	case SIGSEGV:
+#define SIGSEGV_MSG "sigsegv at "
+		write(STDOUT_FILENO, SIGSEGV_MSG, sizeof(SIGSEGV_MSG));
+		break;
+
+	case SIGBUS:
+#define SIGBUS_MSG "sigbus at "
+		write(STDOUT_FILENO, SIGBUS_MSG, sizeof(SIGBUS_MSG));
+		break;
+
+	default:
+		safePrint(STDOUT_FILENO, sig);
+		write(STDOUT_FILENO, " at ", 4);
+		break;
+	}
+
+	safePrintHex(STDOUT_FILENO, (size_t) info->si_addr);
+
+	write(STDOUT_FILENO, "\n", 1);
+	fsync(STDOUT_FILENO);
+
+	Backtrace trace;
+	trace.dump(STDOUT_FILENO);
+
+	_exit(-2);
+}
+
+void PosixSignal::trapFatal()
+{
+	struct sigaction onFault;
+	memset(&onFault, 0, sizeof(onFault));
+	onFault.sa_flags = SA_SIGINFO;
+	onFault.sa_sigaction = &handleFault;
+
+	sigaction(SIGSEGV, &onFault, NULL);
+	sigaction(SIGILL, &onFault, NULL);
+	sigaction(SIGBUS, &onFault, NULL);
+	sigaction(SIGFPE, &onFault, NULL);
 }

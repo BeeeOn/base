@@ -36,6 +36,14 @@ public:
 	std::string at(unsigned int i) const;
 	std::string toString(const std::string &indent = "") const;
 
+	/**
+	 * In case of very unusual situations, it is better to
+	 * dump the backtrace into an open file instead of standard
+	 * logging facilities. This method is intended for such
+	 * purposes. It is async-signal-safe.
+	 */
+	void dump(int fd) const;
+
 protected:
 	void fatal() const;
 

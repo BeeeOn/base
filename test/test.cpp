@@ -22,6 +22,8 @@
 #include "cppunit/TapOutputter.h"
 #include "cppunit/TestTimingListener.h"
 
+#include "util/PosixSignal.h"
+
 using namespace std;
 using namespace CppUnit;
 using namespace Poco;
@@ -86,6 +88,9 @@ static int runStandard(Test *suite, const string &format, bool progress, ostream
 
 int main(int argc, char **argv)
 {
+	if (Environment::get("TEST_TRAP_FATAL", "yes") != "no")
+		BeeeOn::PosixSignal::trapFatal();
+
 	setupLogger(argc > 1? argv[1] : "logging.ini");
 
 	Test *suite = TestFactoryRegistry::getRegistry().makeTest();
