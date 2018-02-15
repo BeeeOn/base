@@ -34,7 +34,7 @@ public:
 		POLL_READABLE = 0x01,
 		POLL_WRITABLE = 0x02,
 		POLL_ERROR    = 0x04,
-		POLL_HUP      = 0x08,
+		POLL_HANGUP   = 0x08,
 		POLL_INVALID  = 0x10,
 		POLL_TIMEOUT  = 0x20,
 	};
