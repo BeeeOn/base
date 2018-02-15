@@ -1,8 +1,8 @@
 #include <new>
+#include <unistd.h>
 
 #ifdef __GLIBC__
 #include <execinfo.h>
-#include <unistd.h>
 #endif
 
 #include "util/Backtrace.h"
