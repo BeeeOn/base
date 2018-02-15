@@ -93,7 +93,7 @@ void Backtrace::dump(int fd) const
 #ifdef __GLIBC__
 	backtrace_symbols_fd(m_backtrace, m_backtrace_size, fd);
 #else
-#define NO_BACKTRACE_MSG "(no backtrace available)\n";
+#define NO_BACKTRACE_MSG "(no backtrace available)\n"
 	write(fd, NO_BACKTRACE_MSG, sizeof(NO_BACKTRACE_MSG));
 #endif
 	fsync(fd);
