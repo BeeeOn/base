@@ -105,5 +105,5 @@ void GWNewDeviceRequest::setRefreshTime(const Poco::Timespan &time)
 
 Poco::Timespan GWNewDeviceRequest::refreshTime() const
 {
-	return json()->getValue<unsigned int>("refresh_time") * Timespan::SECONDS;
+	return json()->getValue<int>("refresh_time") * Timespan::SECONDS;
 }
