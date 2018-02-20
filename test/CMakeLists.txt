@@ -60,6 +60,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/TimespanParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/UnsafePtrTest.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTraceTest.cpp
+	${PROJECT_SOURCE_DIR}/util/ZipIteratorTest.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509FingerprintTest.cpp
 )
 
