@@ -190,6 +190,33 @@ static void handleFault(const int sig, siginfo_t *info, void *)
 	_exit(-2);
 }
 
+static void handleAbort(const int sig, siginfo_t *info, void *)
+{
+	switch (sig) {
+	case SIGABRT:
+#define SIGABRT_MSG "sigabrt from "
+		write(STDOUT_FILENO, SIGABRT_MSG, sizeof(SIGABRT_MSG));
+		break;
+
+	default:
+		safePrint(STDOUT_FILENO, sig);
+		write(STDOUT_FILENO, " from ", 4);
+		break;
+	}
+
+	safePrint(STDOUT_FILENO, (size_t) info->si_pid);
+	write(STDOUT_FILENO, ", ", 2);
+	safePrint(STDOUT_FILENO, (size_t) info->si_uid);
+
+	write(STDOUT_FILENO, "\n", 1);
+	fsync(STDOUT_FILENO);
+
+	Backtrace trace;
+	trace.dump(STDOUT_FILENO);
+
+	_exit(-2);
+}
+
 void PosixSignal::trapFatal()
 {
 	struct sigaction onFault;
@@ -197,8 +224,14 @@ void PosixSignal::trapFatal()
 	onFault.sa_flags = SA_SIGINFO;
 	onFault.sa_sigaction = &handleFault;
 
+	struct sigaction onAbort;
+	memset(&onAbort, 0, sizeof(onAbort));
+	onAbort.sa_flags = SA_SIGINFO;
+	onAbort.sa_sigaction = &handleAbort;
+
 	sigaction(SIGSEGV, &onFault, NULL);
 	sigaction(SIGILL, &onFault, NULL);
 	sigaction(SIGBUS, &onFault, NULL);
 	sigaction(SIGFPE, &onFault, NULL);
+	sigaction(SIGABRT, &onAbort, NULL);
 }
