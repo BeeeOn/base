@@ -154,31 +154,35 @@ static void handleFault(const int sig, siginfo_t *info, void *)
 {
 	switch (sig) {
 	case SIGILL:
-#define SIGILL_MSG "sigill at "
+#define SIGILL_MSG "sigill ("
 		write(STDOUT_FILENO, SIGILL_MSG, sizeof(SIGILL_MSG));
+		safePrint(STDOUT_FILENO, info->si_code);
+		write(STDOUT_FILENO, ") at ", 5);
 		break;
 
 	case SIGFPE:
-#define SIGFPE_MSG "sigfpe at "
+#define SIGFPE_MSG "sigfpe ("
 		write(STDOUT_FILENO, SIGFPE_MSG, sizeof(SIGFPE_MSG));
 		break;
 
 	case SIGSEGV:
-#define SIGSEGV_MSG "sigsegv at "
+#define SIGSEGV_MSG "sigsegv ("
 		write(STDOUT_FILENO, SIGSEGV_MSG, sizeof(SIGSEGV_MSG));
 		break;
 
 	case SIGBUS:
-#define SIGBUS_MSG "sigbus at "
+#define SIGBUS_MSG "sigbus ("
 		write(STDOUT_FILENO, SIGBUS_MSG, sizeof(SIGBUS_MSG));
 		break;
 
 	default:
 		safePrint(STDOUT_FILENO, sig);
-		write(STDOUT_FILENO, " at ", 4);
+		write(STDOUT_FILENO, " (", 2);
 		break;
 	}
 
+	safePrint(STDOUT_FILENO, info->si_code);
+	write(STDOUT_FILENO, ") at ", 5);
 	safePrintHex(STDOUT_FILENO, (size_t) info->si_addr);
 
 	write(STDOUT_FILENO, "\n", 1);
