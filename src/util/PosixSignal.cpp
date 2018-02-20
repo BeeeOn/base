@@ -127,7 +127,7 @@ static void safePrint(int fd, Number n)
 	int i = sizeof(buf);
 
 	while (i > 0 && n) {
-		buf[--i] = n % 10;
+		buf[--i] = '0' + (n % 10);
 		n /= 10;
 	}
 
