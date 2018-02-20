@@ -4,6 +4,8 @@
 #include <termios.h>
 #include <unistd.h>
 
+#include <cerrno>
+
 #include <Poco/Exception.h>
 
 #include "io/SerialPort.h"
