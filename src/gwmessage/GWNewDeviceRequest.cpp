@@ -100,10 +100,13 @@ list<ModuleType> GWNewDeviceRequest::moduleTypes() const
 
 void GWNewDeviceRequest::setRefreshTime(const Poco::Timespan &time)
 {
-	json()->set("refresh_time", time.totalSeconds());
+	if (time < 0)
+		json()->set("refresh_time", -1);
+	else
+		json()->set("refresh_time", time.totalSeconds());
 }
 
 Poco::Timespan GWNewDeviceRequest::refreshTime() const
 {
-	return json()->getValue<unsigned int>("refresh_time") * Timespan::SECONDS;
+	return json()->getValue<int>("refresh_time") * Timespan::SECONDS;
 }
