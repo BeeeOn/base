@@ -127,7 +127,7 @@ static void safePrint(int fd, Number n)
 	int i = sizeof(buf);
 
 	while (i > 0 && n) {
-		buf[--i] = n % 10;
+		buf[--i] = '0' + (n % 10);
 		n /= 10;
 	}
 
@@ -154,32 +154,63 @@ static void handleFault(const int sig, siginfo_t *info, void *)
 {
 	switch (sig) {
 	case SIGILL:
-#define SIGILL_MSG "sigill at "
+#define SIGILL_MSG "sigill ("
 		write(STDOUT_FILENO, SIGILL_MSG, sizeof(SIGILL_MSG));
+		safePrint(STDOUT_FILENO, info->si_code);
+		write(STDOUT_FILENO, ") at ", 5);
 		break;
 
 	case SIGFPE:
-#define SIGFPE_MSG "sigfpe at "
+#define SIGFPE_MSG "sigfpe ("
 		write(STDOUT_FILENO, SIGFPE_MSG, sizeof(SIGFPE_MSG));
 		break;
 
 	case SIGSEGV:
-#define SIGSEGV_MSG "sigsegv at "
+#define SIGSEGV_MSG "sigsegv ("
 		write(STDOUT_FILENO, SIGSEGV_MSG, sizeof(SIGSEGV_MSG));
 		break;
 
 	case SIGBUS:
-#define SIGBUS_MSG "sigbus at "
+#define SIGBUS_MSG "sigbus ("
 		write(STDOUT_FILENO, SIGBUS_MSG, sizeof(SIGBUS_MSG));
 		break;
 
 	default:
 		safePrint(STDOUT_FILENO, sig);
-		write(STDOUT_FILENO, " at ", 4);
+		write(STDOUT_FILENO, " (", 2);
 		break;
 	}
 
+	safePrint(STDOUT_FILENO, info->si_code);
+	write(STDOUT_FILENO, ") at ", 5);
 	safePrintHex(STDOUT_FILENO, (size_t) info->si_addr);
+
+	write(STDOUT_FILENO, "\n", 1);
+	fsync(STDOUT_FILENO);
+
+	Backtrace trace;
+	trace.dump(STDOUT_FILENO);
+
+	_exit(-2);
+}
+
+static void handleAbort(const int sig, siginfo_t *info, void *)
+{
+	switch (sig) {
+	case SIGABRT:
+#define SIGABRT_MSG "sigabrt from "
+		write(STDOUT_FILENO, SIGABRT_MSG, sizeof(SIGABRT_MSG));
+		break;
+
+	default:
+		safePrint(STDOUT_FILENO, sig);
+		write(STDOUT_FILENO, " from ", 4);
+		break;
+	}
+
+	safePrint(STDOUT_FILENO, (size_t) info->si_pid);
+	write(STDOUT_FILENO, ", ", 2);
+	safePrint(STDOUT_FILENO, (size_t) info->si_uid);
 
 	write(STDOUT_FILENO, "\n", 1);
 	fsync(STDOUT_FILENO);
@@ -197,8 +228,14 @@ void PosixSignal::trapFatal()
 	onFault.sa_flags = SA_SIGINFO;
 	onFault.sa_sigaction = &handleFault;
 
+	struct sigaction onAbort;
+	memset(&onAbort, 0, sizeof(onAbort));
+	onAbort.sa_flags = SA_SIGINFO;
+	onAbort.sa_sigaction = &handleAbort;
+
 	sigaction(SIGSEGV, &onFault, NULL);
 	sigaction(SIGILL, &onFault, NULL);
 	sigaction(SIGBUS, &onFault, NULL);
 	sigaction(SIGFPE, &onFault, NULL);
+	sigaction(SIGABRT, &onAbort, NULL);
 }
