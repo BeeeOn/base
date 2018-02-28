@@ -1,5 +1,6 @@
 #include <cmath>
 
+#include <Poco/NumberFormatter.h>
 #include <Poco/RegularExpression.h>
 #include <Poco/StringTokenizer.h>
 
@@ -140,6 +141,18 @@ string ModuleType::Unit::symbol(bool plain) const
 
 	throw AssertionViolationException(
 		"unexpected unit: " + toString());
+}
+
+string ModuleType::Unit::format(double value, bool plain) const
+{
+	if (raw() == BINARY)
+		return value == 0 ? "false" : "true";
+
+	const string val = NumberFormatter::format(value);
+	const string sym = symbol(plain);
+	const string space = raw() == CELSIUS && !plain ? "" : " ";
+
+	return val + (sym.empty() ? "" : (space + sym));
 }
 
 ModuleType::ModuleType(const ModuleType::Type &type,

@@ -249,6 +249,17 @@ public:
 		 * ASCII.
 		 */
 		std::string symbol(bool plain = false) const;
+
+		/**
+		 * @return formatted string consisting of value
+		 * and the unit's symbol separated by a space. If
+		 * the unit has no symbol, only value is used.
+		 * Note that the space separator might be omitted
+		 * in the non-plain mode (e.g. for degree of Celsius).
+		 *
+		 * @see ModuleType::Unit::symbol()
+		 */
+		std::string format(double value, bool plain = false) const;
 	};
 
 	ModuleType(const Type &type);

@@ -20,6 +20,7 @@ class ModuleTypeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testAttributesConflicts);
 	CPPUNIT_TEST(testUnitIsValid);
 	CPPUNIT_TEST(testUnitSymbol);
+	CPPUNIT_TEST(testUnitFormat);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -31,6 +32,7 @@ public:
 	void testAttributesConflicts();
 	void testUnitIsValid();
 	void testUnitSymbol();
+	void testUnitFormat();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTypeTest);
@@ -258,6 +260,58 @@ void ModuleTypeTest::testUnitSymbol()
 	CPPUNIT_ASSERT_EQUAL(
 		"A",
 		ModuleType::Unit(ModuleType::Unit::AMPERE).symbol());
+}
+
+void ModuleTypeTest::testUnitFormat()
+{
+	CPPUNIT_ASSERT_EQUAL(
+		"10",
+		ModuleType::Unit(ModuleType::Unit::NONE).format(10));
+	CPPUNIT_ASSERT_EQUAL(
+		"true",
+		ModuleType::Unit(ModuleType::Unit::BINARY).format(1));
+	CPPUNIT_ASSERT_EQUAL(
+		"false",
+		ModuleType::Unit(ModuleType::Unit::BINARY).format(0));
+	CPPUNIT_ASSERT_EQUAL(
+		"15 %",
+		ModuleType::Unit(ModuleType::Unit::PERCENT).format(15));
+	CPPUNIT_ASSERT_EQUAL(
+		"15.5 %",
+		ModuleType::Unit(ModuleType::Unit::PERCENT).format(15.5));
+	CPPUNIT_ASSERT_EQUAL(
+		"100 ppm",
+		ModuleType::Unit(ModuleType::Unit::PPM).format(100));
+	CPPUNIT_ASSERT_EQUAL(
+		"1000 lux",
+		ModuleType::Unit(ModuleType::Unit::LUX).format(1000));
+	CPPUNIT_ASSERT_EQUAL(
+		"-20 dB",
+		ModuleType::Unit(ModuleType::Unit::DECIBEL).format(-20));
+	CPPUNIT_ASSERT_EQUAL(
+		"1005 hPa",
+		ModuleType::Unit(ModuleType::Unit::HECTOPASCAL).format(1005));
+	CPPUNIT_ASSERT_EQUAL(
+		"1000 lux",
+		ModuleType::Unit(ModuleType::Unit::LUX).format(1000));
+	CPPUNIT_ASSERT_EQUAL(
+		"22\u2103",
+		ModuleType::Unit(ModuleType::Unit::CELSIUS).format(22));
+	CPPUNIT_ASSERT_EQUAL(
+		"21 C",
+		ModuleType::Unit(ModuleType::Unit::CELSIUS).format(21, true));
+	CPPUNIT_ASSERT_EQUAL(
+		"10 UV",
+		ModuleType::Unit(ModuleType::Unit::UVINDEX).format(10));
+	CPPUNIT_ASSERT_EQUAL(
+		"50 W",
+		ModuleType::Unit(ModuleType::Unit::WATT).format(50));
+	CPPUNIT_ASSERT_EQUAL(
+		"230 V",
+		ModuleType::Unit(ModuleType::Unit::VOLT).format(230));
+	CPPUNIT_ASSERT_EQUAL(
+		"1.4 A",
+		ModuleType::Unit(ModuleType::Unit::AMPERE).format(1.4));
 }
 
 }
