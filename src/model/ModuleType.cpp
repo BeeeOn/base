@@ -50,6 +50,31 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 	return valueMap;
 }
 
+ModuleType::Unit::Unit(const Raw &raw):
+	Enum<ModuleType::UnitEnum>(raw)
+{
+}
+
+EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap &ModuleType::UnitEnum::valueMap()
+{
+	static EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap valueMap = {
+		{NONE,       "none"},
+		{BINARY,     "binary"},
+		{PERCENT,    "percent"},
+		{PPM,        "ppm"},
+		{LUX,        "lux"},
+		{DECIBEL,     "decibel"},
+		{HECTOPASCAL, "hectopascal"},
+		{CELSIUS,     "celsius"},
+		{UVINDEX,     "uvindex"},
+		{WATT,        "watt"},
+		{VOLT,        "volt"},
+		{AMPERE,      "ampere"},
+	};
+
+	return valueMap;
+}
+
 ModuleType::ModuleType(const ModuleType::Type &type,
 		const set<ModuleType::Attribute> &attributes):
 	m_type(type),

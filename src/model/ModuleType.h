@@ -165,8 +165,78 @@ public:
 		static EnumHelper<Raw>::ValueMap &valueMap();
 	};
 
+	struct UnitEnum {
+		enum Raw {
+			/**
+			 * Unit for dimensionless quantities like TYPE_BITMAP,
+			 * TYPE_ENUM, etc.
+			 */
+			NONE,
+			/**
+			 * Unit for dimensionless quantities with two states.
+			 * Only two values possible: 0 and 1.
+			 */
+			BINARY,
+			/**
+			 * Unit 1/100 with symbol %.
+			 * Range: 0..100.
+			 */
+			PERCENT,
+			/**
+			 * Unit parts-per-million with symbol ppm.
+			 * Min: 0.
+			 */
+			PPM,
+			/**
+			 * Unit of luminance with symbol lux.
+			 * Range: 0..100000.
+			 */
+			LUX,
+			/**
+			 * Unit of noise with symbol dB.
+			 */
+			DECIBEL,
+			/**
+			 * Unit of pressure with symbol hPa.
+			 */
+			HECTOPASCAL,
+			/**
+			 * Unit of temperature with symbol C.
+			 * Min: -273.15.
+			 */
+			CELSIUS,
+			/**
+			 * Unit of ultraviolet light with no symbol.
+			 * Range: 0..11.
+			 */
+			UVINDEX,
+			/**
+			 * Unit of power with symbol W.
+			 */
+			WATT,
+			/**
+			 * Unit of voltage (electric potential) with symbol V.
+			 */
+			VOLT,
+			/**
+			 * Unit of electric current with symbol A.
+			 */
+			AMPERE,
+		};
+
+		static EnumHelper<Raw>::ValueMap &valueMap();
+	};
+
 	typedef Enum<TypeEnum> Type;
 	typedef Enum<AttributeEnum> Attribute;
+
+	/**
+	 * @brief Representation of physical units.
+	 */
+	class Unit : public Enum<UnitEnum> {
+	public:
+		Unit(const UnitEnum::Raw &raw);
+	};
 
 	ModuleType(const Type &type);
 	ModuleType(const Type &type, const std::set<Attribute> &attributes);
