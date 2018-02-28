@@ -52,8 +52,7 @@ public:
 			 */
 			TYPE_AVAILABILITY = 1,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * State of battery in percents.
 			 */
 			TYPE_BATTERY = 2,
 			/**
@@ -62,13 +61,11 @@ public:
 			 */
 			TYPE_BITMAP = 3,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Brightness in percent.
 			 */
 			TYPE_BRIGHTNESS = 4,
 			/**
-			 * Min: 0
-			 * Unit: one part per million (ppm)
+			 * Concentration of CO2.
 			 */
 			TYPE_CO2 = 5,
 			/**
@@ -82,13 +79,11 @@ public:
 			 */
 			TYPE_FIRE = 7,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Humidity of some environment in percent.
 			 */
 			TYPE_HUMIDITY = 8,
 			/**
-			 * Range: 0..100000
-			 * Unit: lux
+			 * Luminuous intensity per unit area.
 			 */
 			TYPE_LUMINANCE = 9,
 			/**
@@ -97,7 +92,7 @@ public:
 			 */
 			TYPE_MOTION = 10,
 			/**
-			 * Unit: dB
+			 * Noise (also volume) of some environment.
 			 */
 			TYPE_NOISE = 11,
 			/**
@@ -111,17 +106,15 @@ public:
 			 */
 			TYPE_ON_OFF = 13,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Performance of a system or mechine in percent.
 			 */
 			TYPE_PERFORMANCE = 14,
 			/**
-			 * Unit: hPa
+			 * Pressure of a substance (air, water).
 			 */
 			TYPE_PRESSURE = 15,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Signal strength in percent.
 			 */
 			TYPE_RSSI = 16,
 			/**
@@ -136,30 +129,88 @@ public:
 			 */
 			TYPE_SHAKE = 18,
 			/**
-			 * Unit: °C
+			 * Temperature of some environment.
 			 */
 			TYPE_TEMPERATURE = 19,
 			/**
-			 * Ultraviolet light
-			 * Unit: UV index
-			 * Range: 0..11
+			 * Strength of sunburn-producing ultraviolet radiation
+			 * (UV index).
 			 */
 			TYPE_ULTRAVIOLET = 20,
 			/**
-			 * Power
-			 * Unit: Watt
+			 * Physical power (usually) of some electrical equipment.
 			 */
 			TYPE_POWER = 21,
 			/**
-			 * Voltage
-			 * Unit: Volt
+			 * Voltage.
 			 */
 			TYPE_VOLTAGE = 22,
 			/**
-			 * Current
-			 * Unit: Ampere
+			 * Current.
 			 */
 			TYPE_CURRENT = 23,
+		};
+
+		static EnumHelper<Raw>::ValueMap &valueMap();
+	};
+
+	struct UnitEnum {
+		enum Raw {
+			/**
+			 * Unit for dimensionless quantities like TYPE_BITMAP,
+			 * TYPE_ENUM, etc.
+			 */
+			NONE,
+			/**
+			 * Unit for dimensionless quantities with two states.
+			 * Only two values possible: 0 and 1.
+			 */
+			BINARY,
+			/**
+			 * Unit 1/100 with symbol %.
+			 * Range: 0..100.
+			 */
+			PERCENT,
+			/**
+			 * Unit parts-per-million with symbol ppm.
+			 * Min: 0.
+			 */
+			PPM,
+			/**
+			 * Unit of luminance with symbol lux.
+			 * Range: 0..100000.
+			 */
+			LUX,
+			/**
+			 * Unit of noise with symbol dB.
+			 */
+			DECIBEL,
+			/**
+			 * Unit of pressure with symbol hPa.
+			 */
+			HECTOPASCAL,
+			/**
+			 * Unit of temperature with symbol C.
+			 * Min: -273.15.
+			 */
+			CELSIUS,
+			/**
+			 * Unit of ultraviolet light with no symbol.
+			 * Range: 0..11.
+			 */
+			UVINDEX,
+			/**
+			 * Unit of power with symbol W.
+			 */
+			WATT,
+			/**
+			 * Unit of voltage (electric potential) with symbol V.
+			 */
+			VOLT,
+			/**
+			 * Unit of electric current with symbol A.
+			 */
+			AMPERE,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
@@ -168,10 +219,48 @@ public:
 	typedef Enum<TypeEnum> Type;
 	typedef Enum<AttributeEnum> Attribute;
 
+	/**
+	 * @brief Representation of physical units.
+	 */
+	class Unit : public Enum<UnitEnum> {
+	public:
+		Unit(const UnitEnum::Raw &raw);
+
+		/**
+		 * @returns true if the value is valid for the particular unit.
+		 */
+		bool isValid(double value) const;
+
+		/**
+		 * Get symbol for the given unit. If plain is false,
+		 * the returned value can be a Unicode code point.
+		 * When plain is true, the return value is a plain
+		 * ASCII.
+		 */
+		std::string symbol(bool plain = false) const;
+
+		/**
+		 * @return formatted string consisting of value
+		 * and the unit's symbol separated by a space. If
+		 * the unit has no symbol, only value is used.
+		 * Note that the space separator might be omitted
+		 * in the non-plain mode (e.g. for degree of Celsius).
+		 *
+		 * @see ModuleType::Unit::symbol()
+		 */
+		std::string format(double value, bool plain = false) const;
+	};
+
 	ModuleType(const Type &type);
 	ModuleType(const Type &type, const std::set<Attribute> &attributes);
 	ModuleType(const Type &type, const CustomTypeID &customID);
 	ModuleType(const Type &type, const CustomTypeID &customID, const std::set<Attribute> &attributes);
+
+	/**
+	 * Each type has a predefined base unit that is used as the base
+	 * for all measurements.
+	 */
+	Unit baseUnit() const;
 
 	void setType(const Type &type);
 	Type type() const;

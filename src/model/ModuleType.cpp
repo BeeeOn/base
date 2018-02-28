@@ -1,3 +1,6 @@
+#include <cmath>
+
+#include <Poco/NumberFormatter.h>
 #include <Poco/RegularExpression.h>
 #include <Poco/StringTokenizer.h>
 
@@ -50,6 +53,108 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 	return valueMap;
 }
 
+ModuleType::Unit::Unit(const Raw &raw):
+	Enum<ModuleType::UnitEnum>(raw)
+{
+}
+
+EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap &ModuleType::UnitEnum::valueMap()
+{
+	static EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap valueMap = {
+		{NONE,       "none"},
+		{BINARY,     "binary"},
+		{PERCENT,    "percent"},
+		{PPM,        "ppm"},
+		{LUX,        "lux"},
+		{DECIBEL,     "decibel"},
+		{HECTOPASCAL, "hectopascal"},
+		{CELSIUS,     "celsius"},
+		{UVINDEX,     "uvindex"},
+		{WATT,        "watt"},
+		{VOLT,        "volt"},
+		{AMPERE,      "ampere"},
+	};
+
+	return valueMap;
+}
+
+bool ModuleType::Unit::isValid(double value) const
+{
+	switch (raw()) {
+	case NONE:
+		return !std::isnan(value);
+	case BINARY:
+		return value == 0 || value == 1;
+	case PERCENT:
+		return value >= 0 && value <= 100;
+	case PPM:
+		return value >= 0;
+	case LUX:
+		return value >= 0 && value <= 100000;
+	case DECIBEL:
+		return !std::isnan(value);
+	case HECTOPASCAL:
+		return !std::isnan(value);
+	case CELSIUS:
+		return value >= -273.15;
+	case UVINDEX:
+		return value >= 0 && value <= 11;
+	case WATT:
+		return !std::isnan(value);
+	case VOLT:
+		return !std::isnan(value);
+	case AMPERE:
+		return !std::isnan(value);
+	}
+
+	throw AssertionViolationException(
+		"unexpected unit: " + toString());
+}
+
+string ModuleType::Unit::symbol(bool plain) const
+{
+	switch (raw()) {
+	case NONE:
+	case BINARY:
+		return "";
+	case PERCENT:
+		return "%";
+	case PPM:
+		return "ppm";
+	case LUX:
+		return "lux";
+	case DECIBEL:
+		return "dB";
+	case HECTOPASCAL:
+		return "hPa";
+	case CELSIUS:
+		return (plain? "C" : "\u2103");
+	case UVINDEX:
+		return "";
+	case WATT:
+		return "W";
+	case VOLT:
+		return "V";
+	case AMPERE:
+		return "A";
+	}
+
+	throw AssertionViolationException(
+		"unexpected unit: " + toString());
+}
+
+string ModuleType::Unit::format(double value, bool plain) const
+{
+	if (raw() == BINARY)
+		return value == 0 ? "false" : "true";
+
+	const string val = NumberFormatter::format(value);
+	const string sym = symbol(plain);
+	const string space = raw() == CELSIUS && !plain ? "" : " ";
+
+	return val + (sym.empty() ? "" : (space + sym));
+}
+
 ModuleType::ModuleType(const ModuleType::Type &type,
 		const set<ModuleType::Attribute> &attributes):
 	m_type(type),
@@ -95,6 +200,63 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 		throw InvalidArgumentException(
 			"module type " + m_type.toString() + " does not support type ID");
 	}
+}
+
+ModuleType::Unit ModuleType::baseUnit() const
+{
+	switch (m_type.raw()) {
+	case Type::TYPE_BITMAP:
+	case Type::TYPE_ENUM:
+		return Unit::NONE;
+
+	case Type::TYPE_AVAILABILITY:
+	case Type::TYPE_FIRE:
+	case Type::TYPE_MOTION:
+	case Type::TYPE_OPEN_CLOSE:
+	case Type::TYPE_ON_OFF:
+	case Type::TYPE_SECURITY_ALERT:
+	case Type::TYPE_SHAKE:
+		return Unit::BINARY;
+
+	case Type::TYPE_BATTERY:
+	case Type::TYPE_BRIGHTNESS:
+	case Type::TYPE_HUMIDITY:
+	case Type::TYPE_PERFORMANCE:
+	case Type::TYPE_RSSI:
+		return Unit::PERCENT;
+
+	case Type::TYPE_CO2:
+		return Unit::PPM;
+
+	case Type::TYPE_LUMINANCE:
+		return Unit::LUX;
+
+	case Type::TYPE_NOISE:
+		return Unit::DECIBEL;
+
+	case Type::TYPE_PRESSURE:
+		return Unit::HECTOPASCAL;
+
+	case Type::TYPE_TEMPERATURE:
+		return Unit::CELSIUS;
+
+	case Type::TYPE_ULTRAVIOLET:
+		return Unit::UVINDEX;
+
+	case Type::TYPE_POWER:
+		return Unit::WATT;
+
+	case Type::TYPE_VOLTAGE:
+		return Unit::VOLT;
+
+	case Type::TYPE_CURRENT:
+		return Unit::AMPERE;
+
+	// no default to let compiler catch a missing one
+	}
+
+	throw AssertionViolationException(
+		"no unit for type " + type().toString());
 }
 
 void ModuleType::setType(const ModuleType::Type &type)
