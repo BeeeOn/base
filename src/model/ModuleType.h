@@ -241,6 +241,14 @@ public:
 		 * @returns true if the value is valid for the particular unit.
 		 */
 		bool isValid(double value) const;
+
+		/**
+		 * Get symbol for the given unit. If plain is false,
+		 * the returned value can be a Unicode code point.
+		 * When plain is true, the return value is a plain
+		 * ASCII.
+		 */
+		std::string symbol(bool plain = false) const;
 	};
 
 	ModuleType(const Type &type);

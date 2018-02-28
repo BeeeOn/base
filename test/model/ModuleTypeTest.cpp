@@ -19,6 +19,7 @@ class ModuleTypeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testInvalidAttributeDuplication);
 	CPPUNIT_TEST(testAttributesConflicts);
 	CPPUNIT_TEST(testUnitIsValid);
+	CPPUNIT_TEST(testUnitSymbol);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -29,6 +30,7 @@ public:
 	void testInvalidAttributeDuplication();
 	void testAttributesConflicts();
 	void testUnitIsValid();
+	void testUnitSymbol();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTypeTest);
@@ -213,6 +215,49 @@ void ModuleTypeTest::testUnitIsValid()
 	CPPUNIT_ASSERT(ModuleType::Unit(ModuleType::Unit::AMPERE).isValid(-1));
 	CPPUNIT_ASSERT(ModuleType::Unit(ModuleType::Unit::AMPERE).isValid(1));
 	CPPUNIT_ASSERT(!ModuleType::Unit(ModuleType::Unit::AMPERE).isValid(0.0 / 0.0));
+}
+
+void ModuleTypeTest::testUnitSymbol()
+{
+	CPPUNIT_ASSERT_EQUAL(
+		"",
+		ModuleType::Unit(ModuleType::Unit::NONE).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"",
+		ModuleType::Unit(ModuleType::Unit::BINARY).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"%",
+		ModuleType::Unit(ModuleType::Unit::PERCENT).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"ppm",
+		ModuleType::Unit(ModuleType::Unit::PPM).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"lux",
+		ModuleType::Unit(ModuleType::Unit::LUX).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"dB",
+		ModuleType::Unit(ModuleType::Unit::DECIBEL).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"hPa",
+		ModuleType::Unit(ModuleType::Unit::HECTOPASCAL).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"\u2103",
+		ModuleType::Unit(ModuleType::Unit::CELSIUS).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"C",
+		ModuleType::Unit(ModuleType::Unit::CELSIUS).symbol(true));
+	CPPUNIT_ASSERT_EQUAL(
+		"UV",
+		ModuleType::Unit(ModuleType::Unit::UVINDEX).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"W",
+		ModuleType::Unit(ModuleType::Unit::WATT).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"V",
+		ModuleType::Unit(ModuleType::Unit::VOLT).symbol());
+	CPPUNIT_ASSERT_EQUAL(
+		"A",
+		ModuleType::Unit(ModuleType::Unit::AMPERE).symbol());
 }
 
 }

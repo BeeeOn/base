@@ -110,6 +110,38 @@ bool ModuleType::Unit::isValid(double value) const
 		"unexpected unit: " + toString());
 }
 
+string ModuleType::Unit::symbol(bool plain) const
+{
+	switch (raw()) {
+	case NONE:
+	case BINARY:
+		return "";
+	case PERCENT:
+		return "%";
+	case PPM:
+		return "ppm";
+	case LUX:
+		return "lux";
+	case DECIBEL:
+		return "dB";
+	case HECTOPASCAL:
+		return "hPa";
+	case CELSIUS:
+		return (plain? "C" : "\u2103");
+	case UVINDEX:
+		return "";
+	case WATT:
+		return "W";
+	case VOLT:
+		return "V";
+	case AMPERE:
+		return "A";
+	}
+
+	throw AssertionViolationException(
+		"unexpected unit: " + toString());
+}
+
 ModuleType::ModuleType(const ModuleType::Type &type,
 		const set<ModuleType::Attribute> &attributes):
 	m_type(type),
