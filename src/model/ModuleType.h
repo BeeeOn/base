@@ -267,6 +267,12 @@ public:
 	ModuleType(const Type &type, const CustomTypeID &customID);
 	ModuleType(const Type &type, const CustomTypeID &customID, const std::set<Attribute> &attributes);
 
+	/**
+	 * Each type has a predefined base unit that is used as the base
+	 * for all measurements.
+	 */
+	Unit baseUnit() const;
+
 	void setType(const Type &type);
 	Type type() const;
 

@@ -202,6 +202,63 @@ ModuleType::ModuleType(const ModuleType::Type &type, const CustomTypeID &customI
 	}
 }
 
+ModuleType::Unit ModuleType::baseUnit() const
+{
+	switch (m_type.raw()) {
+	case Type::TYPE_BITMAP:
+	case Type::TYPE_ENUM:
+		return Unit::NONE;
+
+	case Type::TYPE_AVAILABILITY:
+	case Type::TYPE_FIRE:
+	case Type::TYPE_MOTION:
+	case Type::TYPE_OPEN_CLOSE:
+	case Type::TYPE_ON_OFF:
+	case Type::TYPE_SECURITY_ALERT:
+	case Type::TYPE_SHAKE:
+		return Unit::BINARY;
+
+	case Type::TYPE_BATTERY:
+	case Type::TYPE_BRIGHTNESS:
+	case Type::TYPE_HUMIDITY:
+	case Type::TYPE_PERFORMANCE:
+	case Type::TYPE_RSSI:
+		return Unit::PERCENT;
+
+	case Type::TYPE_CO2:
+		return Unit::PPM;
+
+	case Type::TYPE_LUMINANCE:
+		return Unit::LUX;
+
+	case Type::TYPE_NOISE:
+		return Unit::DECIBEL;
+
+	case Type::TYPE_PRESSURE:
+		return Unit::HECTOPASCAL;
+
+	case Type::TYPE_TEMPERATURE:
+		return Unit::CELSIUS;
+
+	case Type::TYPE_ULTRAVIOLET:
+		return Unit::UVINDEX;
+
+	case Type::TYPE_POWER:
+		return Unit::WATT;
+
+	case Type::TYPE_VOLTAGE:
+		return Unit::VOLT;
+
+	case Type::TYPE_CURRENT:
+		return Unit::AMPERE;
+
+	// no default to let compiler catch a missing one
+	}
+
+	throw AssertionViolationException(
+		"no unit for type " + type().toString());
+}
+
 void ModuleType::setType(const ModuleType::Type &type)
 {
 	m_type = type;

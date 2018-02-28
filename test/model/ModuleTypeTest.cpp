@@ -21,6 +21,7 @@ class ModuleTypeTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testUnitIsValid);
 	CPPUNIT_TEST(testUnitSymbol);
 	CPPUNIT_TEST(testUnitFormat);
+	CPPUNIT_TEST(testBaseUnit);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -33,6 +34,7 @@ public:
 	void testUnitIsValid();
 	void testUnitSymbol();
 	void testUnitFormat();
+	void testBaseUnit();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ModuleTypeTest);
@@ -312,6 +314,76 @@ void ModuleTypeTest::testUnitFormat()
 	CPPUNIT_ASSERT_EQUAL(
 		"1.4 A",
 		ModuleType::Unit(ModuleType::Unit::AMPERE).format(1.4));
+}
+
+void ModuleTypeTest::testBaseUnit()
+{
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_AVAILABILITY).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::PERCENT,
+		ModuleType(ModuleType::Type::TYPE_BATTERY).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::NONE,
+		ModuleType(ModuleType::Type::TYPE_BITMAP).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::PERCENT,
+		ModuleType(ModuleType::Type::TYPE_BRIGHTNESS).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::PPM,
+		ModuleType(ModuleType::Type::TYPE_CO2).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::NONE,
+		ModuleType(ModuleType::Type::TYPE_ENUM).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_FIRE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::PERCENT,
+		ModuleType(ModuleType::Type::TYPE_HUMIDITY).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::LUX,
+		ModuleType(ModuleType::Type::TYPE_LUMINANCE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_MOTION).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_OPEN_CLOSE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_ON_OFF).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::PERCENT,
+		ModuleType(ModuleType::Type::TYPE_PERFORMANCE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::HECTOPASCAL,
+		ModuleType(ModuleType::Type::TYPE_PRESSURE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::PERCENT,
+		ModuleType(ModuleType::Type::TYPE_RSSI).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_SECURITY_ALERT).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_SHAKE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::CELSIUS,
+		ModuleType(ModuleType::Type::TYPE_TEMPERATURE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::UVINDEX,
+		ModuleType(ModuleType::Type::TYPE_ULTRAVIOLET).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::WATT,
+		ModuleType(ModuleType::Type::TYPE_POWER).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::VOLT,
+		ModuleType(ModuleType::Type::TYPE_VOLTAGE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::AMPERE,
+		ModuleType(ModuleType::Type::TYPE_CURRENT).baseUnit());
 }
 
 }
