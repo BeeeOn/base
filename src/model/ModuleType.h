@@ -52,8 +52,7 @@ public:
 			 */
 			TYPE_AVAILABILITY = 1,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * State of battery in percents.
 			 */
 			TYPE_BATTERY = 2,
 			/**
@@ -62,13 +61,11 @@ public:
 			 */
 			TYPE_BITMAP = 3,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Brightness in percent.
 			 */
 			TYPE_BRIGHTNESS = 4,
 			/**
-			 * Min: 0
-			 * Unit: one part per million (ppm)
+			 * Concentration of CO2.
 			 */
 			TYPE_CO2 = 5,
 			/**
@@ -82,13 +79,11 @@ public:
 			 */
 			TYPE_FIRE = 7,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Humidity of some environment in percent.
 			 */
 			TYPE_HUMIDITY = 8,
 			/**
-			 * Range: 0..100000
-			 * Unit: lux
+			 * Luminuous intensity per unit area.
 			 */
 			TYPE_LUMINANCE = 9,
 			/**
@@ -97,7 +92,7 @@ public:
 			 */
 			TYPE_MOTION = 10,
 			/**
-			 * Unit: dB
+			 * Noise (also volume) of some environment.
 			 */
 			TYPE_NOISE = 11,
 			/**
@@ -111,17 +106,15 @@ public:
 			 */
 			TYPE_ON_OFF = 13,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Performance of a system or mechine in percent.
 			 */
 			TYPE_PERFORMANCE = 14,
 			/**
-			 * Unit: hPa
+			 * Pressure of a substance (air, water).
 			 */
 			TYPE_PRESSURE = 15,
 			/**
-			 * Range: 0..100
-			 * Unit: %
+			 * Signal strength in percent.
 			 */
 			TYPE_RSSI = 16,
 			/**
@@ -136,28 +129,24 @@ public:
 			 */
 			TYPE_SHAKE = 18,
 			/**
-			 * Unit: °C
+			 * Temperature of some environment.
 			 */
 			TYPE_TEMPERATURE = 19,
 			/**
-			 * Ultraviolet light
-			 * Unit: UV index
-			 * Range: 0..11
+			 * Strength of sunburn-producing ultraviolet radiation
+			 * (UV index).
 			 */
 			TYPE_ULTRAVIOLET = 20,
 			/**
-			 * Power
-			 * Unit: Watt
+			 * Physical power (usually) of some electrical equipment.
 			 */
 			TYPE_POWER = 21,
 			/**
-			 * Voltage
-			 * Unit: Volt
+			 * Voltage.
 			 */
 			TYPE_VOLTAGE = 22,
 			/**
-			 * Current
-			 * Unit: Ampere
+			 * Current.
 			 */
 			TYPE_CURRENT = 23,
 		};
