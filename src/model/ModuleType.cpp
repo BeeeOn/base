@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include <Poco/RegularExpression.h>
 #include <Poco/StringTokenizer.h>
 
@@ -73,6 +75,39 @@ EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap &ModuleType::UnitEnum::valueMap(
 	};
 
 	return valueMap;
+}
+
+bool ModuleType::Unit::isValid(double value) const
+{
+	switch (raw()) {
+	case NONE:
+		return !std::isnan(value);
+	case BINARY:
+		return value == 0 || value == 1;
+	case PERCENT:
+		return value >= 0 && value <= 100;
+	case PPM:
+		return value >= 0;
+	case LUX:
+		return value >= 0 && value <= 100000;
+	case DECIBEL:
+		return !std::isnan(value);
+	case HECTOPASCAL:
+		return !std::isnan(value);
+	case CELSIUS:
+		return value >= -273.15;
+	case UVINDEX:
+		return value >= 0 && value <= 11;
+	case WATT:
+		return !std::isnan(value);
+	case VOLT:
+		return !std::isnan(value);
+	case AMPERE:
+		return !std::isnan(value);
+	}
+
+	throw AssertionViolationException(
+		"unexpected unit: " + toString());
 }
 
 ModuleType::ModuleType(const ModuleType::Type &type,

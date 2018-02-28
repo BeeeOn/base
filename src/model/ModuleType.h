@@ -236,6 +236,11 @@ public:
 	class Unit : public Enum<UnitEnum> {
 	public:
 		Unit(const UnitEnum::Raw &raw);
+
+		/**
+		 * @returns true if the value is valid for the particular unit.
+		 */
+		bool isValid(double value) const;
 	};
 
 	ModuleType(const Type &type);
