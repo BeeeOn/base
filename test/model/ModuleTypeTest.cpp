@@ -251,7 +251,7 @@ void ModuleTypeTest::testUnitSymbol()
 		"C",
 		ModuleType::Unit(ModuleType::Unit::CELSIUS).symbol(true));
 	CPPUNIT_ASSERT_EQUAL(
-		"UV",
+		"",
 		ModuleType::Unit(ModuleType::Unit::UVINDEX).symbol());
 	CPPUNIT_ASSERT_EQUAL(
 		"W",
@@ -303,7 +303,7 @@ void ModuleTypeTest::testUnitFormat()
 		"21 C",
 		ModuleType::Unit(ModuleType::Unit::CELSIUS).format(21, true));
 	CPPUNIT_ASSERT_EQUAL(
-		"10 UV",
+		"10",
 		ModuleType::Unit(ModuleType::Unit::UVINDEX).format(10));
 	CPPUNIT_ASSERT_EQUAL(
 		"50 W",
