@@ -31,6 +31,7 @@ public:
 	AsyncExecutor::Ptr asyncExecutor() const;
 
 	void addListener(typename Listener::Ptr listener);
+	void clearListeners();
 
 	/**
 	 * Fire the given instance of some event via the given method.
@@ -85,6 +86,12 @@ template <typename Listener>
 void EventSource<Listener>::addListener(typename Listener::Ptr listener)
 {
 	m_listeners.push_back(listener);
+}
+
+template <typename Listener>
+void EventSource<Listener>::clearListeners()
+{
+	m_listeners.clear();
 }
 
 template <typename Listener> template <typename Event, typename Method>
