@@ -32,6 +32,16 @@ public:
 
 	const Poco::SharedPtr<T> findById(const typename T::ID &id) const;
 
+	typename InfoSet::const_iterator begin() const
+	{
+		return infoSet().begin();
+	}
+
+	typename InfoSet::const_iterator end() const
+	{
+		return infoSet().end();
+	}
+
 protected:
 	bool registerInfo(const T &info);
 	virtual void parseFile(const std::string &path,
