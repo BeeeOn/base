@@ -16,6 +16,7 @@ class EnumTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testStringConcat);
 	CPPUNIT_TEST(testRandom);
 	CPPUNIT_TEST(testImplicitConstructor);
+	CPPUNIT_TEST(testIterable);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testParse();
@@ -24,6 +25,7 @@ public:
 	void testStringConcat();
 	void testRandom();
 	void testImplicitConstructor();
+	void testIterable();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(EnumTest);
@@ -134,6 +136,33 @@ void EnumTest::testImplicitConstructor()
 
 	TestType type1 = TestType::TEST_X0;
 	CPPUNIT_ASSERT_EQUAL("x0", type1.toString());
+}
+
+void EnumTest::testIterable()
+{
+	auto it = std::begin(TestType::all());
+	const auto end = std::end(TestType::all());
+
+	CPPUNIT_ASSERT_EQUAL(TestType::TEST_X0, *it);
+	CPPUNIT_ASSERT(++it != end);
+	CPPUNIT_ASSERT_EQUAL(TestType::TEST_X1, *it);
+	CPPUNIT_ASSERT(++it != end);
+	CPPUNIT_ASSERT_EQUAL(TestType::TEST_X2, *it);
+	CPPUNIT_ASSERT(++it != end);
+	CPPUNIT_ASSERT_EQUAL(TestType::TEST_X3, *it);
+	CPPUNIT_ASSERT(++it == end);
+
+	const vector<TestType::Raw> expect = {
+		TestType::TEST_X0,
+		TestType::TEST_X1,
+		TestType::TEST_X2,
+		TestType::TEST_X3,
+	};
+
+	size_t i = 0;
+	for (const auto &type : TestType::all()) {
+		CPPUNIT_ASSERT_EQUAL(expect[i++], type);
+	}
 }
 
 }

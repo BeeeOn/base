@@ -112,6 +112,64 @@ private:
 		}
 	}
 
+	/**
+	 * @brief Iterator over the enum values.
+	 */
+	class Iterator {
+	public:
+		Iterator(typename EnumHelper<Raw>::RawMap::const_iterator current):
+			m_current(current)
+		{
+		}
+
+		Iterator &operator ++()
+		{
+			++m_current;
+			return *this;
+		}
+
+		Iterator operator ++(int)
+		{
+			return Iterator(m_current++);
+		}
+
+		bool operator ==(const Iterator &it) const
+		{
+			return m_current == it.m_current;
+		}
+
+		bool operator !=(const Iterator &it) const
+		{
+			return m_current != it.m_current;
+		}
+
+		Enum<Base, Raw> operator *()
+		{
+			return Enum<Base, Raw>(m_current->second);
+		}
+
+	private:
+		typename EnumHelper<Raw>::RawMap::const_iterator m_current;
+	};
+
+	/**
+	 * @brief Instantiable object that makes the enum class to be iterable.
+	 * The class preserve no state and thus there can be only one per enum
+	 * type (true singleton).
+	 */
+	class Iterable {
+	public:
+		Iterator begin() const
+		{
+			return Iterator(rawMap().begin());
+		}
+
+		Iterator end() const
+		{
+			return Iterator(rawMap().end());
+		}
+	};
+
 protected:
 	static typename EnumHelper<Raw>::RawMap &rawMap()
 	{
@@ -140,6 +198,12 @@ public:
 	const std::string &toString() const
 	{
 		return m_value->second;
+	}
+
+	static const Iterable &all()
+	{
+		static const Iterable it;
+		return it;
 	}
 
 	static Enum<Base, Raw> parse(const std::string &input)
