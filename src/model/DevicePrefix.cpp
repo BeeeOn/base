@@ -19,6 +19,7 @@ EnumHelper<DevicePrefixEnum::Raw>::ValueMap
 		{DevicePrefixEnum::PREFIX_IQRF, "IQRF"},
 		{DevicePrefixEnum::PREFIX_LEDS, "LEDs"},
 		{DevicePrefixEnum::PREFIX_PHILIPS_HUE, "Philips Hue"},
+		{DevicePrefixEnum::PREFIX_BEEWI, "BeeWi"},
 	};
 
 	return valueMap;
