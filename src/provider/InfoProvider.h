@@ -123,23 +123,24 @@ InfoProvider<T> &NullInfoProvider<T>::instance()
 	return *singleton.get();
 }
 
-template <typename T, typename SAXHandler>
+template <typename T>
 class XmlInfoProvider : public InfoProvider<T> {
 public:
 	virtual ~XmlInfoProvider();
 
 protected:
+	template <typename SAXHandler>
 	void parseFile(const std::string &path,
 			const std::string &infoLabel);
 };
 
-template <typename T, typename SAXHandler>
-XmlInfoProvider<T, SAXHandler>::~XmlInfoProvider()
+template <typename T>
+XmlInfoProvider<T>::~XmlInfoProvider()
 {
 }
 
-template <typename T, typename SAXHandler>
-void XmlInfoProvider<T, SAXHandler>::parseFile(const std::string &path,
+template <typename T> template <typename SAXHandler>
+void XmlInfoProvider<T>::parseFile(const std::string &path,
 		const std::string &infoLabel)
 {
 	if (path.empty())
