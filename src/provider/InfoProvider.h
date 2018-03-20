@@ -44,8 +44,6 @@ public:
 
 protected:
 	bool registerInfo(const T &info);
-	virtual void parseFile(const std::string &path,
-			const std::string &infoLabel) = 0;
 
 	virtual InfoSet &infoSet();
 	virtual const InfoSet &infoSet() const;
@@ -102,12 +100,6 @@ public:
 	static InfoProvider<T> &instance();
 
 protected:
-	void parseFile(const std::string &,
-			const std::string &) override
-	{
-		throw Poco::NotImplementedException(__func__);
-	}
-
 	typename InfoProvider<T>::InfoSet &infoSet() override;
 	const typename InfoProvider<T>::InfoSet &infoSet() const override;
 };
@@ -138,7 +130,7 @@ public:
 
 protected:
 	void parseFile(const std::string &path,
-			const std::string &infoLabel) override;
+			const std::string &infoLabel);
 };
 
 template <typename T, typename SAXHandler>
