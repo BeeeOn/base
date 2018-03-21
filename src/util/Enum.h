@@ -106,6 +106,7 @@ template <typename Base, typename RawType = typename Base::Raw>
 class Enum : public Base {
 public:
 	typedef RawType Raw;
+	typedef Enum<Base, RawType> ThisEnum;
 
 	typedef typename EnumHelper<Raw>::ValueMap ValueMap;
 	typedef typename EnumHelper<Raw>::Value Value;
@@ -162,9 +163,9 @@ private:
 			return m_current != it.m_current;
 		}
 
-		Enum<Base, Raw> operator *()
+		ThisEnum operator *()
 		{
-			return Enum<Base, Raw>(m_current->second);
+			return ThisEnum(m_current->second);
 		}
 
 	private:
@@ -222,7 +223,7 @@ public:
 		return it;
 	}
 
-	static Enum<Base, Raw> parse(const std::string &input)
+	static ThisEnum parse(const std::string &input)
 	{
 		auto it = namesMap().find(input);
 		if (it == namesMap().end()) {
@@ -230,10 +231,10 @@ public:
 				"failed to parse '" + input + "'");
 		}
 
-		return Enum<Base, Raw>(it->second);
+		return ThisEnum(it->second);
 	}
 
-	static Enum<Base, Raw> fromRaw(const Raw &raw)
+	static ThisEnum fromRaw(const Raw &raw)
 	{
 		auto it = rawMap().find(raw);
 		if (it == rawMap().end()) {
@@ -241,10 +242,10 @@ public:
 				"unrecognized raw value " + std::to_string(raw));
 		}
 
-		return Enum<Base, Raw>(it->second);
+		return ThisEnum(it->second);
 	}
 
-	static Enum<Base, Raw> random()
+	static ThisEnum random()
 	{
 		Poco::Random rnd;
 		rnd.seed();
@@ -257,10 +258,10 @@ public:
 				break;
 		}
 
-		return Enum<Base, Raw>(it);
+		return ThisEnum(it);
 	}
 
-	static Enum<Base, Raw> fromRaw(const unsigned int raw)
+	static ThisEnum fromRaw(const unsigned int raw)
 	{
 		return fromRaw(Raw(raw));
 	}
