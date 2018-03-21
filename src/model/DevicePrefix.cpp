@@ -2,6 +2,18 @@
 
 using namespace BeeeOn;
 
+DevicePrefixNamesInitializer::DevicePrefixNamesInitializer(
+		const ValueMap &map):
+	EnumNamesInitializer<DevicePrefix::Raw>(customNamesMap(map))
+{
+}
+
+DevicePrefixNamesInitializer::NamesMap DevicePrefixNamesInitializer::customNamesMap(
+		const ValueMap &map)
+{
+	return initNamesMap(map);
+}
+
 EnumHelper<DevicePrefixEnum::Raw>::ValueMap
 &DevicePrefixEnum::valueMap()
 {
