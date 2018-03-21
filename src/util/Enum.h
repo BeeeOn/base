@@ -102,11 +102,12 @@ struct EnumNamesInitializer {
  *
  * Use Test class as the target enum's type.
  */
-template <typename Base, typename RawType = typename Base::Raw>
+template <typename Base, typename RawType = typename Base::Raw,
+	typename NamesMapInitializer = EnumNamesInitializer<RawType>>
 class Enum : public Base {
 public:
 	typedef RawType Raw;
-	typedef Enum<Base, RawType> ThisEnum;
+	typedef Enum<Base, RawType, NamesMapInitializer> ThisEnum;
 
 	typedef typename EnumHelper<Raw>::ValueMap ValueMap;
 	typedef typename EnumHelper<Raw>::Value Value;
@@ -202,7 +203,7 @@ protected:
 
 	static const typename EnumHelper<Raw>::NamesMap &namesMap()
 	{
-		static EnumNamesInitializer<Raw> initializer(Base::valueMap());
+		static NamesMapInitializer initializer(Base::valueMap());
 		return initializer.namesMap;
 	}
 
@@ -335,14 +336,16 @@ private:
 	Value m_value;
 };
 
-template <typename Base, typename Raw = typename Base::Raw>
-inline std::string operator +(const std::string &s, const Enum<Base, Raw> &e)
+template <typename Base, typename Raw = typename Base::Raw,
+	typename NamesMapInitializer = EnumNamesInitializer<Raw>>
+inline std::string operator +(const std::string &s, const Enum<Base, Raw, NamesMapInitializer> &e)
 {
 	return s + e.toString();
 }
 
-template <typename Base, typename Raw = typename Base::Raw>
-inline std::string operator +(const char *s, const Enum<Base, Raw> &e)
+template <typename Base, typename Raw = typename Base::Raw,
+	typename NamesMapInitializer = EnumNamesInitializer<Raw>>
+inline std::string operator +(const char *s, const Enum<Base, Raw, NamesMapInitializer> &e)
 {
 	return s + e.toString();
 }
