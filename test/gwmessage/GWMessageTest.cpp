@@ -639,7 +639,7 @@ void GWMessageTest::testParseDeviceList()
 
 	GWDeviceListRequest::Ptr request = message.cast<GWDeviceListRequest>();
 	CPPUNIT_ASSERT_EQUAL("495b7a34-d2e7-4cc7-afcc-0690fa5f072a", request->id().toString());
-	CPPUNIT_ASSERT_EQUAL("Fitprotocol", request->devicePrefix().toString());
+	CPPUNIT_ASSERT_EQUAL("fitp", request->devicePrefix().toString());
 }
 
 void GWMessageTest::testCreateDeviceList()
@@ -674,7 +674,7 @@ void GWMessageTest::testCreateDeviceList()
 		jsonReformat(R"({
 			"message_type": "device_list_request",
 			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
-			"device_prefix": "Fitprotocol"
+			"device_prefix": "fitp"
 		})"),
 		request->toString()
 	);
