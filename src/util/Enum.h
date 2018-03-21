@@ -46,6 +46,23 @@ struct EnumHelper {
 
 		return rawMap;
 	}
+};
+
+template <typename Raw>
+struct EnumNamesInitializer {
+	typedef typename EnumHelper<Raw>::Value Value;
+	typedef typename EnumHelper<Raw>::ValueMap ValueMap;
+	typedef typename EnumHelper<Raw>::NamesMap NamesMap;
+
+	EnumNamesInitializer(const NamesMap &map):
+		namesMap(map)
+	{
+	}
+
+	EnumNamesInitializer(const ValueMap &valueMap):
+		namesMap(initNamesMap(valueMap))
+	{
+	}
 
 	static NamesMap initNamesMap(const ValueMap &valueMap)
 	{
@@ -60,6 +77,8 @@ struct EnumHelper {
 
 		return namesMap;
 	}
+
+	const NamesMap namesMap;
 };
 
 /**
@@ -180,13 +199,10 @@ protected:
 		return rawMap;
 	}
 
-	static typename EnumHelper<Raw>::NamesMap &namesMap()
+	static const typename EnumHelper<Raw>::NamesMap &namesMap()
 	{
-		static typename EnumHelper<Raw>::NamesMap namesMap(
-			EnumHelper<Raw>::initNamesMap(Base::valueMap())
-		);
-
-		return namesMap;
+		static EnumNamesInitializer<Raw> initializer(Base::valueMap());
+		return initializer.namesMap;
 	}
 
 public:
