@@ -65,15 +65,7 @@ void SequentialAsyncExecutor::execute(std::function<void()> task)
 	try {
 		task();
 	}
-	catch(Poco::Exception &ex) {
-		logger().log(ex, __FILE__, __LINE__);
-	}
-	catch(std::exception &ex) {
-		poco_critical(logger(), ex.what());
-	}
-	catch(...) {
-		poco_critical(logger(), "unknown error");
-	}
+	BEEEON_CATCH_CHAIN(logger())
 }
 
 void SequentialAsyncExecutor::stop()
