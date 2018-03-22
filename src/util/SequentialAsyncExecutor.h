@@ -33,6 +33,7 @@ private:
 	Poco::Event m_wakeupEvent;
 	Poco::FastMutex m_queueMutex;
 	Poco::AtomicCounter m_stopRequested;
+	Poco::Timespan m_stopTimeout;
 };
 
 }

@@ -59,6 +59,8 @@ void SequentialAsyncExecutor::run()
 	if (!m_taskQueue.empty()) {
 		poco_warning(logger(), "exiting thread with non empty queue");
 	}
+
+	m_stoppedEvent.set();
 }
 
 void SequentialAsyncExecutor::execute(std::function<void()> task)
@@ -73,4 +75,6 @@ void SequentialAsyncExecutor::stop()
 {
 	m_stopRequested = true;
 	m_wakeupEvent.set();
+
+	m_stoppedEvent.wait();
 }
