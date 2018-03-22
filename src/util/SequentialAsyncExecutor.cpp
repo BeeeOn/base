@@ -10,6 +10,7 @@ BEEEON_OBJECT_CASTABLE(StoppableRunnable)
 BEEEON_OBJECT_END(BeeeOn, SequentialAsyncExecutor)
 
 using namespace std;
+using namespace Poco;
 using namespace BeeeOn;
 
 SequentialAsyncExecutor::SequentialAsyncExecutor() :
@@ -28,7 +29,7 @@ SequentialAsyncExecutor::~SequentialAsyncExecutor()
 
 void SequentialAsyncExecutor::invoke(std::function<void()> f)
 {
-	Poco::FastMutex::ScopedLock lock(m_queueMutex);
+	FastMutex::ScopedLock lock(m_queueMutex);
 	m_taskQueue.push(f);
 	m_wakeupEvent.set();
 }
@@ -38,7 +39,7 @@ void SequentialAsyncExecutor::run()
 	std::function<void()> task;
 
 	while (!m_stopRequested) {
-		Poco::ScopedLockWithUnlock<Poco::FastMutex> guard(m_queueMutex);
+		ScopedLockWithUnlock<FastMutex> guard(m_queueMutex);
 
 		if (m_taskQueue.empty()) {
 			guard.unlock();
