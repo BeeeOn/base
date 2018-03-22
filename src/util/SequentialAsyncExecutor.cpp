@@ -54,12 +54,11 @@ void SequentialAsyncExecutor::run()
 		execute(task);
 	}
 
-	m_stopRequested = false;
-
 	if (!m_taskQueue.empty()) {
 		poco_warning(logger(), "exiting thread with non empty queue");
 	}
 
+	m_stopRequested = false;
 	m_stoppedEvent.set();
 }
 
