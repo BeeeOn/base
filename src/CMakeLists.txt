@@ -12,6 +12,17 @@ find_library (POCO_JSON PocoJSON)
 add_definitions(-std=c++11)
 add_definitions(-Wall -pedantic -Wextra)
 
+if(ENABLE_UCLIBCXX_FIXES)
+message(STATUS "fixing uclibc++ flaws")
+
+add_definitions(-DNO_std_to_string)
+set(CMAKE_CXX_FLAGS "-I${PROJECT_SOURCE_DIR}/uclibc++ ${CMAKE_CXX_FLAGS}")
+
+file(GLOB UCLIBCXX_FIXES
+	${PROJECT_SOURCE_DIR}/uclibc++/string_impl.cpp
+)
+endif()
+
 file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/di/DIApplicationConfigurationLoader.cpp
@@ -116,6 +127,10 @@ file(GLOB SOURCES
 include_directories(
 	${PROJECT_SOURCE_DIR}
 )
+
+if(UCLIBCXX_FIXES_ENABLE)
+	list(APPEND SOURCES ${UCLIBCXX_FIXES})
+endif()
 
 add_library(BeeeOnBase SHARED ${SOURCES})
 
