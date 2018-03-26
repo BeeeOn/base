@@ -1,3 +1,5 @@
+#include <sstream>
+
 #include <Poco/Exception.h>
 #include <Poco/RandomStream.h>
 #include <Poco/Dynamic/Var.h>
@@ -90,7 +92,9 @@ string CryptoParams::toString() const
 	if (m_iterationCount > 0)
 		json->set("it", m_iterationCount);
 
-	return Dynamic::Var::toString(json);
+	ostringstream buf;
+	json->stringify(buf);
+	return buf.str();
 }
 
 bool CryptoParams::empty() const
