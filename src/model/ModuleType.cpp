@@ -51,6 +51,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_CURRENT, "current"},
 		{ModuleType::TypeEnum::TYPE_FREQUENCY, "frequency"},
 		{ModuleType::TypeEnum::TYPE_COLOR_TEMPERATURE, "color_temperature"},
+		{ModuleType::TypeEnum::TYPE_COLOR, "color"},
 	};
 
 	return valueMap;
@@ -220,6 +221,7 @@ ModuleType::Unit ModuleType::baseUnit() const
 	switch (m_type.raw()) {
 	case Type::TYPE_UNKNOWN:
 	case Type::TYPE_BITMAP:
+	case Type::TYPE_COLOR:
 	case Type::TYPE_ENUM:
 		return Unit::NONE;
 

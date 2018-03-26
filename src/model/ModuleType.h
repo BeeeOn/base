@@ -165,6 +165,12 @@ public:
 			 * Range: 1700..27000.
 			 */
 			TYPE_COLOR_TEMPERATURE = 25,
+			/**
+			 * Color expressed by RGB. Each component is in one Byte.
+			 * The format of color is 0x00RRGGBB in the little-endian.
+			 * Range: 0..16777215.
+			 */
+			TYPE_COLOR = 26,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
