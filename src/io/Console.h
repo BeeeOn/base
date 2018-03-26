@@ -110,6 +110,8 @@ private:
 class Console {
 	friend ConsoleSession;
 public:
+	typedef Poco::SharedPtr<Console> Ptr;
+
 	Console();
 	virtual ~Console();
 
