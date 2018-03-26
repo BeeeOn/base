@@ -18,7 +18,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(OnceTest);
 
 void OnceTest::testOnce()
 {
-	static Once once;
+	Once once;
 
 	int i = 0;
 	CPPUNIT_ASSERT_EQUAL(0, i);
