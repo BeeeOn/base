@@ -45,6 +45,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/io/SerialPort.cpp
 	${PROJECT_SOURCE_DIR}/io/SimpleConsole.cpp
 	${PROJECT_SOURCE_DIR}/io/StdConsole.cpp
+	${PROJECT_SOURCE_DIR}/io/StreamConsole.cpp
 	${PROJECT_SOURCE_DIR}/io/TCPConsole.cpp
 	${PROJECT_SOURCE_DIR}/l10n/Locale.cpp
 	${PROJECT_SOURCE_DIR}/l10n/LocaleImpl.cpp
