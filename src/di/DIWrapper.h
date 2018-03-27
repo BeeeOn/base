@@ -944,7 +944,7 @@ public:                                                 \
                                                         \
 	BeeeOn::DIWrapper *create() const override      \
 	{                                               \
-		return new type;                        \
+		return new type##DIW;                   \
 	}                                               \
 };                                                      \
 static name##Factory name##Factory;
@@ -1013,25 +1013,25 @@ BEEEON_WRAPPER(cls, cls##DIW)
 #define BEEEON_OBJECT_END1(cls) \
 		}               \
 	};                      \
-BEEEON_OBJECT_IMPL(cls, cls##DIW)
+BEEEON_OBJECT_IMPL(cls, cls)
 
 #define BEEEON_OBJECT_END2(ns1, cls) \
 		}                    \
 	};                           \
 }                                    \
-BEEEON_OBJECT_IMPL(ns1##_##cls, ns1::cls##DIW)
+BEEEON_OBJECT_IMPL(ns1##_##cls, ns1::cls)
 
 #define BEEEON_OBJECT_END3(ns1, ns2, cls) \
 		}                         \
 	};                                \
 }}                                        \
-BEEEON_OBJECT_IMPL(ns1##_##ns2##_##cls, ns1::ns2::cls##DIW)
+BEEEON_OBJECT_IMPL(ns1##_##ns2##_##cls, ns1::ns2::cls)
 
 #define BEEEON_OBJECT_END4(ns1, ns2, ns3, cls) \
 		}                              \
 	};                                     \
 }}}                                            \
-BEEEON_OBJECT_IMPL(ns1##_##ns2##_##ns3##_##cls, ns1::ns2::ns3::cls##DIW)
+BEEEON_OBJECT_IMPL(ns1##_##ns2##_##ns3##_##cls, ns1::ns2::ns3::cls)
 
 #define BEEEON_OBJECT_END(...) \
 	_BEEEON_VA_SELECT(BEEEON_OBJECT_END, __VA_ARGS__)

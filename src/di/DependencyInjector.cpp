@@ -274,7 +274,7 @@ DIWrapper *DependencyInjector::createNew(const InstanceInfo &info)
 
 	logger().debug("creating " + info.name() + " as " + cls);
 
-	DIWrapperFactory &factory = DIWrapperFactory::lookupFactory(cls + "DIW");
+	DIWrapperFactory &factory = DIWrapperFactory::lookupFactory(cls);
 	return factory.create();
 }
 
