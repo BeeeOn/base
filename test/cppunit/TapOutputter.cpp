@@ -57,6 +57,8 @@ void TapOutputter::reportSuccess(unsigned int id, Test *test)
 void TapOutputter::reportFailures(unsigned int id, Test *test,
 		const vector<TestFailure *> &fails)
 {
+	m_output << "not ok " << id << " - " << test->getName() << endl;
+
 	for (const TestFailure *fail : fails) {
 		const SourceLine &line = fail->sourceLine();
 
@@ -76,8 +78,6 @@ void TapOutputter::reportFailures(unsigned int id, Test *test,
 
 		m_output << " ..." << endl;
 	}
-
-	m_output << "not ok " << id << " - " << test->getName() << endl;
 }
 
 void TapOutputter::reportException(const CppUnit::Exception *e)
