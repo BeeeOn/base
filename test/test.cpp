@@ -15,6 +15,7 @@
 #include <Poco/NumberParser.h>
 #include <Poco/NullStream.h>
 #include <Poco/FileStream.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/Util/IniFileConfiguration.h>
 #include <Poco/Util/MapConfiguration.h>
 #include <Poco/Util/LoggingConfigurator.h>
@@ -49,6 +50,12 @@ void setupLogger(const std::string &path)
 	}
 }
 
+static vector<string> parseTapSkips()
+{
+	StringTokenizer skips(Environment::get("TEST_TAP_SKIP", ""), ",");
+	return {skips.begin(), skips.end()};
+}
+
 static int runStandard(Test *suite, const string &format, bool progress, ostream &timing)
 {
 	TestRunner runner;
@@ -76,6 +83,10 @@ static int runStandard(Test *suite, const string &format, bool progress, ostream
 	}
 	else if (format == "tap") {
 		BeeeOn::TapOutputter outputter(&collector, cout);
+
+		for (const auto &name : parseTapSkips())
+			outputter.skip(name);
+
 		outputter.write();
 	}
 	else {
