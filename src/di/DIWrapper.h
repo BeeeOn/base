@@ -995,17 +995,24 @@ BEEEON_WRAPPER(cls, cls##DIW)
 	DIWCast::add(new DIWCastImpl<Self, to>);
 #define BEEEON_OBJECT_PROPERTY(name, method) \
 	setter(name, method);
+
 #define BEEEON_OBJECT_REF(name, method) \
+	_Pragma ("GCC warning \"'BEEEON_OBJECT_REF' macro is deprecated\"") \
 	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_NUMBER(name, method) \
+	_Pragma ("GCC warning \"'BEEEON_OBJECT_NUMBER' macro is deprecated\"") \
 	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_TEXT(name, method) \
+	_Pragma ("GCC warning \"'BEEEON_OBJECT_TEXT' macro is deprecated\"") \
 	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_TIME(name, method) \
+	_Pragma ("GCC warning \"'BEEEON_OBJECT_TIME' macro is deprecated\"") \
 	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_LIST(name, method) \
+	_Pragma ("GCC warning \"'BEEEON_OBJECT_LIST' macro is deprecated\"") \
 	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_MAP(name, method) \
+	_Pragma ("GCC warning \"'BEEEON_OBJECT_MAP' macro is deprecated\"") \
 	BEEEON_OBJECT_PROPERTY(name, method)
 #define BEEEON_OBJECT_HOOK(name, method) \
 	hookHandler(name, method);
