@@ -76,7 +76,7 @@ void TapOutputter::reportFailures(unsigned int id, Test *test,
 
 		m_output << " ..." << endl;
 	}
-	
+
 	m_output << "not ok " << id << " - " << test->getName() << endl;
 }
 
