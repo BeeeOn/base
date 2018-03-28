@@ -2,6 +2,8 @@
 #define BEEEON_TAP_OUTPUTTER_H
 
 #include <iosfwd>
+#include <set>
+#include <string>
 #include <vector>
 
 #include <cppunit/Outputter.h>
@@ -34,6 +36,8 @@ public:
 	TapOutputter(CppUnit::TestResultCollector *collector,
 			std::ostream &output);
 
+	void skip(const std::string &name);
+
 	void write() override;
 
 protected:
@@ -44,6 +48,7 @@ protected:
 
 private:
 	CppUnit::TestResultCollector *m_collector;
+	std::set<std::string> m_skip;
 	std::ostream &m_output;
 };
 

@@ -29,6 +29,11 @@ TapOutputter::TapOutputter(
 {
 }
 
+void TapOutputter::skip(const string &name)
+{
+	m_skip.emplace(name);
+}
+
 void TapOutputter::write()
 {
 	map<Test *, vector<TestFailure *>> failures;
@@ -57,6 +62,13 @@ void TapOutputter::reportSuccess(unsigned int id, Test *test)
 void TapOutputter::reportFailures(unsigned int id, Test *test,
 		const vector<TestFailure *> &fails)
 {
+	m_output << "not ok " << id << " - " << test->getName();
+
+	if (m_skip.find(test->getName()) != m_skip.end())
+		m_output << " # skip";
+
+	m_output << endl;
+
 	for (const TestFailure *fail : fails) {
 		const SourceLine &line = fail->sourceLine();
 
@@ -76,8 +88,6 @@ void TapOutputter::reportFailures(unsigned int id, Test *test,
 
 		m_output << " ..." << endl;
 	}
-	
-	m_output << "not ok " << id << " - " << test->getName() << endl;
 }
 
 void TapOutputter::reportException(const CppUnit::Exception *e)
