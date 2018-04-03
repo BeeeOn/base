@@ -58,6 +58,8 @@ unsigned int PosixSignal::byName(const string &name)
 		return SIGCONT;
 	else if (name == "SIGHUP")
 		return SIGHUP;
+	else if (name == "SIGXFSZ")
+		return SIGXFSZ;
 	else
 		throw InvalidArgumentException("unrecognized signal name");
 }
