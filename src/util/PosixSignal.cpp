@@ -38,8 +38,7 @@ void PosixSignal::send(const Thread &thread, unsigned int num)
 
 void PosixSignal::ignore(const unsigned int num)
 {
-	signal(num, SIG_IGN);
-	if (errno)
+	if (signal(num, SIG_IGN) == SIG_ERR)
 		throw InvalidArgumentException(strerror(errno));
 }
 
