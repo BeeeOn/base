@@ -30,6 +30,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/io/TCPConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/SystemLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunnerTest.cpp
+	${PROJECT_SOURCE_DIR}/loop/ToolTest.cpp
 	${PROJECT_SOURCE_DIR}/math/SimpleCalcTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
