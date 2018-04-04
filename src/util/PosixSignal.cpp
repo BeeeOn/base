@@ -38,8 +38,7 @@ void PosixSignal::send(const Thread &thread, unsigned int num)
 
 void PosixSignal::ignore(const unsigned int num)
 {
-	signal(num, SIG_IGN);
-	if (errno)
+	if (signal(num, SIG_IGN) == SIG_ERR)
 		throw InvalidArgumentException(strerror(errno));
 }
 
@@ -59,6 +58,8 @@ unsigned int PosixSignal::byName(const string &name)
 		return SIGCONT;
 	else if (name == "SIGHUP")
 		return SIGHUP;
+	else if (name == "SIGXFSZ")
+		return SIGXFSZ;
 	else
 		throw InvalidArgumentException("unrecognized signal name");
 }
