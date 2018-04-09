@@ -365,16 +365,15 @@ void GWMessageTest::testCreateSensorDataExport()
 	value2.setValue(NAN);
 	value2.setValid(false);
 
-	SensorData data1;
-	data1.setDeviceID(DeviceID::parse("0xa123123412341234"));
-	data1.setTimestamp(Timestamp(1500334250150150));
-	data1.insertValue(value1);
+	SensorData data1(
+		DeviceID::parse("0xa123123412341234"),
+		Timestamp(1500334250150150),
+		{value1});
 
-	SensorData data2;
-	data2.setDeviceID(DeviceID::parse("0xa123444455556666"));
-	data2.setTimestamp(Timestamp(1111111111111111));
-	data2.insertValue(value1);
-	data2.insertValue(value2);
+	SensorData data2(
+		DeviceID::parse("0xa123444455556666"),
+		Timestamp(1111111111111111),
+		{value1, value2});
 
 	vector<SensorData> dataVector;
 	dataVector.push_back(data1);

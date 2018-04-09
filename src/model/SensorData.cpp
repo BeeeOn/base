@@ -1,7 +1,22 @@
 #include "model/SensorData.h"
 
 using namespace std;
+using namespace Poco;
 using namespace BeeeOn;
+
+SensorData::SensorData()
+{
+}
+
+SensorData::SensorData(
+		const DeviceID &id,
+		const Timestamp &timestamp,
+		const vector<SensorValue> &values):
+	m_deviceID(id),
+	m_timestamp(timestamp),
+	m_values(values)
+{
+}
 
 void SensorData::setDeviceID(const DeviceID &deviceID)
 {

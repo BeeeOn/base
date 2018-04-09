@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <Poco/Timestamp.h>
+
 #include "model/DeviceID.h"
 #include "model/ModuleID.h"
 #include "model/SensorValue.h"
@@ -18,6 +20,12 @@ namespace BeeeOn {
  */
 class SensorData {
 public:
+	SensorData();
+	SensorData(
+		const DeviceID &id,
+		const Poco::Timestamp &timestamp,
+		const std::vector<SensorValue> &values);
+
 	void setDeviceID(const DeviceID &deviceID);
 	const DeviceID deviceID() const;
 
