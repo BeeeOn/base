@@ -3,7 +3,7 @@
 
 #include <string>
 
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 #define BEEEON_BACKTRACE_GLIBC(name, size) \
 	void *name[16];                    \
 	unsigned int size;
@@ -16,7 +16,7 @@ namespace BeeeOn {
 class Backtrace {
 public:
 	enum {
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 	supported = 1
 #else
 	supported = 0

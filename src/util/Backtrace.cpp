@@ -1,7 +1,7 @@
 #include <new>
 #include <unistd.h>
 
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 #include <execinfo.h>
 #endif
 
@@ -13,13 +13,13 @@ using namespace BeeeOn;
 Backtrace::Backtrace(bool empty)
 {
 	if (empty) {
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 		m_backtrace_size = 0;
 #endif
 		return;
 	}
 
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 	m_backtrace_size = backtrace(m_backtrace,
 			sizeof(m_backtrace) / sizeof(m_backtrace[0]));
 #endif
@@ -31,7 +31,7 @@ Backtrace::~Backtrace()
 
 unsigned int Backtrace::size() const
 {
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 	return m_backtrace_size;
 #else
 	return 0;
@@ -48,7 +48,7 @@ void Backtrace::fatal() const
 
 string Backtrace::at(unsigned int i) const
 {
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 	if (i >= m_backtrace_size)
 		return "";
 
@@ -66,7 +66,7 @@ string Backtrace::at(unsigned int i) const
 
 string Backtrace::toString(const string &indent) const
 {
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 	if (m_backtrace_size == 0)
 		return "";
 
@@ -90,7 +90,7 @@ string Backtrace::toString(const string &indent) const
 
 void Backtrace::dump(int fd) const
 {
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 	backtrace_symbols_fd(m_backtrace, m_backtrace_size, fd);
 #else
 #define NO_BACKTRACE_MSG "(no backtrace available)\n"
@@ -99,7 +99,7 @@ void Backtrace::dump(int fd) const
 	fsync(fd);
 }
 
-#ifdef __GLIBC__
+#if defined(__GLIBC__) && !defined(__UCLIBC__)
 namespace BeeeOn {
 
 /**
