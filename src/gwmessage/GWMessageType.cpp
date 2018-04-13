@@ -22,6 +22,7 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{SENSOR_DATA_EXPORT, "sensor_data_export"},
 		{SET_VALUE_REQUEST, "set_value_request"},
 		{UNPAIR_REQUEST, "unpair_request"},
+		{UNPAIR_RESPONSE, "unpair_response"},
 	};
 
 	return valueMap;
