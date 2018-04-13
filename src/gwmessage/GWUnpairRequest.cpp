@@ -1,4 +1,5 @@
 #include "gwmessage/GWUnpairRequest.h"
+#include "gwmessage/GWUnpairResponse.h"
 
 using namespace std;
 using namespace Poco;
@@ -22,4 +23,10 @@ void GWUnpairRequest::setDeviceID(const DeviceID &deviceID)
 DeviceID GWUnpairRequest::deviceID() const
 {
 	return DeviceID::parse(json()->getValue<string>("device_id"));
+}
+
+GWResponse::Ptr GWUnpairRequest::deriveResponse() const
+{
+	GWUnpairResponse::Ptr response = new GWUnpairResponse;
+	return deriveGenericResponse(response);
 }
