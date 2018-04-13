@@ -13,9 +13,11 @@ namespace BeeeOn {
 class StopControlTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(StopControlTest);
 	CPPUNIT_TEST(testShouldStop);
+	CPPUNIT_TEST(testRun);
 	CPPUNIT_TEST_SUITE_END();
 public:
 	void testShouldStop();
+	void testRun();
 };
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StopControlTest);
@@ -37,6 +39,28 @@ void StopControlTest::testShouldStop()
 
 	control.requestStop();
 	CPPUNIT_ASSERT(control.shouldStop());
+}
+
+void StopControlTest::testRun()
+{
+	StopControl control;
+
+	CPPUNIT_ASSERT(!control.shouldStop());
+	control.requestStop();
+
+	{
+		StopControl::Run run(control);
+		CPPUNIT_ASSERT(!!run);
+		CPPUNIT_ASSERT(!control.shouldStop());
+
+		control.requestStop();
+
+		CPPUNIT_ASSERT(!run);
+		CPPUNIT_ASSERT(control.shouldStop());
+	}
+
+	// constructor clears stop flag
+	CPPUNIT_ASSERT(!control.shouldStop());
 }
 
 }

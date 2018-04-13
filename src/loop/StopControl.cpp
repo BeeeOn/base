@@ -1,10 +1,36 @@
 #include <Poco/Exception.h>
+#include <Poco/Logger.h>
 
 #include "loop/StopControl.h"
+#include "util/Loggable.h"
 
 using namespace std;
 using namespace Poco;
 using namespace BeeeOn;
+
+StopControl::Run::Run(StopControl &control):
+	m_control(control)
+{
+	m_control.clear();
+}
+
+StopControl::Run::~Run()
+{
+	try {
+		m_control.clear();
+	}
+	BEEEON_CATCH_CHAIN(Loggable::forInstance(this))
+}
+
+bool StopControl::Run::waitStoppable(const Timespan &timeout)
+{
+	return m_control.waitStoppable(timeout);
+}
+
+StopControl::Run::operator bool() const
+{
+	return !m_control.shouldStop();
+}
 
 StopControl::StopControl():
 	m_stop(false)

@@ -11,6 +11,46 @@ namespace BeeeOn {
  */
 class StopControl {
 public:
+	/**
+	 * @brief Helper class for managing a common stoppable loop
+	 * situation:
+	 * <pre>
+	 * void run()
+	 * {
+	 *    StopControl::Run run(m_stopControl);
+	 *
+	 *    while (run) {
+	 *       ...
+	 *       run.waitStoppable(...)
+	 *       ...
+	 *    }
+	 * }
+	 *
+	 * void stop()
+	 * {
+	 *    m_stopControl.requestStop();
+	 * }
+	 * </pre>
+	 */
+	class Run {
+	public:
+		Run(StopControl &control);
+		~Run();
+
+		/**
+		 * @brief Delegates to StopControl::waitStoppable().
+		 */
+		bool waitStoppable(const Poco::Timespan &timeout);
+
+		/**
+		 * @brief Equivalent to !StopControl::shouldStop().
+		 */
+		operator bool() const;
+
+	private:
+		StopControl &m_control;
+	};
+
 	StopControl();
 
 	/**
