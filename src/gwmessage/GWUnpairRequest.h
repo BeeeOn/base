@@ -22,6 +22,9 @@ public:
 
 	void setDeviceID(const DeviceID &deviceID);
 	DeviceID deviceID() const;
+
+protected:
+	GWResponse::Ptr deriveResponse() const override;
 };
 
 }
