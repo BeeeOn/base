@@ -31,7 +31,14 @@ public:
 	static EnumHelper<Raw>::ValueMap &valueMap();
 };
 
-typedef Enum<DevicePrefixEnum> DevicePrefix;
+struct DevicePrefixNamesInitializer : public EnumNamesInitializer<DevicePrefixEnum::Raw> {
+	DevicePrefixNamesInitializer(const ValueMap &map);
+
+	static NamesMap customNamesMap(const ValueMap &map);
+};
+
+typedef Enum<DevicePrefixEnum, DevicePrefixEnum::Raw,
+	DevicePrefixNamesInitializer> DevicePrefix;
 
 
 }

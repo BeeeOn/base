@@ -46,6 +46,23 @@ struct EnumHelper {
 
 		return rawMap;
 	}
+};
+
+template <typename Raw>
+struct EnumNamesInitializer {
+	typedef typename EnumHelper<Raw>::Value Value;
+	typedef typename EnumHelper<Raw>::ValueMap ValueMap;
+	typedef typename EnumHelper<Raw>::NamesMap NamesMap;
+
+	EnumNamesInitializer(const NamesMap &map):
+		namesMap(map)
+	{
+	}
+
+	EnumNamesInitializer(const ValueMap &valueMap):
+		namesMap(initNamesMap(valueMap))
+	{
+	}
 
 	static NamesMap initNamesMap(const ValueMap &valueMap)
 	{
@@ -60,6 +77,8 @@ struct EnumHelper {
 
 		return namesMap;
 	}
+
+	const NamesMap namesMap;
 };
 
 /**
@@ -83,10 +102,12 @@ struct EnumHelper {
  *
  * Use Test class as the target enum's type.
  */
-template <typename Base, typename RawType = typename Base::Raw>
+template <typename Base, typename RawType = typename Base::Raw,
+	typename NamesMapInitializer = EnumNamesInitializer<RawType>>
 class Enum : public Base {
 public:
 	typedef RawType Raw;
+	typedef Enum<Base, RawType, NamesMapInitializer> ThisEnum;
 
 	typedef typename EnumHelper<Raw>::ValueMap ValueMap;
 	typedef typename EnumHelper<Raw>::Value Value;
@@ -143,9 +164,9 @@ private:
 			return m_current != it.m_current;
 		}
 
-		Enum<Base, Raw> operator *()
+		ThisEnum operator *()
 		{
-			return Enum<Base, Raw>(m_current->second);
+			return ThisEnum(m_current->second);
 		}
 
 	private:
@@ -180,13 +201,10 @@ protected:
 		return rawMap;
 	}
 
-	static typename EnumHelper<Raw>::NamesMap &namesMap()
+	static const typename EnumHelper<Raw>::NamesMap &namesMap()
 	{
-		static typename EnumHelper<Raw>::NamesMap namesMap(
-			EnumHelper<Raw>::initNamesMap(Base::valueMap())
-		);
-
-		return namesMap;
+		static NamesMapInitializer initializer(Base::valueMap());
+		return initializer.namesMap;
 	}
 
 public:
@@ -206,7 +224,7 @@ public:
 		return it;
 	}
 
-	static Enum<Base, Raw> parse(const std::string &input)
+	static ThisEnum parse(const std::string &input)
 	{
 		auto it = namesMap().find(input);
 		if (it == namesMap().end()) {
@@ -214,10 +232,10 @@ public:
 				"failed to parse '" + input + "'");
 		}
 
-		return Enum<Base, Raw>(it->second);
+		return ThisEnum(it->second);
 	}
 
-	static Enum<Base, Raw> fromRaw(const Raw &raw)
+	static ThisEnum fromRaw(const Raw &raw)
 	{
 		auto it = rawMap().find(raw);
 		if (it == rawMap().end()) {
@@ -225,10 +243,10 @@ public:
 				"unrecognized raw value " + std::to_string(raw));
 		}
 
-		return Enum<Base, Raw>(it->second);
+		return ThisEnum(it->second);
 	}
 
-	static Enum<Base, Raw> random()
+	static ThisEnum random()
 	{
 		Poco::Random rnd;
 		rnd.seed();
@@ -241,10 +259,10 @@ public:
 				break;
 		}
 
-		return Enum<Base, Raw>(it);
+		return ThisEnum(it);
 	}
 
-	static Enum<Base, Raw> fromRaw(const unsigned int raw)
+	static ThisEnum fromRaw(const unsigned int raw)
 	{
 		return fromRaw(Raw(raw));
 	}
@@ -318,14 +336,16 @@ private:
 	Value m_value;
 };
 
-template <typename Base, typename Raw = typename Base::Raw>
-inline std::string operator +(const std::string &s, const Enum<Base, Raw> &e)
+template <typename Base, typename Raw = typename Base::Raw,
+	typename NamesMapInitializer = EnumNamesInitializer<Raw>>
+inline std::string operator +(const std::string &s, const Enum<Base, Raw, NamesMapInitializer> &e)
 {
 	return s + e.toString();
 }
 
-template <typename Base, typename Raw = typename Base::Raw>
-inline std::string operator +(const char *s, const Enum<Base, Raw> &e)
+template <typename Base, typename Raw = typename Base::Raw,
+	typename NamesMapInitializer = EnumNamesInitializer<Raw>>
+inline std::string operator +(const char *s, const Enum<Base, Raw, NamesMapInitializer> &e)
 {
 	return s + e.toString();
 }

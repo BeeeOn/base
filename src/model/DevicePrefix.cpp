@@ -2,24 +2,52 @@
 
 using namespace BeeeOn;
 
+DevicePrefixNamesInitializer::DevicePrefixNamesInitializer(
+		const ValueMap &map):
+	EnumNamesInitializer<DevicePrefix::Raw>(customNamesMap(map))
+{
+}
+
+DevicePrefixNamesInitializer::NamesMap DevicePrefixNamesInitializer::customNamesMap(
+		const ValueMap &map)
+{
+	NamesMap namesMap = initNamesMap(map);
+
+	namesMap.emplace("Fitprotocol", map.find(DevicePrefix::PREFIX_FITPROTOCOL));
+	namesMap.emplace("PressureSensor", map.find(DevicePrefix::PREFIX_PRESSURE_SENSOR));
+	namesMap.emplace("VirtualDevice", map.find(DevicePrefix::PREFIX_VIRTUAL_DEVICE));
+	namesMap.emplace("VPT", map.find(DevicePrefix::PREFIX_VPT));
+	namesMap.emplace("OpenHAB", map.find(DevicePrefix::PREFIX_OPENHAB));
+	namesMap.emplace("Bluetooth", map.find(DevicePrefix::PREFIX_BLUETOOTH));
+	namesMap.emplace("BelkinWemo", map.find(DevicePrefix::PREFIX_BELKIN_WEMO));
+	namesMap.emplace("Z-Wave", map.find(DevicePrefix::PREFIX_ZWAVE));
+	namesMap.emplace("Jablotron", map.find(DevicePrefix::PREFIX_JABLOTRON));
+	namesMap.emplace("IQRF", map.find(DevicePrefix::PREFIX_IQRF));
+	namesMap.emplace("LEDs", map.find(DevicePrefix::PREFIX_LEDS));
+	namesMap.emplace("Philips Hue", map.find(DevicePrefix::PREFIX_PHILIPS_HUE));
+	namesMap.emplace("BeeWi", map.find(DevicePrefix::PREFIX_BEEWI));
+
+	return namesMap;
+}
+
 EnumHelper<DevicePrefixEnum::Raw>::ValueMap
 &DevicePrefixEnum::valueMap()
 {
 	static EnumHelper<DevicePrefixEnum::Raw>::ValueMap valueMap = {
-		{DevicePrefixEnum::PREFIX_INVALID, "Invalid"},
-		{DevicePrefixEnum::PREFIX_FITPROTOCOL, "Fitprotocol"},
-		{DevicePrefixEnum::PREFIX_PRESSURE_SENSOR, "PressureSensor"},
-		{DevicePrefixEnum::PREFIX_VIRTUAL_DEVICE, "VirtualDevice"},
-		{DevicePrefixEnum::PREFIX_VPT, "VPT"},
-		{DevicePrefixEnum::PREFIX_OPENHAB, "OpenHAB"},
-		{DevicePrefixEnum::PREFIX_BLUETOOTH, "Bluetooth"},
-		{DevicePrefixEnum::PREFIX_BELKIN_WEMO, "BelkinWemo"},
-		{DevicePrefixEnum::PREFIX_ZWAVE, "Z-Wave"},
-		{DevicePrefixEnum::PREFIX_JABLOTRON, "Jablotron"},
-		{DevicePrefixEnum::PREFIX_IQRF, "IQRF"},
-		{DevicePrefixEnum::PREFIX_LEDS, "LEDs"},
-		{DevicePrefixEnum::PREFIX_PHILIPS_HUE, "Philips Hue"},
-		{DevicePrefixEnum::PREFIX_BEEWI, "BeeWi"},
+		{DevicePrefixEnum::PREFIX_INVALID, "invalid"},
+		{DevicePrefixEnum::PREFIX_FITPROTOCOL, "fitp"},
+		{DevicePrefixEnum::PREFIX_PRESSURE_SENSOR, "pdev"},
+		{DevicePrefixEnum::PREFIX_VIRTUAL_DEVICE, "vdev"},
+		{DevicePrefixEnum::PREFIX_VPT, "vpt"},
+		{DevicePrefixEnum::PREFIX_OPENHAB, "open_hab"},
+		{DevicePrefixEnum::PREFIX_BLUETOOTH, "bluetooth"},
+		{DevicePrefixEnum::PREFIX_BELKIN_WEMO, "belkin_wemo"},
+		{DevicePrefixEnum::PREFIX_ZWAVE, "zwave"},
+		{DevicePrefixEnum::PREFIX_JABLOTRON, "jablotron"},
+		{DevicePrefixEnum::PREFIX_IQRF, "iqrf"},
+		{DevicePrefixEnum::PREFIX_LEDS, "leds"},
+		{DevicePrefixEnum::PREFIX_PHILIPS_HUE, "philips_hue"},
+		{DevicePrefixEnum::PREFIX_BEEWI, "beewi"},
 	};
 
 	return valueMap;
