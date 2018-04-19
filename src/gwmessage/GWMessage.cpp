@@ -7,6 +7,7 @@
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWLastValueResponse.h"
 #include "gwmessage/GWListenRequest.h"
+#include "gwmessage/GWNewDeviceGroupRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
 #include "gwmessage/GWPingRequest.h"
 #include "gwmessage/GWResponse.h"
@@ -91,6 +92,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWLastValueResponse(object);
 	case GWMessageType::LISTEN_REQUEST:
 		return new GWListenRequest(object);
+	case GWMessageType::NEW_DEVICE_GROUP_REQUEST:
+		return new GWNewDeviceGroupRequest(object);
 	case GWMessageType::NEW_DEVICE_REQUEST:
 		return new GWNewDeviceRequest(object);
 	case GWMessageType::PING_REQUEST:

@@ -12,6 +12,7 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{GATEWAY_ACCEPTED, "gateway_accepted"},
 		{GENERIC_RESPONSE, "generic_response"},
 		{GENERIC_ACK, "generic_ack"},
+		{NEW_DEVICE_GROUP_REQUEST, "new_device_group_request"},
 		{NEW_DEVICE_REQUEST, "new_device_request"},
 		{LAST_VALUE_REQUEST, "last_value_request"},
 		{LAST_VALUE_RESPONSE, "last_value_response"},

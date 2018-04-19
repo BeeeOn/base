@@ -15,6 +15,7 @@
 #include "gwmessage/GWResponseWithAck.h"
 #include "gwmessage/GWSensorDataConfirm.h"
 #include "gwmessage/GWSensorDataExport.h"
+#include "gwmessage/GWNewDeviceGroupRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
 #include "gwmessage/GWLastValueResponse.h"
 #include "gwmessage/GWLastValueRequest.h"
@@ -26,6 +27,7 @@
 #include "gwmessage/GWSetValueRequest.h"
 #include "gwmessage/GWDeviceAcceptRequest.h"
 #include "model/GlobalID.h"
+#include "model/DeviceDescription.h"
 #include "util/JsonUtil.h"
 
 using namespace std;
@@ -52,6 +54,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testGetConfirmFromSensorDataExport);
 	CPPUNIT_TEST(testParseNewDevice);
 	CPPUNIT_TEST(testCreateNewDevice);
+	CPPUNIT_TEST(testParseNewDeviceGroup);
+	CPPUNIT_TEST(testCreateNewDeviceGroup);
 	CPPUNIT_TEST(testParseLastValue);
 	CPPUNIT_TEST(testCreateLastValue);
 	CPPUNIT_TEST(testParseDeviceList);
@@ -84,6 +88,8 @@ public:
 	void testGetConfirmFromSensorDataExport();
 	void testParseNewDevice();
 	void testCreateNewDevice();
+	void testParseNewDeviceGroup();
+	void testCreateNewDeviceGroup();
 	void testParseLastValue();
 	void testCreateLastValue();
 	void testParseDeviceList();
@@ -523,6 +529,153 @@ void GWMessageTest::testCreateNewDevice()
 						{"attribute" : "manual-only"},
 						{"attribute" : "outer"},
 						{"attribute" : "controllable"}
+					]
+				}
+			]
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseNewDeviceGroup()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "new_device_group_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"group_name" : "Perfect Two",
+			"vendor" : "Good Company",
+			"devices" : [
+				{
+					"device_id" : "0xfe01020304050607",
+					"product_name" : "Nice Product",
+					"refresh_time" : 30,
+					"module_types" : [
+						{
+							"type" : "humidity",
+							"attributes" : [
+								{"attribute" : "inner"}
+							]
+						}
+					]
+				},
+				{
+					"device_id" : "0xfe01020304050608",
+					"product_name" : "Very Nice Product",
+					"refresh_time" : 30,
+					"module_types" : [
+						{
+							"type" : "temperature",
+							"attributes" : [
+								{"attribute" : "inner"}
+							]
+						}
+					]
+				}
+			]
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::NEW_DEVICE_GROUP_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWNewDeviceGroupRequest>().isNull());
+
+	GWNewDeviceGroupRequest::Ptr request = message.cast<GWNewDeviceGroupRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("Perfect Two", request->groupName());
+	CPPUNIT_ASSERT_EQUAL("Good Company", request->vendor());
+
+	vector<DeviceDescription> descriptions = request->deviceDescriptions();
+	auto it = descriptions.begin();
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", it->id().toString());
+	CPPUNIT_ASSERT_EQUAL("Good Company", it->vendor());
+	CPPUNIT_ASSERT_EQUAL("Nice Product", it->productName());
+	CPPUNIT_ASSERT(Timespan(30, 0) == it->refreshTime());
+
+	const list<ModuleType> &types1 = it->dataTypes();
+	CPPUNIT_ASSERT_EQUAL("humidity", types1.begin()->type().toString());
+	CPPUNIT_ASSERT_EQUAL("inner", types1.begin()->attributes().begin()->toString());
+
+	it++;
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050608", it->id().toString());
+	CPPUNIT_ASSERT_EQUAL("Good Company", it->vendor());
+	CPPUNIT_ASSERT_EQUAL("Very Nice Product", it->productName());
+	CPPUNIT_ASSERT(Timespan(30, 0) == it->refreshTime());
+
+	const list<ModuleType> &types2 = it->dataTypes();
+	CPPUNIT_ASSERT_EQUAL("temperature", types2.begin()->type().toString());
+	CPPUNIT_ASSERT_EQUAL("inner", types2.begin()->attributes().begin()->toString());
+}
+
+void GWMessageTest::testCreateNewDeviceGroup()
+{
+	GWNewDeviceGroupRequest::Ptr request(new GWNewDeviceGroupRequest);
+	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request->setGroupName("Perfect Two");
+	request->setVendor("Good Company");
+
+	set<ModuleType::Attribute> attributes1;
+	attributes1.emplace(ModuleType::Attribute::ATTR_INNER);
+	ModuleType type1(ModuleType::Type::fromRaw(
+		ModuleType::Type::TYPE_HUMIDITY), attributes1);
+
+	list<ModuleType> types1;
+	types1.push_back(type1);
+
+	DeviceDescription description1(
+		DeviceID::parse("0xfe01020304050607"),
+		"Good Company",
+		"Nice Product",
+		types1,
+		Timespan(30, 0));
+
+	set<ModuleType::Attribute> attributes2;
+	attributes2.emplace(ModuleType::Attribute::ATTR_INNER);
+	ModuleType type2(ModuleType::Type::fromRaw(
+		ModuleType::Type::TYPE_TEMPERATURE), attributes2);
+
+	list<ModuleType> types2;
+	types2.push_back(type2);
+
+	DeviceDescription description2(
+		DeviceID::parse("0xfe01020304050608"),
+		"Good Company",
+		"Very Nice Product",
+		types2,
+		Timespan(30, 0));
+
+	request->addDeviceDescription(description1);
+	request->addDeviceDescription(description2);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "new_device_group_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"group_name" : "Perfect Two",
+			"vendor" : "Good Company",
+			"devices" : [
+				{
+					"device_id" : "0xfe01020304050607",
+					"product_name" : "Nice Product",
+					"refresh_time" : 30,
+					"module_types" : [
+						{
+							"type" : "humidity",
+							"attributes" : [
+								{"attribute" : "inner"}
+							]
+						}
+					]
+				},
+				{
+					"device_id" : "0xfe01020304050608",
+					"product_name" : "Very Nice Product",
+					"refresh_time" : 30,
+					"module_types" : [
+						{
+							"type" : "temperature",
+							"attributes" : [
+								{"attribute" : "inner"}
+							]
+						}
 					]
 				}
 			]
