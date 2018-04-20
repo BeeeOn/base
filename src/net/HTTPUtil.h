@@ -43,7 +43,7 @@ public:
 		Poco::Net::HTTPRequest& request,
 		const Poco::URI& uri,
 		const std::string& msg,
-		Poco::SharedPtr<SSLClient> sslConfig,
+		SSLClient::Ptr sslConfig,
 		const Poco::Timespan& timeout = -1);
 
 	/**
@@ -68,7 +68,7 @@ public:
 		const std::string& host,
 		const uint16_t port,
 		const std::string& msg,
-		Poco::SharedPtr<SSLClient> sslConfig,
+		SSLClient::Ptr sslConfig,
 		const Poco::Timespan& timeout = -1);
 
 private:

@@ -21,7 +21,7 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 	Poco::Net::HTTPRequest& request,
 	const Poco::URI& uri,
 	const std::string& msg,
-	Poco::SharedPtr<SSLClient> sslConfig,
+	SSLClient::Ptr sslConfig,
 	const Poco::Timespan& timeout)
 {
 	if (request.getURI() == "/")
@@ -47,7 +47,7 @@ HTTPEntireResponse HTTPUtil::makeRequest(
 	const std::string& host,
 	const uint16_t port,
 	const std::string& msg,
-	Poco::SharedPtr<SSLClient> sslConfig,
+	SSLClient::Ptr sslConfig,
 	const Poco::Timespan& timeout)
 {
 	SharedPtr<HTTPClientSession> session;
