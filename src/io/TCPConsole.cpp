@@ -128,7 +128,7 @@ void TCPConsole::setBacklog(int backlog)
 	m_backlog = backlog;
 }
 
-void TCPConsole::setSSLConfig(SharedPtr<SSLServer> config)
+void TCPConsole::setSSLConfig(SSLServer::Ptr config)
 {
 	m_sslConfig = config;
 }
