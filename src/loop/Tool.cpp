@@ -51,6 +51,7 @@ void Tool::start()
 
 void Tool::stop()
 {
+	m_console->close();
 	m_stop = true;
 	m_event.set();
 	m_thread.join();
