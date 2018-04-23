@@ -16,6 +16,8 @@ namespace BeeeOn {
  */
 class SSLClient : public SSLFacility {
 public:
+	typedef Poco::SharedPtr<SSLClient> Ptr;
+
 	SSLClient();
 	~SSLClient();
 
