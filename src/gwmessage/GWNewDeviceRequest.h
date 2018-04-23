@@ -51,6 +51,8 @@ public:
 
 	static Poco::JSON::Array::Ptr serializeModuleTypes(
 		const std::list<ModuleType> &types);
+	static std::list<ModuleType> parseModuleTypes(
+		const Poco::JSON::Array::Ptr arrayOfTypes);
 };
 
 }

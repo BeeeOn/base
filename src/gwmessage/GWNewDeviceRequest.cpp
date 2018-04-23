@@ -51,31 +51,9 @@ void GWNewDeviceRequest::setModuleTypes(const list<ModuleType> &types)
 
 list<ModuleType> GWNewDeviceRequest::moduleTypes() const
 {
-	list<ModuleType> types;
-
 	JSON::Array::Ptr arrayOfTypes = json()->getArray("module_types");
 
-	for (size_t i = 0; i < arrayOfTypes->size(); i++) {
-		const JSON::Object::Ptr typeObject = arrayOfTypes->getObject(i);
-
-		ModuleType::Type type(ModuleType::Type::parse(
-			typeObject->getValue<string>("type")));
-
-		set<ModuleType::Attribute> attributes;
-
-		JSON::Array::Ptr arrayOfAttributes = typeObject->getArray("attributes");
-
-		for(size_t j = 0; j < arrayOfAttributes->size(); j++) {
-			const JSON::Object::Ptr attributeObject = arrayOfAttributes->getObject(j);
-
-			attributes.emplace(ModuleType::Attribute::parse(
-				attributeObject->getValue<string>("attribute")));
-		}
-
-		types.push_back(ModuleType(type, attributes));
-	}
-
-	return types;
+	return parseModuleTypes(arrayOfTypes);
 }
 
 void GWNewDeviceRequest::setRefreshTime(const Poco::Timespan &time)
@@ -135,4 +113,31 @@ JSON::Array::Ptr GWNewDeviceRequest::serializeModuleTypes(const list<ModuleType>
 	}
 
 	return arrayOfTypes;
+}
+
+list<ModuleType> GWNewDeviceRequest::parseModuleTypes(const JSON::Array::Ptr arrayOfTypes)
+{
+	list<ModuleType> types;
+
+	for (size_t i = 0; i < arrayOfTypes->size(); i++) {
+		const JSON::Object::Ptr typeObject = arrayOfTypes->getObject(i);
+
+		ModuleType::Type type(ModuleType::Type::parse(
+			typeObject->getValue<string>("type")));
+
+		set<ModuleType::Attribute> attributes;
+
+		JSON::Array::Ptr arrayOfAttributes = typeObject->getArray("attributes");
+
+		for(size_t j = 0; j < arrayOfAttributes->size(); j++) {
+			const JSON::Object::Ptr attributeObject = arrayOfAttributes->getObject(j);
+
+			attributes.emplace(ModuleType::Attribute::parse(
+				attributeObject->getValue<string>("attribute")));
+		}
+
+		types.push_back(ModuleType(type, attributes));
+	}
+
+	return types;
 }
