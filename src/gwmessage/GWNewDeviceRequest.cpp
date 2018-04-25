@@ -46,27 +46,7 @@ string GWNewDeviceRequest::vendor() const
 
 void GWNewDeviceRequest::setModuleTypes(const list<ModuleType> &types)
 {
-	JSON::Array::Ptr arrayOfTypes(new JSON::Array);
-
-	for (const auto &type : types) {
-		JSON::Object::Ptr typeObject(new JSON::Object);
-		typeObject->set("type", type.type().toString());
-
-		JSON::Array::Ptr arrayOfAttributes(new JSON::Array);
-
-		for (const auto &attribute : type.attributes()){
-			JSON::Object::Ptr attributeObject(new JSON::Object);
-			attributeObject->set("attribute", attribute.toString());
-
-			arrayOfAttributes->add(Dynamic::Var(attributeObject));
-		}
-
-		typeObject->set("attributes", arrayOfAttributes);
-
-		arrayOfTypes->add(Dynamic::Var(typeObject));
-	}
-
-	json()->set("module_types", arrayOfTypes);
+	json()->set("module_types", serializeModuleTypes(types));
 }
 
 list<ModuleType> GWNewDeviceRequest::moduleTypes() const
@@ -130,4 +110,29 @@ DeviceDescription GWNewDeviceRequest::deviceDescription() const
 		refreshTime());
 
 	return description;
+}
+
+JSON::Array::Ptr GWNewDeviceRequest::serializeModuleTypes(const list<ModuleType> &types)
+{
+	JSON::Array::Ptr arrayOfTypes(new JSON::Array);
+
+	for (const auto &type : types) {
+		JSON::Object::Ptr typeObject(new JSON::Object);
+		typeObject->set("type", type.type().toString());
+
+		JSON::Array::Ptr arrayOfAttributes(new JSON::Array);
+
+		for (const auto &attribute : type.attributes()){
+			JSON::Object::Ptr attributeObject(new JSON::Object);
+			attributeObject->set("attribute", attribute.toString());
+
+			arrayOfAttributes->add(Dynamic::Var(attributeObject));
+		}
+
+		typeObject->set("attributes", arrayOfAttributes);
+
+		arrayOfTypes->add(Dynamic::Var(typeObject));
+	}
+
+	return arrayOfTypes;
 }

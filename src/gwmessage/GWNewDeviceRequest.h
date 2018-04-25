@@ -48,6 +48,9 @@ public:
 
 	void setDeviceDescription(const DeviceDescription &description);
 	DeviceDescription deviceDescription() const;
+
+	static Poco::JSON::Array::Ptr serializeModuleTypes(
+		const std::list<ModuleType> &types);
 };
 
 }
