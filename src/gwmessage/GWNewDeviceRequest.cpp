@@ -110,3 +110,24 @@ Poco::Timespan GWNewDeviceRequest::refreshTime() const
 {
 	return json()->getValue<int>("refresh_time") * Timespan::SECONDS;
 }
+
+void GWNewDeviceRequest::setDeviceDescription(const DeviceDescription &description)
+{
+	setDeviceID(description.id());
+	setVendor(description.vendor());
+	setProductName(description.productName());
+	setModuleTypes(description.dataTypes());
+	setRefreshTime(description.refreshTime());
+}
+
+DeviceDescription GWNewDeviceRequest::deviceDescription() const
+{
+	DeviceDescription description(
+		deviceID(),
+		vendor(),
+		productName(),
+		moduleTypes(),
+		refreshTime());
+
+	return description;
+}
