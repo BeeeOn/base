@@ -40,6 +40,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWLastValueResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWListenRequest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceGroupRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWPingRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp

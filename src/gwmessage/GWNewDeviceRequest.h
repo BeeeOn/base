@@ -9,6 +9,7 @@
 #include <Poco/JSON/Object.h>
 
 #include "gwmessage/GWRequest.h"
+#include "model/DeviceDescription.h"
 #include "model/DeviceID.h"
 #include "model/ModuleType.h"
 
@@ -44,6 +45,14 @@ public:
 
 	void setRefreshTime(const Poco::Timespan &time);
 	Poco::Timespan refreshTime() const;
+
+	void setDeviceDescription(const DeviceDescription &description);
+	DeviceDescription deviceDescription() const;
+
+	static Poco::JSON::Array::Ptr serializeModuleTypes(
+		const std::list<ModuleType> &types);
+	static std::list<ModuleType> parseModuleTypes(
+		const Poco::JSON::Array::Ptr arrayOfTypes);
 };
 
 }

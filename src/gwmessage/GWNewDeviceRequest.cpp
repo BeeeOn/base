@@ -46,6 +46,52 @@ string GWNewDeviceRequest::vendor() const
 
 void GWNewDeviceRequest::setModuleTypes(const list<ModuleType> &types)
 {
+	json()->set("module_types", serializeModuleTypes(types));
+}
+
+list<ModuleType> GWNewDeviceRequest::moduleTypes() const
+{
+	JSON::Array::Ptr arrayOfTypes = json()->getArray("module_types");
+
+	return parseModuleTypes(arrayOfTypes);
+}
+
+void GWNewDeviceRequest::setRefreshTime(const Poco::Timespan &time)
+{
+	if (time < 0)
+		json()->set("refresh_time", -1);
+	else
+		json()->set("refresh_time", time.totalSeconds());
+}
+
+Poco::Timespan GWNewDeviceRequest::refreshTime() const
+{
+	return json()->getValue<int>("refresh_time") * Timespan::SECONDS;
+}
+
+void GWNewDeviceRequest::setDeviceDescription(const DeviceDescription &description)
+{
+	setDeviceID(description.id());
+	setVendor(description.vendor());
+	setProductName(description.productName());
+	setModuleTypes(description.dataTypes());
+	setRefreshTime(description.refreshTime());
+}
+
+DeviceDescription GWNewDeviceRequest::deviceDescription() const
+{
+	DeviceDescription description(
+		deviceID(),
+		vendor(),
+		productName(),
+		moduleTypes(),
+		refreshTime());
+
+	return description;
+}
+
+JSON::Array::Ptr GWNewDeviceRequest::serializeModuleTypes(const list<ModuleType> &types)
+{
 	JSON::Array::Ptr arrayOfTypes(new JSON::Array);
 
 	for (const auto &type : types) {
@@ -66,14 +112,12 @@ void GWNewDeviceRequest::setModuleTypes(const list<ModuleType> &types)
 		arrayOfTypes->add(Dynamic::Var(typeObject));
 	}
 
-	json()->set("module_types", arrayOfTypes);
+	return arrayOfTypes;
 }
 
-list<ModuleType> GWNewDeviceRequest::moduleTypes() const
+list<ModuleType> GWNewDeviceRequest::parseModuleTypes(const JSON::Array::Ptr arrayOfTypes)
 {
 	list<ModuleType> types;
-
-	JSON::Array::Ptr arrayOfTypes = json()->getArray("module_types");
 
 	for (size_t i = 0; i < arrayOfTypes->size(); i++) {
 		const JSON::Object::Ptr typeObject = arrayOfTypes->getObject(i);
@@ -96,17 +140,4 @@ list<ModuleType> GWNewDeviceRequest::moduleTypes() const
 	}
 
 	return types;
-}
-
-void GWNewDeviceRequest::setRefreshTime(const Poco::Timespan &time)
-{
-	if (time < 0)
-		json()->set("refresh_time", -1);
-	else
-		json()->set("refresh_time", time.totalSeconds());
-}
-
-Poco::Timespan GWNewDeviceRequest::refreshTime() const
-{
-	return json()->getValue<int>("refresh_time") * Timespan::SECONDS;
 }
