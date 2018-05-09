@@ -51,6 +51,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/BlockingAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
+	${PROJECT_SOURCE_DIR}/util/DelayedAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EventSourceTest.cpp
