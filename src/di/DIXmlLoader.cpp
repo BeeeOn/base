@@ -19,7 +19,7 @@ DIXmlLoader::DIXmlLoader()
 void DIXmlLoader::load(istream &in)
 {
 	SecureXmlParser parser;
-	Document *doc = parser.parse(in);
+	AutoPtr<Document> doc = parser.parse(in);
 
 	if (doc->documentElement()->localName() != "system") {
 		throw InvalidArgumentException("unexpected XML document root element: "
@@ -38,11 +38,11 @@ void DIXmlLoader::load(istream &in)
 		logger().debug("parsing and merging XML document");
 
 		Element *target = m_document->documentElement()->getChildElement("factory");
-		NodeList *children = factory->childNodes();
+		AutoPtr<NodeList> children = factory->childNodes();
 
 		for (unsigned long i = 0; i < children->length(); ++i) {
-			Node *node = m_document->importNode(children->item(i), true);
-			if (node == NULL)
+			AutoPtr<Node> node = m_document->importNode(children->item(i), true);
+			if (node.isNull())
 				throw IllegalStateException("imported node is NULL");
 
 			target->appendChild(node);
