@@ -28,6 +28,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/io/AutoCloseTest.cpp
 	${PROJECT_SOURCE_DIR}/io/ConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStreamTest.cpp
+	${PROJECT_SOURCE_DIR}/io/SafeWriterTest.cpp
 	${PROJECT_SOURCE_DIR}/io/TCPConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/SystemLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunnerTest.cpp
