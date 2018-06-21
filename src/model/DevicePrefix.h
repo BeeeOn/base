@@ -25,7 +25,7 @@ public:
 		PREFIX_IQRF = 0xa9,
 		PREFIX_LEDS = 0xaa,
 		PREFIX_PHILIPS_HUE = 0xab,
-		PREFIX_BEEWI = 0xac,
+		PREFIX_BLE_SMART = 0xac,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();
