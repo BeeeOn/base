@@ -5,6 +5,7 @@
 #include <Poco/AtomicCounter.h>
 #include <Poco/Event.h>
 #include <Poco/Mutex.h>
+#include <Poco/Timespan.h>
 
 #include "loop/StoppableRunnable.h"
 #include "util/AsyncExecutor.h"
@@ -22,10 +23,15 @@ public:
 	SequentialAsyncExecutor();
 	~SequentialAsyncExecutor();
 
+	void setStopTimeout(const Poco::Timespan &timeout);
+
 	void invoke(std::function<void()> f) override;
 
 	void run() override;
 	void stop() override;
+
+protected:
+	void finalize();
 
 private:
 	void execute(std::function<void()> task);
@@ -33,6 +39,8 @@ private:
 	Poco::Event m_wakeupEvent;
 	Poco::FastMutex m_queueMutex;
 	Poco::AtomicCounter m_stopRequested;
+	Poco::Event m_stoppedEvent;
+	Poco::Timespan m_stopTimeout;
 };
 
 }
