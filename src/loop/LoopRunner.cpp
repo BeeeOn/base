@@ -62,8 +62,12 @@ void LoopRunner::stop()
 
 void LoopRunner::stopAll(list<SharedPtr<StoppableLoop>> &list)
 {
-	for (auto loop : list)
-		loop->stop();
+	for (auto it = list.rbegin(); it != list.rend(); ++it) {
+		try {
+			(*it)->stop();
+		}
+		BEEEON_CATCH_CHAIN(logger())
+	}
 }
 
 void LoopRunner::start()
