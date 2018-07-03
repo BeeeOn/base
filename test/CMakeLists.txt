@@ -15,6 +15,7 @@ add_definitions(-std=c++11)
 add_definitions(-Wall -pedantic -Wextra)
 
 file(GLOB TEST_LIBRARY_SOURCES
+	${PROJECT_SOURCE_DIR}/cppunit/FileTestFixture.cpp
 	${PROJECT_SOURCE_DIR}/cppunit/TapOutputter.cpp
 	${PROJECT_SOURCE_DIR}/cppunit/TestTimingListener.cpp
 )
@@ -27,6 +28,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/io/AutoCloseTest.cpp
 	${PROJECT_SOURCE_DIR}/io/ConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStreamTest.cpp
+	${PROJECT_SOURCE_DIR}/io/SafeWriterTest.cpp
 	${PROJECT_SOURCE_DIR}/io/TCPConsoleTest.cpp
 	${PROJECT_SOURCE_DIR}/l10n/SystemLocaleImplTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/LoopRunnerTest.cpp
