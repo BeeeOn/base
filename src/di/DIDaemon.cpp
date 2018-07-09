@@ -72,6 +72,14 @@ DIDaemon::DIDaemon(const About &about):
 	m_notifyStartedOption.argument("<PID>", true);
 	m_notifyStartedOption.binding(
 			"di.daemon.notify.started", &config());
+
+	m_noEarlyOption.shortName("E");
+	m_noEarlyOption.fullName("no-early");
+	m_noEarlyOption.required(false);
+	m_noEarlyOption.repeatable(false);
+	m_noEarlyOption.noArgument();
+	m_noEarlyOption.callback(OptionCallback<DIDaemon>(
+			this, &DIDaemon::handleNoEarly));
 }
 
 DIDaemon::~DIDaemon()
@@ -167,7 +175,7 @@ int DIDaemon::main(const std::vector<std::string> &)
 
 void DIDaemon::startRunner(const string &name)
 {
-	DependencyInjector di(config().createView("factory"));
+	DependencyInjector di(config().createView("factory"), noEarlyRequested());
 	SharedPtr<StoppableLoop> runner = di.create<StoppableLoop>(name);
 
 	logger().notice("starting runner " + name,
@@ -194,6 +202,7 @@ void DIDaemon::defineOptions(OptionSet &options)
 	options.addOption(m_defineOption);
 	options.addOption(m_configOption);
 	options.addOption(m_notifyStartedOption);
+	options.addOption(m_noEarlyOption);
 }
 
 void DIDaemon::handleHelp(const string &, const string &)
@@ -264,6 +273,14 @@ void DIDaemon::handleConfig(const string &, const string &value)
 		config().setString("application.configDir", configDir.absolute().parent().toString());
 }
 
+void DIDaemon::handleNoEarly(const string &, const string &)
+{
+	logger().debug("early instances would not be created",
+			__FILE__, __LINE__);
+
+	m_noEarlyRequested = true;
+}
+
 bool DIDaemon::isUnix() const
 {
 #if defined(__linux__) || defined(__unix__) || defined(_POSIX_VERSION) || defined(__APPLE__)
@@ -281,6 +298,11 @@ bool DIDaemon::helpRequested() const
 bool DIDaemon::versionRequested() const
 {
 	return m_versionRequested;
+}
+
+bool DIDaemon::noEarlyRequested() const
+{
+	return m_noEarlyRequested;
 }
 
 string DIDaemon::runnerName()

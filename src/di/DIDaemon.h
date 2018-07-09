@@ -47,6 +47,7 @@ protected:
 	void handleDebugStartup(const std::string &name, const std::string &value);
 	void handleDefine(const std::string &name, const std::string &value);
 	void handleConfig(const std::string &name, const std::string &value);
+	void handleNoEarly(const std::string &name, const std::string &value);
 	void startRunner(const std::string &name);
 	void printHelp() const;
 	void printVersion() const;
@@ -56,12 +57,14 @@ protected:
 	bool isUnix() const;
 	bool helpRequested() const;
 	bool versionRequested() const;
+	bool noEarlyRequested() const;
 	std::string runnerName();
 	std::string version() const;
 
 private:
 	bool m_helpRequested = false;
 	bool m_versionRequested = false;
+	bool m_noEarlyRequested = false;
 	About m_about;
 	UnhandledErrorHandler m_errorHandler;
 	Poco::Util::Option m_helpOption;
@@ -70,6 +73,7 @@ private:
 	Poco::Util::Option m_defineOption;
 	Poco::Util::Option m_configOption;
 	Poco::Util::Option m_notifyStartedOption;
+	Poco::Util::Option m_noEarlyOption;
 };
 
 }
