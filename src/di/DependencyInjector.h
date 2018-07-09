@@ -102,10 +102,12 @@ public:
 	typedef std::vector<DIWrapper *> WrapperVector;
 
 	DependencyInjector(
-		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf):
+		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf,
+		bool avoidEarly = false):
 		m_conf(conf)
 	{
-		createEarly();
+		if (!avoidEarly)
+			createEarly();
 	}
 
 	~DependencyInjector();
