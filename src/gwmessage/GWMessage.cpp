@@ -17,6 +17,7 @@
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWSetValueRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
+#include "gwmessage/GWUnpairResponse.h"
 #include "util/JsonUtil.h"
 
 using namespace std;
@@ -108,9 +109,11 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWSetValueRequest(object);
 	case GWMessageType::UNPAIR_REQUEST:
 		return new GWUnpairRequest(object);
+	case GWMessageType::UNPAIR_RESPONSE:
+		return new GWUnpairResponse(object);
 	default:
 		throw InvalidArgumentException(
-			"unsupported message type" + type.toString());
+			"unsupported message type " + type.toString());
 	}
 }
 
