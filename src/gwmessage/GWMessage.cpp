@@ -113,7 +113,7 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWUnpairResponse(object);
 	default:
 		throw InvalidArgumentException(
-			"unsupported message type" + type.toString());
+			"unsupported message type " + type.toString());
 	}
 }
 
