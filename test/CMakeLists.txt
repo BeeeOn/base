@@ -44,6 +44,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/SensorDataTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp
+	${PROJECT_SOURCE_DIR}/util/AbstractAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
