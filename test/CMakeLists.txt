@@ -44,11 +44,14 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/SensorDataTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp
+	${PROJECT_SOURCE_DIR}/util/AbstractAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
+	${PROJECT_SOURCE_DIR}/util/BlockingAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
+	${PROJECT_SOURCE_DIR}/util/DelayedAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DAMMTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumTest.cpp
 	${PROJECT_SOURCE_DIR}/util/EventSourceTest.cpp
@@ -62,6 +65,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/ParallelExecutorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutorTest.cpp
+	${PROJECT_SOURCE_DIR}/util/ThreadWrapperAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeIntervalTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/UnsafePtrTest.cpp
