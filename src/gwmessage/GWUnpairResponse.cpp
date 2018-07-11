@@ -33,6 +33,9 @@ set<DeviceID> GWUnpairResponse::unpairedDevices() const
 	set<DeviceID> devices;
 	Array::Ptr array = json()->getArray("devices");
 
+	if (array.isNull())
+		return devices;
+
 	for (size_t i = 0; i < array->size(); ++i) {
 		Object::Ptr entry = array->getObject(i);
 		const string &id = entry->getValue<string>("device_id");
