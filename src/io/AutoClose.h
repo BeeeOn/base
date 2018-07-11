@@ -16,11 +16,10 @@ struct DefaultClose {
 };
 
 template <typename Closable, typename Close = DefaultClose<Closable>>
-class AutoClose {
+class AutoClose : protected Loggable {
 public:
 	AutoClose(Closable &c):
-		m_closable(c),
-		m_logger(Loggable::forInstance(&c))
+		m_closable(c)
 	{
 	}
 
@@ -36,15 +35,15 @@ public:
 			const Close close;
 			close(m_closable);
 
-			if (m_logger.debug()) {
-				m_logger.debug(
+			if (logger().debug()) {
+				logger().debug(
 					"auto-close successful",
 					__FILE__, __LINE__
 				);
 			}
 		}
 		catch (...) {
-			m_logger.fatal(
+			logger().fatal(
 				"auto-close has failed",
 				__FILE__, __LINE__
 			);
@@ -73,7 +72,6 @@ public:
 
 private:
 	Closable &m_closable;
-	Poco::Logger &m_logger;
 };
 
 struct FdClose {
