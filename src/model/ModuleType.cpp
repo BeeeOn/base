@@ -49,6 +49,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_POWER, "power"},
 		{ModuleType::TypeEnum::TYPE_VOLTAGE, "voltage"},
 		{ModuleType::TypeEnum::TYPE_CURRENT, "current"},
+		{ModuleType::TypeEnum::TYPE_FREQUENCY, "frequency"},
 	};
 
 	return valueMap;
@@ -74,6 +75,7 @@ EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap &ModuleType::UnitEnum::valueMap(
 		{WATT,        "watt"},
 		{VOLT,        "volt"},
 		{AMPERE,      "ampere"},
+		{HERTZ,       "hertz"},
 	};
 
 	return valueMap;
@@ -105,6 +107,8 @@ bool ModuleType::Unit::isValid(double value) const
 	case VOLT:
 		return !std::isnan(value);
 	case AMPERE:
+		return !std::isnan(value);
+	case HERTZ:
 		return !std::isnan(value);
 	}
 
@@ -138,6 +142,8 @@ string ModuleType::Unit::symbol(bool plain) const
 		return "V";
 	case AMPERE:
 		return "A";
+	case HERTZ:
+		return "Hz";
 	}
 
 	throw AssertionViolationException(
@@ -253,6 +259,9 @@ ModuleType::Unit ModuleType::baseUnit() const
 
 	case Type::TYPE_CURRENT:
 		return Unit::AMPERE;
+
+	case Type::TYPE_FREQUENCY:
+		return Unit::HERTZ;
 
 	// no default to let compiler catch a missing one
 	}

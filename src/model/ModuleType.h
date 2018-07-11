@@ -156,6 +156,10 @@ public:
 			 * Current.
 			 */
 			TYPE_CURRENT = 23,
+			/**
+			 * Frequency.
+			 */
+			TYPE_FREQUENCY = 24,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
@@ -218,6 +222,10 @@ public:
 			 * Unit of electric current with symbol A.
 			 */
 			AMPERE,
+			/**
+			 * Unit of frequency with symbol Hz.
+			 */
+			HERTZ,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
