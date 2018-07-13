@@ -160,6 +160,17 @@ public:
 			 * Frequency.
 			 */
 			TYPE_FREQUENCY = 24,
+			/**
+			 * Temperature of color in Kelvin.
+			 * Range: 1700..27000.
+			 */
+			TYPE_COLOR_TEMPERATURE = 25,
+			/**
+			 * Color expressed by RGB. Each component is in one Byte.
+			 * The format of color is 0x00RRGGBB in the little-endian.
+			 * Range: 0..16777215.
+			 */
+			TYPE_COLOR = 26,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
@@ -226,6 +237,11 @@ public:
 			 * Unit of frequency with symbol Hz.
 			 */
 			HERTZ,
+			/**
+			 * Unit of temperature with symbol K.
+			 * Min: 0.
+			 */
+			KELVIN,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
