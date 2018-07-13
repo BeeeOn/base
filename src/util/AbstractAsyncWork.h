@@ -16,6 +16,8 @@ namespace BeeeOn {
 template <typename Result = Poco::Void>
 class AbstractAsyncWork : public AsyncWork<Result> {
 public:
+	typedef Poco::SharedPtr<AbstractAsyncWork<Result>> Ptr;
+
 	/**
 	 * @brief Set result of the operation. The result can
 	 * be set only once.
