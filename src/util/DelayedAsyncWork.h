@@ -20,6 +20,8 @@ namespace BeeeOn {
 template <typename Result = Poco::Void>
 class DelayedAsyncWork : public AbstractAsyncWork<Result>, Loggable {
 public:
+	typedef Poco::SharedPtr<DelayedAsyncWork<Result>> Ptr;
+
 	DelayedAsyncWork(
 		std::function<void()> f,
 		const Poco::Timespan &delay);

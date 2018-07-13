@@ -16,6 +16,8 @@ namespace BeeeOn {
 template <typename Result = Poco::Void>
 class ThreadWrapperAsyncWork : public AbstractAsyncWork<Result> {
 public:
+	typedef Poco::SharedPtr<ThreadWrapperAsyncWork<Result>> Ptr;
+
 	ThreadWrapperAsyncWork(Poco::Thread &thread);
 
 	bool tryJoin(const Poco::Timespan &timeout) override;
