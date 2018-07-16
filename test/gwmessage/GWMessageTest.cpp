@@ -59,7 +59,9 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseLastValue);
 	CPPUNIT_TEST(testCreateLastValue);
 	CPPUNIT_TEST(testParseDeviceList);
+	CPPUNIT_TEST(testParseDeviceListWithValues);
 	CPPUNIT_TEST(testCreateDeviceList);
+	CPPUNIT_TEST(testCreateDeviceListWithValues);
 	CPPUNIT_TEST(testParseListen);
 	CPPUNIT_TEST(testCreateListen);
 	CPPUNIT_TEST(testParsePing);
@@ -93,7 +95,9 @@ public:
 	void testParseLastValue();
 	void testCreateLastValue();
 	void testParseDeviceList();
+	void testParseDeviceListWithValues();
 	void testCreateDeviceList();
+	void testCreateDeviceListWithValues();
 	void testParseListen();
 	void testCreateListen();
 	void testParsePing();
@@ -794,6 +798,54 @@ void GWMessageTest::testParseDeviceList()
 	CPPUNIT_ASSERT_EQUAL("fitp", request->devicePrefix().toString());
 }
 
+void GWMessageTest::testParseDeviceListWithValues()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type": "device_list_response",
+			"id": "495b7a34-d2e7-4cc7-afcc-0690fa5f072a",
+			"status": 1,
+			"devices": [
+				{"device_id": "0xa15410132465788"},
+				{"device_id": "0xa15410132465789"},
+				{"device_id": "0xa15410132465790"}
+			],
+			"values": {
+				"0xa15410132465788": {
+					"0": 15.0,
+					"2": 24.4
+				},
+				"0xa15410132465790": {
+					"1": -1.0
+				}
+			}
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::DEVICE_LIST_RESPONSE, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWDeviceListResponse>().isNull());
+
+	GWDeviceListResponse::Ptr response = message.cast<GWDeviceListResponse>();
+	CPPUNIT_ASSERT_EQUAL("495b7a34-d2e7-4cc7-afcc-0690fa5f072a", response->id().toString());
+	CPPUNIT_ASSERT_EQUAL(GWResponse::Status::SUCCESS, response->status());
+
+	vector<DeviceID> devices = response->devices();
+	CPPUNIT_ASSERT_EQUAL("0xa15410132465788", devices[0].toString());
+	CPPUNIT_ASSERT_EQUAL("0xa15410132465789", devices[1].toString());
+	CPPUNIT_ASSERT_EQUAL("0xa15410132465790", devices[2].toString());
+
+	const auto &values0 = response->modulesValues(0xa15410132465788);
+	CPPUNIT_ASSERT_EQUAL(2, values0.size());
+	CPPUNIT_ASSERT_EQUAL(15.0, values0.at(0));
+	CPPUNIT_ASSERT_EQUAL(24.4, values0.at(2));
+
+	const auto &values1 = response->modulesValues(0xa15410132465789);
+	CPPUNIT_ASSERT(values1.empty());
+
+	const auto &values2 = response->modulesValues(0xa15410132465790);
+	CPPUNIT_ASSERT_EQUAL(1, values2.size());
+	CPPUNIT_ASSERT_EQUAL(-1.0, values2.at(1));
+}
+
 void GWMessageTest::testCreateDeviceList()
 {
 	GWDeviceListResponse::Ptr response(new GWDeviceListResponse);
@@ -829,6 +881,46 @@ void GWMessageTest::testCreateDeviceList()
 			"device_prefix": "fitp"
 		})"),
 		request->toString()
+	);
+}
+
+void GWMessageTest::testCreateDeviceListWithValues()
+{
+	GWDeviceListResponse::Ptr response(new GWDeviceListResponse);
+	response->setID(GlobalID::parse("a08c356b-316d-4690-84d4-b77d95b403fe"));
+	response->setStatus(GWResponse::Status::SUCCESS);
+
+	vector<DeviceID> devices;
+	devices.push_back(DeviceID::parse("0xa1001234567890a0"));
+	devices.push_back(DeviceID::parse("0xa1001234567890a1"));
+	response->setDevices(devices);
+	response->setModulesValues(
+		DeviceID::parse("0xa1001234567890a0"),
+		{{0, 20.0}, {3, 1.0}});
+	response->setModulesValues(
+		DeviceID::parse("0xa1001234567890a1"),
+		{{2, 0.0}});
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "device_list_response",
+			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
+			"status": 1,
+			"devices": [
+				{"device_id": "0xa1001234567890a0"},
+				{"device_id": "0xa1001234567890a1"}
+			],
+			"values": {
+				"0xa1001234567890a0": {
+					"0": 20.0,
+					"3": 1.0
+				},
+				"0xa1001234567890a1": {
+					"2": 0.0
+				}
+			}
+		})"),
+		response->toString()
 	);
 }
 

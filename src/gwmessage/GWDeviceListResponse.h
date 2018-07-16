@@ -1,13 +1,16 @@
 #ifndef BEEEON_GW_MESSAGE_DEVICE_LIST_RESPONSE_H
 #define BEEEON_GW_MESSAGE_DEVICE_LIST_RESPONSE_H
 
+#include <map>
 #include <vector>
 
 #include <Poco/SharedPtr.h>
+#include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
 
 #include "gwmessage/GWResponse.h"
 #include "model/DeviceID.h"
+#include "model/ModuleID.h"
 
 namespace BeeeOn {
 
@@ -26,6 +29,11 @@ public:
 
 	void setDevices(const std::vector<DeviceID> &devices);
 	std::vector<DeviceID> devices() const;
+
+	void setModulesValues(
+		const DeviceID &device,
+		const std::map<ModuleID, double> &values);
+	std::map<ModuleID, double> modulesValues(const DeviceID &device) const;
 };
 
 }

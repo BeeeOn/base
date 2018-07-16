@@ -41,3 +41,46 @@ vector<DeviceID> GWDeviceListResponse::devices() const
 	return devices;
 }
 
+void GWDeviceListResponse::setModulesValues(
+	const DeviceID &id,
+	const map<ModuleID, double> &modulesValues)
+{
+	if (!json()->has("values") || !json()->isObject("values")) {
+		JSON::Object::Ptr empty = new JSON::Object;
+		json()->set("values", empty);
+	}
+
+	JSON::Object::Ptr values = json()->getObject("values");
+
+	if (!values->has(id.toString()) || !values->isObject(id.toString())) {
+		JSON::Object::Ptr empty = new JSON::Object;
+		values->set(id.toString(), empty);
+	}
+
+	JSON::Object::Ptr device = values->getObject(id.toString());
+
+	for (const auto &pair : modulesValues)
+		device->set(pair.first.toString(), pair.second);
+}
+
+map<ModuleID, double> GWDeviceListResponse::modulesValues(
+		const DeviceID &id) const
+{
+	map<ModuleID, double> result;
+
+	JSON::Object::Ptr values = json()->getObject("values");
+	if (values.isNull())
+		return result;
+
+	JSON::Object::Ptr device = values->getObject(id.toString());
+	if (device.isNull())
+		return result;
+
+	for (const auto &pair : *device) {
+		result.emplace(
+			ModuleID::parse(pair.first),
+			pair.second.extract<double>());
+	}
+
+	return result;
+}
