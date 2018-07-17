@@ -50,8 +50,6 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_VOLTAGE, "voltage"},
 		{ModuleType::TypeEnum::TYPE_CURRENT, "current"},
 		{ModuleType::TypeEnum::TYPE_FREQUENCY, "frequency"},
-		{ModuleType::TypeEnum::TYPE_COLOR_TEMPERATURE, "color_temperature"},
-		{ModuleType::TypeEnum::TYPE_COLOR, "color"},
 	};
 
 	return valueMap;
@@ -78,7 +76,6 @@ EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap &ModuleType::UnitEnum::valueMap(
 		{VOLT,        "volt"},
 		{AMPERE,      "ampere"},
 		{HERTZ,       "hertz"},
-		{KELVIN,      "kelvin"},
 	};
 
 	return valueMap;
@@ -113,8 +110,6 @@ bool ModuleType::Unit::isValid(double value) const
 		return !std::isnan(value);
 	case HERTZ:
 		return !std::isnan(value);
-	case KELVIN:
-		return value >= 0;
 	}
 
 	throw AssertionViolationException(
@@ -149,8 +144,6 @@ string ModuleType::Unit::symbol(bool plain) const
 		return "A";
 	case HERTZ:
 		return "Hz";
-	case KELVIN:
-		return "K";
 	}
 
 	throw AssertionViolationException(
@@ -221,7 +214,6 @@ ModuleType::Unit ModuleType::baseUnit() const
 	switch (m_type.raw()) {
 	case Type::TYPE_UNKNOWN:
 	case Type::TYPE_BITMAP:
-	case Type::TYPE_COLOR:
 	case Type::TYPE_ENUM:
 		return Unit::NONE;
 
@@ -270,9 +262,6 @@ ModuleType::Unit ModuleType::baseUnit() const
 
 	case Type::TYPE_FREQUENCY:
 		return Unit::HERTZ;
-
-	case Type::TYPE_COLOR_TEMPERATURE:
-		return Unit::KELVIN;
 
 	// no default to let compiler catch a missing one
 	}
