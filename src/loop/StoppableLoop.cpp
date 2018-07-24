@@ -34,6 +34,11 @@ void StoppableLoopAdapter::setStopTimeout(const Timespan &timeout)
 	m_stopTimeout = timeout;
 }
 
+SharedPtr<StoppableRunnable> StoppableLoopAdapter::runnable() const
+{
+	return m_runnable;
+}
+
 void StoppableLoopAdapter::start()
 {
 	if (m_thread != NULL && m_thread->isRunning())

@@ -42,6 +42,8 @@ public:
 
 	void setStopTimeout(const Poco::Timespan &timeout);
 
+	Poco::SharedPtr<StoppableRunnable> runnable() const;
+
 protected:
 	void doStop();
 
