@@ -22,9 +22,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION(DelayedAsyncWorkTest);
 void DelayedAsyncWorkTest::testRunDelayed()
 {
 	Poco::Event event;
+
 	DelayedAsyncWork<> work([&]() {event.set();}, 100 * Timespan::MILLISECONDS);
 
 	CPPUNIT_ASSERT(event.tryWait(10 * Timespan::SECONDS));
+	CPPUNIT_ASSERT(work.tryJoin(10 * Timespan::SECONDS));
 }
 
 void DelayedAsyncWorkTest::testCancelBeforeRun()
