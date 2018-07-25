@@ -22,6 +22,33 @@ public:
 	~WaitCondition();
 
 	/**
+	 * @brief Broadcaster can be used to ensure that the broadcast
+	 * is called even in cast when an unexpected exception is thrown.
+	 * Broadcaster calls broadcast() from its destructor unless it
+	 * has been called explicitly.
+	 */
+	class Broadcaster {
+	public:
+		Broadcaster(WaitCondition &condition);
+
+		/**
+		 * @brief It calls broadcast() internally to make sure
+		 * that the given wait condition has been broadcasted.
+		 */
+		~Broadcaster();
+
+		/**
+		 * @brief Call WaitCondition::broadcast() unless it has
+		 * already been called.
+		 */
+		void broadcast();
+
+	private:
+		bool m_broadcasted;
+		WaitCondition &m_condition;
+	};
+
+	/**
 	 * @brief Wait until the condition is broadcasted.
 	 * Negative timeout would block infinitly (until broadcasted).
 	 *

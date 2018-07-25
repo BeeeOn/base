@@ -5,6 +5,25 @@
 using namespace Poco;
 using namespace BeeeOn;
 
+WaitCondition::Broadcaster::Broadcaster(WaitCondition &condition):
+	m_broadcasted(false),
+	m_condition(condition)
+{
+}
+
+WaitCondition::Broadcaster::~Broadcaster()
+{
+	broadcast();
+}
+
+void WaitCondition::Broadcaster::broadcast()
+{
+	if (!m_broadcasted)
+		m_condition.broadcast();
+
+	m_broadcasted = true;
+}
+
 WaitCondition::WaitCondition(bool repeat):
 	m_canRepeat(repeat),
 	m_broadcasted(false)
