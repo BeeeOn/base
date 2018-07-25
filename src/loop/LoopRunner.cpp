@@ -57,16 +57,17 @@ void LoopRunner::stop()
 	FastMutex::ScopedLock guard(m_lock);
 
 	stopAll(m_started);
-	m_started.clear();
 }
 
 void LoopRunner::stopAll(list<SharedPtr<StoppableLoop>> &list)
 {
-	for (auto it = list.rbegin(); it != list.rend(); ++it) {
+	while (!list.empty()) {
 		try {
-			(*it)->stop();
+			list.back()->stop();
 		}
 		BEEEON_CATCH_CHAIN(logger())
+
+		list.pop_back();
 	}
 }
 
