@@ -49,6 +49,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/BacktraceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/Base64Test.cpp
 	${PROJECT_SOURCE_DIR}/util/BlockingAsyncWorkTest.cpp
+	${PROJECT_SOURCE_DIR}/util/CancellableSetTest.cpp
 	${PROJECT_SOURCE_DIR}/util/CastableTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfoTest.cpp
 	${PROJECT_SOURCE_DIR}/util/DelayedAsyncWorkTest.cpp

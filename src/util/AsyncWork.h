@@ -5,6 +5,8 @@
 #include <Poco/Timespan.h>
 #include <Poco/Void.h>
 
+#include "util/Cancellable.h"
+
 namespace BeeeOn {
 
 /**
@@ -18,7 +20,7 @@ namespace BeeeOn {
  * parameter.
  */
 template <typename Result = Poco::Void>
-class AsyncWork {
+class AsyncWork : public Cancellable {
 public:
 	typedef Poco::SharedPtr<AsyncWork> Ptr;
 
@@ -29,11 +31,6 @@ public:
 	 * false when the timeout has exceeded
 	 */
 	virtual bool tryJoin(const Poco::Timespan &timeout) = 0;
-
-	/**
-	 * @brief Cancel the discovery process. It should exit immediatelly.
-	 */
-	virtual void cancel() = 0;
 
 	/**
 	 * @brief If the asynchronous operation provides a result, this method

@@ -100,6 +100,8 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/AutoConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/Backtrace.cpp
 	${PROJECT_SOURCE_DIR}/util/BackOff.cpp
+	${PROJECT_SOURCE_DIR}/util/Cancellable.cpp
+	${PROJECT_SOURCE_DIR}/util/CancellableSet.cpp
 	${PROJECT_SOURCE_DIR}/util/ClassInfo.cpp
 	${PROJECT_SOURCE_DIR}/util/ConfigurationExplorer.cpp
 	${PROJECT_SOURCE_DIR}/util/ConfigurationLoader.cpp
