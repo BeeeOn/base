@@ -59,14 +59,10 @@ void LoopRunner::stop()
 	stopAll(m_started);
 }
 
-void LoopRunner::stopAll(list<SharedPtr<StoppableLoop>> &list)
+void LoopRunner::stopAll(list<Stopper> &list)
 {
 	while (!list.empty()) {
-		try {
-			list.back()->stop();
-		}
-		BEEEON_CATCH_CHAIN(logger())
-
+		list.back().run();
 		list.pop_back();
 	}
 }
@@ -78,7 +74,7 @@ void LoopRunner::start()
 	for (auto &loop : m_loops) {
 		try {
 			loop->start();
-			m_started.push_back(loop);
+			m_started.push_back(Stopper(loop));
 		}
 		BEEEON_CATCH_CHAIN_ACTION_RETHROW(logger(), stopAll(m_started));
 	}
@@ -93,4 +89,26 @@ void LoopRunner::autoStart()
 		logger().information("auto-starting loops", __FILE__, __LINE__);
 		start();
 	}
+}
+
+LoopRunner::Stopper::Stopper():
+	Loggable(typeid(LoopRunner))
+{
+}
+
+LoopRunner::Stopper::Stopper(SharedPtr<StoppableLoop> loop):
+	Loggable(typeid(LoopRunner)),
+	m_loop(loop)
+{
+}
+
+void LoopRunner::Stopper::run()
+{
+	if (m_loop.isNull())
+		return;
+
+	try {
+		m_loop->stop();
+	}
+	BEEEON_CATCH_CHAIN(logger())
 }

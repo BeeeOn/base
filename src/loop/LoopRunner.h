@@ -25,13 +25,28 @@ public:
 	void autoStart();
 
 protected:
-	void stopAll(std::list<Poco::SharedPtr<StoppableLoop>> &list);
+	/**
+	 * @brief Wrapper around StoppableLoop that allows to
+	 * stop it from inside a thread.
+	 */
+	class Stopper : public Poco::Runnable, Loggable {
+	public:
+		Stopper();
+		Stopper(Poco::SharedPtr<StoppableLoop> loop);
+
+		void run() override;
+
+	private:
+		Poco::SharedPtr<StoppableLoop> m_loop;
+	};
+
+	void stopAll(std::list<Stopper> &list);
 
 private:
 	bool m_autoStart;
 	Poco::FastMutex m_lock;
 	std::list<Poco::SharedPtr<StoppableLoop>> m_loops;
-	std::list<Poco::SharedPtr<StoppableLoop>> m_started;
+	std::list<Stopper> m_started;
 };
 
 }
