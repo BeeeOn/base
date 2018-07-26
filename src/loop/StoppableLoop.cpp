@@ -3,6 +3,7 @@
 #include <Poco/Logger.h>
 
 #include "loop/StoppableLoop.h"
+#include "util/ClassInfo.h"
 
 using namespace Poco;
 using namespace BeeeOn;
@@ -74,6 +75,9 @@ void StoppableLoopAdapter::doStop()
 		 a bug, leave it as it is and just log
 		 this fact.
 		 */
+		logger().error(
+			"failed to stop " + ClassInfo::repr(m_runnable.get()),
+			__FILE__, __LINE__);
 		logger().log(e, __FILE__, __LINE__);
 	}
 
