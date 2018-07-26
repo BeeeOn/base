@@ -7,6 +7,7 @@
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/NumberFormatter.h>
 
 #include "util/ClassInfo.h"
 #include "util/Loggable.h"
@@ -123,4 +124,10 @@ ClassInfo ClassInfo::byName(const string &name)
 		throw NotFoundException("class " + name + " is not registered");
 	else
 		return ClassInfo(it->second);
+}
+
+string ClassInfo::reprImpl(const ClassInfo &c, const void *p)
+{
+	const auto &ptr = NumberFormatter::formatHex(reinterpret_cast<uintptr_t>(p));
+	return c.name() + " (" + ptr + ")";
 }

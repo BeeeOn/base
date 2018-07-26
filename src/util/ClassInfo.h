@@ -82,10 +82,20 @@ public:
 		registerClassInfo(name, typeid(T));
 	}
 
+	template <typename T>
+	static std::string repr(const T *t)
+	{
+		return reprImpl(
+			ClassInfo::forPointer(t),
+			reinterpret_cast<const void *>(t));
+	}
+
 protected:
 	static void registerClassInfo(
 			const std::string &name,
 			const std::type_info &info);
+
+	static std::string reprImpl(const ClassInfo &c, const void *p);
 
 private:
 	std::type_index m_index;
