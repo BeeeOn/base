@@ -129,6 +129,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParser.cpp
 	${PROJECT_SOURCE_DIR}/util/ValueGenerator.cpp
+	${PROJECT_SOURCE_DIR}/util/WaitCondition.cpp
 	${PROJECT_SOURCE_DIR}/util/WithTrace.cpp
 )
 
