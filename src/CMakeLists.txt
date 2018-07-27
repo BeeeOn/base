@@ -113,6 +113,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/FailDetector.cpp
 	${PROJECT_SOURCE_DIR}/util/FileLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/HavingThreadPool.cpp
+	${PROJECT_SOURCE_DIR}/util/Joiner.cpp
 	${PROJECT_SOURCE_DIR}/util/JsonUtil.cpp
 	${PROJECT_SOURCE_DIR}/util/LambdaTimerTask.cpp
 	${PROJECT_SOURCE_DIR}/util/Loggable.cpp

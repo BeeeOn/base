@@ -8,6 +8,7 @@
 #include <Poco/Thread.h>
 
 #include "util/AbstractAsyncWork.h"
+#include "util/Joiner.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -43,6 +44,7 @@ private:
 	Poco::Event m_event;
 	Poco::RunnableAdapter<DelayedAsyncWork> m_runnable;
 	Poco::Thread m_thread;
+	Joiner m_finished;
 };
 
 template <typename Result>
@@ -61,7 +63,8 @@ DelayedAsyncWork<Result>::DelayedAsyncWork(
 	m_f(f),
 	m_cancelled(cancelled),
 	m_delay(delay),
-	m_runnable(*this, &DelayedAsyncWork<Result>::run)
+	m_runnable(*this, &DelayedAsyncWork<Result>::run),
+	m_finished(m_thread)
 {
 	m_thread.start(m_runnable);
 }
@@ -69,14 +72,14 @@ DelayedAsyncWork<Result>::DelayedAsyncWork(
 template <typename Result>
 bool DelayedAsyncWork<Result>::tryJoin(const Poco::Timespan &timeout)
 {
-	return m_thread.tryJoin(timeout.totalMilliseconds());
+	return m_finished.tryJoin(timeout);
 }
 
 template <typename Result>
 void DelayedAsyncWork<Result>::cancel()
 {
 	m_event.set();
-	m_thread.join();
+	m_finished.join();
 }
 
 template <typename Result>
