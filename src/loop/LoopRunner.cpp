@@ -5,6 +5,7 @@
 
 #include "di/Injectable.h"
 #include "loop/LoopRunner.h"
+#include "util/ClassInfo.h"
 
 using namespace std;
 using namespace BeeeOn;
@@ -18,6 +19,16 @@ BEEEON_OBJECT_PROPERTY("autoStart", &LoopRunner::setAutoStart)
 BEEEON_OBJECT_PROPERTY("stopParallel", &LoopRunner::setStopParallel)
 BEEEON_OBJECT_HOOK("done", &LoopRunner::autoStart)
 BEEEON_OBJECT_END(BeeeOn, LoopRunner)
+
+static string repr(const SharedPtr<StoppableLoop> loop)
+{
+	SharedPtr<StoppableLoopAdapter> adapter = loop.cast<StoppableLoopAdapter>();
+
+	if (adapter.isNull())
+		return ClassInfo::repr(loop.get());
+	else
+		return ClassInfo::repr(adapter->runnable().get());
+}
 
 LoopRunner::LoopRunner():
 	m_autoStart(false),
@@ -121,6 +132,9 @@ void LoopRunner::start()
 
 	for (auto &loop : m_loops) {
 		try {
+			if (logger().debug())
+				logger().debug("start " + repr(loop), __FILE__, __LINE__);
+
 			loop->start();
 			m_started.push_back(Stopper(loop));
 		}
@@ -155,8 +169,14 @@ void LoopRunner::Stopper::run()
 	if (m_loop.isNull())
 		return;
 
+	if (logger().debug())
+		logger().debug("stop " + repr(m_loop), __FILE__, __LINE__);
+
 	try {
 		m_loop->stop();
+
+		if (logger().debug())
+			logger().debug("stopped " + repr(m_loop), __FILE__, __LINE__);
 	}
 	BEEEON_CATCH_CHAIN(logger())
 }
