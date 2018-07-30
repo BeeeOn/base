@@ -94,6 +94,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/ssl/SSLFacility.cpp
 	${PROJECT_SOURCE_DIR}/ssl/SSLServer.cpp
 	${PROJECT_SOURCE_DIR}/ssl/X509Fingerprint.cpp
+	${PROJECT_SOURCE_DIR}/util/AnyAsyncWork.cpp
 	${PROJECT_SOURCE_DIR}/util/ApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/util/ArgsParser.cpp
 	${PROJECT_SOURCE_DIR}/util/AsyncExecutor.cpp

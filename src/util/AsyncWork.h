@@ -1,11 +1,9 @@
 #pragma once
 
 #include <Poco/Nullable.h>
-#include <Poco/SharedPtr.h>
-#include <Poco/Timespan.h>
 #include <Poco/Void.h>
 
-#include "util/Cancellable.h"
+#include "util/AnyAsyncWork.h"
 
 namespace BeeeOn {
 
@@ -20,17 +18,9 @@ namespace BeeeOn {
  * parameter.
  */
 template <typename Result = Poco::Void>
-class AsyncWork : public Cancellable {
+class AsyncWork : public AnyAsyncWork {
 public:
 	typedef Poco::SharedPtr<AsyncWork> Ptr;
-
-	virtual ~AsyncWork();
-
-	/**
-	 * @returns true when the time discovery process finishes,
-	 * false when the timeout has exceeded
-	 */
-	virtual bool tryJoin(const Poco::Timespan &timeout) = 0;
 
 	/**
 	 * @brief If the asynchronous operation provides a result, this method
@@ -42,11 +32,6 @@ public:
 	 */
 	virtual Poco::Nullable<Result> result() const;
 };
-
-template <typename Result>
-AsyncWork<Result>::~AsyncWork()
-{
-}
 
 template <typename Result>
 Poco::Nullable<Result> AsyncWork<Result>::result() const
