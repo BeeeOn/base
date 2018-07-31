@@ -37,6 +37,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/math/SimpleCalcTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceDescriptionTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
+	${PROJECT_SOURCE_DIR}/model/DevicePrefixTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GatewayIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/GlobalIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleIDTest.cpp
