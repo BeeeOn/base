@@ -15,6 +15,7 @@ DevicePrefixNamesInitializer::NamesMap DevicePrefixNamesInitializer::customNames
 
 	namesMap.emplace("Fitprotocol", map.find(DevicePrefix::PREFIX_FITPROTOCOL));
 	namesMap.emplace("PressureSensor", map.find(DevicePrefix::PREFIX_PRESSURE_SENSOR));
+	namesMap.emplace("pdev", map.find(DevicePrefix::PREFIX_PRESSURE_SENSOR));
 	namesMap.emplace("VirtualDevice", map.find(DevicePrefix::PREFIX_VIRTUAL_DEVICE));
 	namesMap.emplace("VPT", map.find(DevicePrefix::PREFIX_VPT));
 	namesMap.emplace("OpenHAB", map.find(DevicePrefix::PREFIX_OPENHAB));
@@ -36,7 +37,7 @@ EnumHelper<DevicePrefixEnum::Raw>::ValueMap
 	static EnumHelper<DevicePrefixEnum::Raw>::ValueMap valueMap = {
 		{DevicePrefixEnum::PREFIX_INVALID, "invalid"},
 		{DevicePrefixEnum::PREFIX_FITPROTOCOL, "fitp"},
-		{DevicePrefixEnum::PREFIX_PRESSURE_SENSOR, "pdev"},
+		{DevicePrefixEnum::PREFIX_PRESSURE_SENSOR, "psdev"},
 		{DevicePrefixEnum::PREFIX_VIRTUAL_DEVICE, "vdev"},
 		{DevicePrefixEnum::PREFIX_VPT, "vpt"},
 		{DevicePrefixEnum::PREFIX_OPENHAB, "open_hab"},

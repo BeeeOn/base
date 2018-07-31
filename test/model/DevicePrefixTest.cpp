@@ -45,7 +45,7 @@ void DevicePrefixTest::doTestParseSupported()
 
 	CPPUNIT_ASSERT_EQUAL(
 		DevicePrefix::PREFIX_PRESSURE_SENSOR,
-		DevicePrefix::parse("pdev").raw());
+		DevicePrefix::parse("psdev").raw());
 
 	CPPUNIT_ASSERT_EQUAL(
 		DevicePrefix::PREFIX_VIRTUAL_DEVICE,
@@ -106,6 +106,10 @@ void DevicePrefixTest::doTestParseLegacy()
 	CPPUNIT_ASSERT_EQUAL(
 		DevicePrefix::PREFIX_PRESSURE_SENSOR,
 		DevicePrefix::parse("PressureSensor").raw());
+
+	CPPUNIT_ASSERT_EQUAL(
+		DevicePrefix::PREFIX_PRESSURE_SENSOR,
+		DevicePrefix::parse("pdev").raw());
 
 	CPPUNIT_ASSERT_EQUAL(
 		DevicePrefix::PREFIX_VIRTUAL_DEVICE,
@@ -189,7 +193,7 @@ void DevicePrefixTest::testToString()
 		DevicePrefix(DevicePrefix::PREFIX_FITPROTOCOL).toString());
 
 	CPPUNIT_ASSERT_EQUAL(
-		"pdev",
+		"psdev",
 		DevicePrefix(DevicePrefix::PREFIX_PRESSURE_SENSOR).toString());
 
 	CPPUNIT_ASSERT_EQUAL(
