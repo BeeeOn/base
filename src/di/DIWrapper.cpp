@@ -82,6 +82,8 @@ DIWrapper::~DIWrapper()
 {
 }
 
+namespace BeeeOn {
+
 class DIWCastRegistry {
 public:
 	~DIWCastRegistry()
@@ -110,6 +112,8 @@ private:
 };
 
 static DIWCastRegistry g_registry;
+
+}
 
 DIWCast::~DIWCast()
 {
