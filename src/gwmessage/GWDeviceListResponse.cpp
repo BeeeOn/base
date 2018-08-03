@@ -79,7 +79,7 @@ map<ModuleID, double> GWDeviceListResponse::modulesValues(
 	for (const auto &pair : *device) {
 		result.emplace(
 			ModuleID::parse(pair.first),
-			pair.second.extract<double>());
+			pair.second.convert<double>());
 	}
 
 	return result;

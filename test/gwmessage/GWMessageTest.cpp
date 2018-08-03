@@ -769,7 +769,16 @@ void GWMessageTest::testParseDeviceList()
 			"devices": [
 				{"device_id": "0xa15410132465788"},
 				{"device_id": "0xa15410132465789"}
-			]
+			],
+			"values" : {
+			    "0xa15410132465788" : {
+			      "0" : 0,
+			      "1" : 45.5
+			    },
+			    "0xa15410132465789" : {
+			      "0" : -54.2
+			    }
+			}
 	})");
 
 	CPPUNIT_ASSERT_EQUAL(GWMessageType::DEVICE_LIST_RESPONSE, message->type().raw());
@@ -782,6 +791,15 @@ void GWMessageTest::testParseDeviceList()
 	vector<DeviceID> devices = response->devices();
 	CPPUNIT_ASSERT_EQUAL("0xa15410132465788", devices[0].toString());
 	CPPUNIT_ASSERT_EQUAL("0xa15410132465789", devices[1].toString());
+
+	const auto values0 = response->modulesValues(DeviceID::parse("0xa15410132465788"));
+	CPPUNIT_ASSERT_EQUAL(2, values0.size());
+	CPPUNIT_ASSERT_EQUAL(0.0, values0.at(0));
+	CPPUNIT_ASSERT_EQUAL(45.5, values0.at(1));
+
+	const auto values1 = response->modulesValues(DeviceID::parse("0xa15410132465789"));
+	CPPUNIT_ASSERT_EQUAL(1, values1.size());
+	CPPUNIT_ASSERT_EQUAL(-54.2, values1.at(0));
 
 	message = GWMessage::fromJSON(
 	R"({
