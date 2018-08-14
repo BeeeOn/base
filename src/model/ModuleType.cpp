@@ -169,6 +169,11 @@ string ModuleType::Unit::format(double value, bool plain) const
 	return val + (sym.empty() ? "" : (space + sym));
 }
 
+ModuleType::ModuleType():
+	m_type(ModuleType::Type::TYPE_UNKNOWN)
+{
+}
+
 ModuleType::ModuleType(const ModuleType::Type &type,
 		const set<ModuleType::Attribute> &attributes):
 	m_type(type),

@@ -282,6 +282,7 @@ public:
 		std::string format(double value, bool plain = false) const;
 	};
 
+	ModuleType();
 	ModuleType(const Type &type);
 	ModuleType(const Type &type, const std::set<Attribute> &attributes);
 	ModuleType(const Type &type, const CustomTypeID &customID);
