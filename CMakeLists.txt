@@ -10,7 +10,10 @@ set(AR_INSTALL_DIR "lib")
 endif()
 
 add_subdirectory(src)
+
+if(NOT DEFINED ENABLE_TESTS OR ENABLE_TESTS)
 add_subdirectory(test)
+endif()
 
 install(FILES dtd/factory.dtd
 	DESTINATION "share/beeeon/dtd")
