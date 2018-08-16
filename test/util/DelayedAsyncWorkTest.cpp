@@ -23,7 +23,7 @@ void DelayedAsyncWorkTest::testRunDelayed()
 {
 	Poco::Event event;
 
-	DelayedAsyncWork<> work([&]() {event.set();}, 100 * Timespan::MILLISECONDS);
+	DelayedAsyncWork<> work([&](DelayedAsyncWork<> &) {event.set();}, 100 * Timespan::MILLISECONDS);
 
 	CPPUNIT_ASSERT(event.tryWait(10 * Timespan::SECONDS));
 	CPPUNIT_ASSERT(work.tryJoin(10 * Timespan::SECONDS));
@@ -35,8 +35,8 @@ void DelayedAsyncWorkTest::testCancelBeforeRun()
 	bool cancel = false;
 	
 	DelayedAsyncWork<> work(
-		[&]() {run = true;},
-		[&]() {cancel = true;},
+		[&](DelayedAsyncWork<> &) {run = true;},
+		[&](DelayedAsyncWork<> &) {cancel = true;},
 		10 * Timespan::MINUTES);
 
 	work.cancel();

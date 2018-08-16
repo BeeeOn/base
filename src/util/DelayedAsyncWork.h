@@ -22,13 +22,14 @@ template <typename Result = Poco::Void>
 class DelayedAsyncWork : public AbstractAsyncWork<Result>, Loggable {
 public:
 	typedef Poco::SharedPtr<DelayedAsyncWork<Result>> Ptr;
+	typedef std::function<void(DelayedAsyncWork<Result> &)> Call;
 
 	DelayedAsyncWork(
-		std::function<void()> f,
+		Call f,
 		const Poco::Timespan &delay);
 	DelayedAsyncWork(
-		std::function<void()> f,
-		std::function<void()> cancelled,
+		Call f,
+		Call cancelled,
 		const Poco::Timespan &delay);
 
 	bool tryJoin(const Poco::Timespan &timeout) override;
@@ -38,8 +39,8 @@ protected:
 	void run();
 
 private:
-	std::function<void()> m_f;
-	std::function<void()> m_cancelled;
+	Call m_f;
+	Call m_cancelled;
 	Poco::Timespan m_delay;
 	Poco::Event m_event;
 	Poco::RunnableAdapter<DelayedAsyncWork> m_runnable;
@@ -49,16 +50,16 @@ private:
 
 template <typename Result>
 DelayedAsyncWork<Result>::DelayedAsyncWork(
-		std::function<void()> f,
+		Call f,
 		const Poco::Timespan &delay):
-	DelayedAsyncWork<Result>(f, [](){}, delay)
+	DelayedAsyncWork<Result>(f, [](DelayedAsyncWork<Result> &){}, delay)
 {
 }
 
 template <typename Result>
 DelayedAsyncWork<Result>::DelayedAsyncWork(
-		std::function<void()> f,
-		std::function<void()> cancelled,
+		Call f,
+		Call cancelled,
 		const Poco::Timespan &delay):
 	m_f(f),
 	m_cancelled(cancelled),
@@ -86,12 +87,12 @@ template <typename Result>
 void DelayedAsyncWork<Result>::run()
 {
 	if (m_event.tryWait(m_delay.totalMilliseconds())) {
-		m_cancelled();
+		m_cancelled(*this);
 		return; // cancelled
 	}
 
 	try {
-		m_f(); // not cancellable, must not sleep
+		m_f(*this); // not cancellable, must not sleep
 	}
 	BEEEON_CATCH_CHAIN(logger())
 }
