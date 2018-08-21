@@ -54,6 +54,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_COLOR, "color"},
 		{ModuleType::TypeEnum::TYPE_SMOKE, "smoke"},
 		{ModuleType::TypeEnum::TYPE_HEAT, "heat"},
+		{ModuleType::TypeEnum::TYPE_PM25, "pm25"},
 	};
 
 	return valueMap;
@@ -81,6 +82,7 @@ EnumHelper<ModuleType::UnitEnum::Raw>::ValueMap &ModuleType::UnitEnum::valueMap(
 		{AMPERE,      "ampere"},
 		{HERTZ,       "hertz"},
 		{KELVIN,      "kelvin"},
+		{UG_M3,       "ug/m3"},
 	};
 
 	return valueMap;
@@ -116,6 +118,8 @@ bool ModuleType::Unit::isValid(double value) const
 	case HERTZ:
 		return !std::isnan(value);
 	case KELVIN:
+		return value >= 0;
+	case UG_M3:
 		return value >= 0;
 	}
 
@@ -153,6 +157,8 @@ string ModuleType::Unit::symbol(bool plain) const
 		return "Hz";
 	case KELVIN:
 		return "K";
+	case UG_M3:
+		return "ug/m3";
 	}
 
 	throw AssertionViolationException(
@@ -282,6 +288,9 @@ ModuleType::Unit ModuleType::baseUnit() const
 
 	case Type::TYPE_COLOR_TEMPERATURE:
 		return Unit::KELVIN;
+
+	case Type::TYPE_PM25:
+		return Unit::UG_M3;
 
 	// no default to let compiler catch a missing one
 	}

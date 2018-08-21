@@ -181,6 +181,10 @@ public:
 			 * - 1 - over-heat detected.
 			 */
 			TYPE_HEAT = 28,
+			/**
+			 * Particulate matter with diameter up to 2.5 um.
+			 */
+			TYPE_PM25 = 29,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
@@ -252,6 +256,10 @@ public:
 			 * Min: 0.
 			 */
 			KELVIN,
+			/**
+			 * Unit of particulate matter with symbol ug/m3.
+			 */
+			UG_M3,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();

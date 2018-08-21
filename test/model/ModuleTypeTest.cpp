@@ -399,6 +399,9 @@ void ModuleTypeTest::testBaseUnit()
 	CPPUNIT_ASSERT_EQUAL(
 		ModuleType::Unit::BINARY,
 		ModuleType(ModuleType::Type::TYPE_HEAT).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::UG_M3,
+		ModuleType(ModuleType::Type::TYPE_PM25).baseUnit());
 }
 
 }
