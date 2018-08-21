@@ -384,6 +384,21 @@ void ModuleTypeTest::testBaseUnit()
 	CPPUNIT_ASSERT_EQUAL(
 		ModuleType::Unit::AMPERE,
 		ModuleType(ModuleType::Type::TYPE_CURRENT).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::HERTZ,
+		ModuleType(ModuleType::Type::TYPE_FREQUENCY).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::KELVIN,
+		ModuleType(ModuleType::Type::TYPE_COLOR_TEMPERATURE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::NONE,
+		ModuleType(ModuleType::Type::TYPE_COLOR).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_SMOKE).baseUnit());
+	CPPUNIT_ASSERT_EQUAL(
+		ModuleType::Unit::BINARY,
+		ModuleType(ModuleType::Type::TYPE_HEAT).baseUnit());
 }
 
 }
