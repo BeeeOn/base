@@ -171,6 +171,11 @@ public:
 			 * Range: 0..16777215.
 			 */
 			TYPE_COLOR = 26,
+			/**
+			 * - 0 - smoke not detected
+			 * - 1 - smoke detected
+			 */
+			TYPE_SMOKE = 27,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();

@@ -52,6 +52,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_FREQUENCY, "frequency"},
 		{ModuleType::TypeEnum::TYPE_COLOR_TEMPERATURE, "color_temperature"},
 		{ModuleType::TypeEnum::TYPE_COLOR, "color"},
+		{ModuleType::TypeEnum::TYPE_SMOKE, "smoke"},
 	};
 
 	return valueMap;
@@ -237,6 +238,7 @@ ModuleType::Unit ModuleType::baseUnit() const
 	case Type::TYPE_ON_OFF:
 	case Type::TYPE_SECURITY_ALERT:
 	case Type::TYPE_SHAKE:
+	case Type::TYPE_SMOKE:
 		return Unit::BINARY;
 
 	case Type::TYPE_BATTERY:
