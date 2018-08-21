@@ -176,6 +176,11 @@ public:
 			 * - 1 - smoke detected
 			 */
 			TYPE_SMOKE = 27,
+			/**
+			 * - 0 - heat is normal
+			 * - 1 - over-heat detected.
+			 */
+			TYPE_HEAT = 28,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
