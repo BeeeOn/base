@@ -199,6 +199,11 @@ private:
 			const std::string &key,
 			const std::string &name);
 
+	void evalAndInjectNumber(
+			const std::string &targetName,
+			DIWrapper *target,
+			const std::string &name,
+			const std::string &value);
 	bool tryInjectNumber(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,

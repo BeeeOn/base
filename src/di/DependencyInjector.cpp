@@ -414,6 +414,21 @@ bool DependencyInjector::tryInjectRef(
 	return false;
 }
 
+void DependencyInjector::evalAndInjectNumber(
+		const string &targetName,
+		DIWrapper *target,
+		const string &name,
+		const string &value)
+{
+		SimpleCalc calc;
+		const double number = calc.evaluate(value);
+
+		logger().debug("injecting number " + to_string(number)
+				+ " as " + name + " into " + targetName);
+
+		target->injectNumber(name, number);
+}
+
 bool DependencyInjector::tryInjectNumber(
 		const InstanceInfo &info,
 		DIWrapper *target,
@@ -421,14 +436,8 @@ bool DependencyInjector::tryInjectNumber(
 		const string &name)
 {
 	if (m_conf->has(key + "[@number]")) {
-		SimpleCalc calc;
 		const string &tmp = m_conf->getString(key + "[@number]");
-		const double value = calc.evaluate(tmp);
-
-		logger().debug("injecting number " + to_string(value)
-				+ " as " + name + " into " + info.name());
-
-		target->injectNumber(name, value);
+		evalAndInjectNumber(info.name(), target, name, tmp);
 		return true;
 	}
 
