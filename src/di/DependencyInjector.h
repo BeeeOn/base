@@ -102,7 +102,7 @@ class InstanceInfo;
  * Poco::SharedPtr<Main> main = di.create<Main>("main");
  * </pre>
  */
-class DependencyInjector : public Loggable {
+class DependencyInjector : protected Loggable {
 public:
 	typedef std::map<std::string, DIWrapper *> WrapperMap;
 	typedef std::vector<DIWrapper *> WrapperVector;
