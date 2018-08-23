@@ -173,6 +173,10 @@ private:
 	 */
 	void destroyAll();
 
+	DIWrapper *resolveAndCreate(
+			const std::string &name,
+			bool disown);
+
 	DIWrapper *createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);

@@ -303,22 +303,15 @@ void DependencyInjector::createEarly()
 	}
 }
 
-DIWrapper *DependencyInjector::create(const string &name, bool disown)
+DIWrapper *DependencyInjector::resolveAndCreate(const string &name, bool disown)
 {
-	DIWrapper *existing = find(name);
-	if (existing != NULL) {
-		logger().debug("instance " + name + " reused",
-				__FILE__, __LINE__);
-		return existing;
-	}
-
 	InstanceInfo info(name);
 	const string &ref = info.resolveAlias(m_conf);
 
 	if (ref.empty())
 		return createNoAlias(info, disown);
 
-	existing = find(ref);
+	DIWrapper *existing = find(ref);
 	if (existing != NULL) {
 		logger().debug("instance " + name
 				+ " reused as alias to " + ref,
@@ -328,6 +321,18 @@ DIWrapper *DependencyInjector::create(const string &name, bool disown)
 
 	InstanceInfo aliasInfo(ref);
 	return createNoAlias(aliasInfo, disown);
+}
+
+DIWrapper *DependencyInjector::create(const string &name, bool disown)
+{
+	DIWrapper *existing = find(name);
+	if (existing != NULL) {
+		logger().debug("instance " + name + " reused",
+				__FILE__, __LINE__);
+		return existing;
+	}
+
+	return resolveAndCreate(name, disown);
 }
 
 DIWrapper *DependencyInjector::find(const string &name)
