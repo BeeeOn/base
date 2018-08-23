@@ -188,10 +188,17 @@ private:
 			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
+
+	void createAndInjectRef(
+			const std::string &targetName,
+			DIWrapper *target,
+			const std::string &name,
+			const std::string &value);
 	bool tryInjectRef(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
+
 	bool tryInjectNumber(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,

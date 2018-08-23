@@ -371,6 +371,33 @@ DIWrapper *DependencyInjector::createNew(const InstanceInfo &info)
 	return factory.create();
 }
 
+void DependencyInjector::createAndInjectRef(
+		const string &targetName,
+		DIWrapper *target,
+		const string &name,
+		const string &value)
+{
+	logger().debug("injecting " + value + " as " + name
+			+ " into " + targetName);
+
+	DIWrapper *ref = NULL;
+
+	try {
+		ref = create(value);
+	} catch (const Exception &e) {
+		logger().error("failed to create ref " + value,
+				__FILE__, __LINE__);
+		e.rethrow();
+	}
+
+	if (ref == NULL) {
+		throw NullPointerException(
+				"failed to create ref " + value);
+	}
+
+	target->injectRef(name, *ref);
+}
+
 bool DependencyInjector::tryInjectRef(
 		const InstanceInfo &info,
 		DIWrapper *target,
@@ -380,25 +407,7 @@ bool DependencyInjector::tryInjectRef(
 	if (m_conf->has(key + "[@ref]")) {
 		const string value = m_conf->getString(key + "[@ref]");
 
-		logger().debug("injecting " + value + " as " + name
-				+ " into " + info.name());
-
-		DIWrapper *ref = NULL;
-
-		try {
-			ref = create(value);
-		} catch (const Exception &e) {
-			logger().error("failed to create ref " + value,
-					__FILE__, __LINE__);
-			e.rethrow();
-		}
-
-		if (ref == NULL) {
-			throw NullPointerException(
-					"failed to create ref " + value);
-		}
-
-		target->injectRef(name, *ref);
+		createAndInjectRef(info.name(), target, name, value);
 		return true;
 	}
 
