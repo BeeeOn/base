@@ -166,8 +166,13 @@ DependencyInjector::DependencyInjector(
 		bool avoidEarly):
 	m_conf(conf)
 {
-	if (!avoidEarly)
-		createEarly();
+	if (!avoidEarly) {
+		try {
+			createEarly();
+		}
+		BEEEON_CATCH_CHAIN_ACTION(logger(),
+			destroyAll())
+	}
 }
 
 void DependencyInjector::destroyAll()
