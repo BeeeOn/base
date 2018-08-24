@@ -103,12 +103,7 @@ public:
 
 	DependencyInjector(
 		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf,
-		bool avoidEarly = false):
-		m_conf(conf)
-	{
-		if (!avoidEarly)
-			createEarly();
-	}
+		bool avoidEarly = false);
 
 	~DependencyInjector();
 

@@ -161,6 +161,15 @@ void DependencyInjector::destroyRest(const WrapperVector vec) const
 	}
 }
 
+DependencyInjector::DependencyInjector(
+		AutoPtr<AbstractConfiguration> conf,
+		bool avoidEarly):
+	m_conf(conf)
+{
+	if (!avoidEarly)
+		createEarly();
+}
+
 DependencyInjector::~DependencyInjector()
 {
 	logger().debug(
