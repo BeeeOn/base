@@ -161,7 +161,21 @@ void DependencyInjector::destroyRest(const WrapperVector vec) const
 	}
 }
 
-DependencyInjector::~DependencyInjector()
+DependencyInjector::DependencyInjector(
+		AutoPtr<AbstractConfiguration> conf,
+		bool avoidEarly):
+	m_conf(conf)
+{
+	if (!avoidEarly) {
+		try {
+			createEarly();
+		}
+		BEEEON_CATCH_CHAIN_ACTION(logger(),
+			destroyAll())
+	}
+}
+
+void DependencyInjector::destroyAll()
 {
 	logger().debug(
 		"destroying " + to_string(m_free.size()) + " instances",
@@ -191,6 +205,11 @@ DependencyInjector::~DependencyInjector()
 	}
 
 	destroyRest(alive);
+}
+
+DependencyInjector::~DependencyInjector()
+{
+	destroyAll();
 }
 
 void DependencyInjector::createEarly()
