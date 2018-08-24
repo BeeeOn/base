@@ -170,7 +170,7 @@ DependencyInjector::DependencyInjector(
 		createEarly();
 }
 
-DependencyInjector::~DependencyInjector()
+void DependencyInjector::destroyAll()
 {
 	logger().debug(
 		"destroying " + to_string(m_free.size()) + " instances",
@@ -200,6 +200,11 @@ DependencyInjector::~DependencyInjector()
 	}
 
 	destroyRest(alive);
+}
+
+DependencyInjector::~DependencyInjector()
+{
+	destroyAll();
 }
 
 void DependencyInjector::createEarly()

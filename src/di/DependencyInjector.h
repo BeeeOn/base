@@ -155,6 +155,12 @@ private:
 	WrapperVector tryDestroy(const WrapperVector vec) const;
 	void destroyRest(const WrapperVector vec) const;
 
+	/**
+	 * @brief It destroyes all created instances. The method is to be called
+	 * from destructor or from failing constructor.
+	 */
+	void destroyAll();
+
 	DIWrapper *createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);
