@@ -4,6 +4,8 @@
 #include <typeinfo>
 #include <string>
 
+#include <Poco/Message.h>
+
 namespace Poco {
 
 class Logger;
@@ -33,6 +35,13 @@ public:
 
 	static void configureSimple(
 			Poco::Logger &logger, const std::string &level);
+
+	static void logException(
+			Poco::Logger &logger,
+			const Poco::Message::Priority priority,
+			const Poco::Exception &e,
+			const char *file,
+			size_t line);
 
 protected:
 	void setupLogger(Poco::Logger *logger = 0) const;
