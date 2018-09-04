@@ -202,7 +202,7 @@ void SerialPort::open()
 	}
 }
 
-unsigned int SerialPort::write(const char *buffer, size_t size)
+size_t SerialPort::write(const char *buffer, size_t size)
 {
 	ssize_t ret = ::write(m_fd, buffer, size);
 
@@ -219,7 +219,7 @@ unsigned int SerialPort::write(const char *buffer, size_t size)
 	return ret;
 }
 
-unsigned int SerialPort::write(const string &data)
+size_t SerialPort::write(const string &data)
 {
 	return write(data.c_str(), data.length());
 }
