@@ -18,7 +18,7 @@ static const int BUFFER_SIZE = 1024;
 
 void throwFromErrno(const std::string &func, int err)
 {
-	switch (errno) {
+	switch (err) {
 	case EINTR:
 		throw SignalException(func + ": " + strerror(err), err);
 	case EINVAL:
