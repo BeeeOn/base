@@ -17,7 +17,7 @@ using namespace std;
 
 static const int BUFFER_SIZE = 1024;
 
-void throwFromErrno(const std::string &func)
+static void throwFromErrno(const std::string &func)
 {
 	const int err = Error::last();
 	const auto &msg = func + ": " + Error::getMessage(err);
@@ -68,7 +68,7 @@ static void prepareBaudRate(struct termios &term, int baudrate)
 		throwFromErrno("cfsetspeed");
 }
 
-void prepareStopBits(struct termios &term, SerialPort::StopBits stopBits)
+static void prepareStopBits(struct termios &term, SerialPort::StopBits stopBits)
 {
 	switch (stopBits) {
 	case SerialPort::STOPBITS_1:
@@ -82,7 +82,7 @@ void prepareStopBits(struct termios &term, SerialPort::StopBits stopBits)
 	}
 }
 
-void prepareParity(struct termios &term, SerialPort::Parity parity)
+static void prepareParity(struct termios &term, SerialPort::Parity parity)
 {
 	switch (parity) {
 	case SerialPort::PARITY_NONE:
@@ -101,7 +101,7 @@ void prepareParity(struct termios &term, SerialPort::Parity parity)
 	}
 }
 
-void prepareDataBits(struct termios &term, SerialPort::DataBits dataBits)
+static void prepareDataBits(struct termios &term, SerialPort::DataBits dataBits)
 {
 	switch (dataBits) {
 	case SerialPort::DATABITS_5:
