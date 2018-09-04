@@ -207,11 +207,11 @@ unsigned int SerialPort::write(const char *buffer, size_t size)
 	ssize_t ret = ::write(m_fd, buffer, size);
 
 	if (ret < 0) {
-		if (m_nonBlocking && errno == EAGAIN)
+		if (m_nonBlocking && Error::last() == EAGAIN)
 			return 0;
 
-		if (errno == EIO)
-			throw WriteFileException("write: " + string(strerror(errno)));
+		if (Error::last() == EIO)
+			throw WriteFileException("write: " + Error::getMessage(Error::last()));
 
 		throwFromErrno("write");
 	}
@@ -231,11 +231,11 @@ string SerialPort::readDirect(int fd)
 	ssize_t ret = ::read(fd, buf, sizeof(buf));
 
 	if (ret < 0) {
-		if (errno == EAGAIN)
+		if (Error::last() == EAGAIN)
 			return "";
 
-		if (errno == EIO)
-			throw ReadFileException("read: " + string(strerror(errno)));
+		if (Error::last() == EIO)
+			throw ReadFileException("read: " + Error::getMessage(Error::last()));
 
 		throwFromErrno("read");
 	}
