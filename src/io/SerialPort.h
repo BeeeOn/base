@@ -39,7 +39,6 @@ public:
 
 	void open();
 	std::string read(const Poco::Timespan &timeout);
-	static std::string readDirect(int fd);
 	size_t write(const char* buffer, size_t size);
 	size_t write(const std::string &data);
 	void close();
@@ -48,6 +47,7 @@ public:
 	bool isOpen();
 
 private:
+	static std::string readDirect(int fd);
 	void installNonBlocking();
 	void installBlocking();
 
