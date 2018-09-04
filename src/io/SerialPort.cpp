@@ -231,13 +231,14 @@ string SerialPort::readDirect(int fd)
 	ssize_t ret = ::read(fd, buf, sizeof(buf));
 
 	if (ret < 0) {
-		if (Error::last() == EAGAIN)
+		switch (Error::last()) {
+		case EAGAIN:
 			return "";
-
-		if (Error::last() == EIO)
+		case EIO:
 			throw ReadFileException("read: " + Error::getMessage(Error::last()));
-
-		throwFromErrno("read");
+		default:
+			throwFromErrno("read");
+		}
 	}
 
 	return string(buf, ret);
