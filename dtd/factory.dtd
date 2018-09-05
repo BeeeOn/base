@@ -25,6 +25,8 @@ We cannot use NMTOKEN as it disallows ${...} constructions.
 	name    CDATA    #REQUIRED
 	ref     CDATA    #IMPLIED
 	text    CDATA    #IMPLIED
+	time    CDATA    #IMPLIED
+	list    CDATA    #IMPLIED
 	number  CDATA    #IMPLIED
 	if-yes  CDATA    #IMPLIED
 >
@@ -35,6 +37,8 @@ We cannot use NMTOKEN as it disallows ${...} constructions.
 	name    CDATA    #REQUIRED
 	ref     CDATA    #IMPLIED
 	text    CDATA    #IMPLIED
+	time    CDATA    #IMPLIED
+	list    CDATA    #IMPLIED
 	number  CDATA    #IMPLIED
 	if-yes  CDATA    #IMPLIED
 >
