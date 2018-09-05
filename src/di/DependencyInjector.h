@@ -34,7 +34,7 @@ class InstanceInfo;
  *   + attribute ref    - value to set is a reference to an instance by name
  *   + attribute text   - value to set is a string
  *   + attribute time   - value to set is a timespan
- *   + attribute number - value to set is an integer
+ *   + attribute number - value to set is a number
  *   + attribute list   - value to set is a list of strings
  *   + attribute if-yes - optional condition to avoid applying the "set"
  *
@@ -43,7 +43,7 @@ class InstanceInfo;
  *   + attribute ref    - value to add is a reference to an instance by name
  *   + attribute text   - value to add is a string
  *   + attribute time   - value to add is a timespan
- *   + attribute number - value to add is an integer
+ *   + attribute number - value to add is a number
  *   + attribute if-yes - optional condition to avoid applying the "add"
  *
  * * map: constructs a map of key-value pairs
