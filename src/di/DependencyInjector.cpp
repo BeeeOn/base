@@ -221,7 +221,10 @@ void DependencyInjector::createEarly()
 	for (it = tmp.begin(); it != tmp.end(); ++it) {
 		const string &key = *it;
 
-		if (key.find("instance[") == string::npos)
+		if (key.find("instance[") == string::npos && key != "instance")
+			continue;
+
+		if (!m_conf->has(key + "[@name]"))
 			continue;
 
 		const string &init = m_conf->getString(
