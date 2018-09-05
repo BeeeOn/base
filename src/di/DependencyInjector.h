@@ -46,7 +46,7 @@ class InstanceInfo;
  *   + attribute number - value to add is a number
  *   + attribute if-yes - optional condition to avoid applying the "add"
  *
- * * map: constructs a map of key-value pairs
+ * * set/add: constructs a map of key-value pairs
  *   + attribute name   - name of the property to inject
  *   + attribute if-yes - optional constructs to avoid applying the "map"
  *
@@ -79,10 +79,10 @@ class InstanceInfo;
  *	</instance>
  *
  *      <instance name="nameMap" class="BeeeOn::NameMap">
- *		<map name="mapping">
+ *		<set name="mapping">
  *			<pair key="first" text="The First One" />
  *			<pair key="second" text="The Second One" />
- *		</map>
+ *		</set>
  *      </instance>
  *
  *	<instance name="userService" class="BeeeOn::UserService" />
