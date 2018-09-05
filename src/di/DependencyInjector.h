@@ -58,6 +58,12 @@ class InstanceInfo;
  *   + attribute name   - name of the alias (new instance name)
  *   + attribute ref    - name of an existing instance
  *
+ * * constant: defines a constant value that is evaluated and can be interpolated
+ *   + attribute name   - name of the constant
+ *   + attribute text   - constant is a string
+ *   + attribute time   - constant is a time
+ *   + attribute number - constant is a number
+ *
  * The attributes can contain ${property} strings which are expanded
  * automatically.
  *
@@ -144,6 +150,12 @@ private:
 
 		return instance;
 	}
+
+	/**
+	 * @brief Compute all defined constants and reinject them back
+	 * into the main configuration.
+	 */
+	void computeConstants();
 
 	/**
 	 * Create instances that should be always created.

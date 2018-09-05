@@ -1,6 +1,13 @@
 <!ELEMENT system (factory)>
 <!ELEMENT factory (instance|alias)*>
 
+<!ELEMENT constant EMPTY>
+<!ATTLIST constant
+	name    CDATA    #REQUIRED
+	text    CDATA    #IMPLIED
+	time    CDATA    #IMPLIED
+	number  CDATA    #IMPLIED
+>
 <!ELEMENT instance (set|add)*>
 <!ATTLIST instance
 	name    ID       #IMPLIED
