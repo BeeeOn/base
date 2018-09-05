@@ -19,7 +19,7 @@ We cannot use NMTOKEN as it disallows ${...} constructions.
 	ref     CDATA    #REQUIRED
 >
 
-<!ELEMENT set EMPTY>
+<!ELEMENT set (pair*)>
 <!-- see note for alias/@ref -->
 <!ATTLIST set
 	name    CDATA    #REQUIRED
@@ -29,7 +29,7 @@ We cannot use NMTOKEN as it disallows ${...} constructions.
 	if-yes  CDATA    #IMPLIED
 >
 
-<!ELEMENT add EMPTY>
+<!ELEMENT add (pair*)>
 <!-- see note for alias/@ref -->
 <!ATTLIST add
 	name    CDATA    #REQUIRED
@@ -37,4 +37,10 @@ We cannot use NMTOKEN as it disallows ${...} constructions.
 	text    CDATA    #IMPLIED
 	number  CDATA    #IMPLIED
 	if-yes  CDATA    #IMPLIED
+>
+
+<!ELEMENT pair EMPTY>
+<!ATTLIST pair
+	key     CDATA    #REQUIRED
+	text    CDATA    #IMPLIED
 >
