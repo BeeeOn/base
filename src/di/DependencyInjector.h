@@ -34,7 +34,7 @@ class InstanceInfo;
  *   + attribute ref    - value to set is a reference to an instance by name
  *   + attribute text   - value to set is a string
  *   + attribute time   - value to set is a timespan
- *   + attribute number - value to set is an integer
+ *   + attribute number - value to set is a number
  *   + attribute list   - value to set is a list of strings
  *   + attribute if-yes - optional condition to avoid applying the "set"
  *
@@ -43,10 +43,10 @@ class InstanceInfo;
  *   + attribute ref    - value to add is a reference to an instance by name
  *   + attribute text   - value to add is a string
  *   + attribute time   - value to add is a timespan
- *   + attribute number - value to add is an integer
+ *   + attribute number - value to add is a number
  *   + attribute if-yes - optional condition to avoid applying the "add"
  *
- * * map: constructs a map of key-value pairs
+ * * set/add: constructs a map of key-value pairs
  *   + attribute name   - name of the property to inject
  *   + attribute if-yes - optional constructs to avoid applying the "map"
  *
@@ -57,6 +57,12 @@ class InstanceInfo;
  * * alias: defines alias name of an existing instance
  *   + attribute name   - name of the alias (new instance name)
  *   + attribute ref    - name of an existing instance
+ *
+ * * constant: defines a constant value that is evaluated and can be interpolated
+ *   + attribute name   - name of the constant
+ *   + attribute text   - constant is a string
+ *   + attribute time   - constant is a time
+ *   + attribute number - constant is a number
  *
  * The attributes can contain ${property} strings which are expanded
  * automatically.
@@ -79,10 +85,10 @@ class InstanceInfo;
  *	</instance>
  *
  *      <instance name="nameMap" class="BeeeOn::NameMap">
- *		<map name="mapping">
+ *		<set name="mapping">
  *			<pair key="first" text="The First One" />
  *			<pair key="second" text="The Second One" />
- *		</map>
+ *		</set>
  *      </instance>
  *
  *	<instance name="userService" class="BeeeOn::UserService" />
@@ -144,6 +150,12 @@ private:
 
 		return instance;
 	}
+
+	/**
+	 * @brief Compute all defined constants and reinject them back
+	 * into the main configuration.
+	 */
+	void computeConstants();
 
 	/**
 	 * Create instances that should be always created.

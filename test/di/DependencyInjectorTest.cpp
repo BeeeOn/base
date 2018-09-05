@@ -16,6 +16,7 @@ namespace BeeeOn {
 class DependencyInjectorTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST_SUITE(DependencyInjectorTest);
 	CPPUNIT_TEST(testSimple);
+	CPPUNIT_TEST(testConstant);
 	CPPUNIT_TEST(testCastToBase);
 	CPPUNIT_TEST(testAlias);
 	CPPUNIT_TEST(testAliasLoop);
@@ -34,6 +35,7 @@ public:
 	void setUp();
 	void tearDown();
 	void testSimple();
+	void testConstant();
 	void testCastToBase();
 	void testAlias();
 	void testAliasLoop();
@@ -132,6 +134,12 @@ namespace BeeeOn {
 void DependencyInjectorTest::setUp()
 {
 	m_config->loadEmpty("empty");
+	m_config->setString("constant[1][@name]", "label");
+	m_config->setString("constant[1][@text]", "Some text");
+	m_config->setString("constant[2][@name]", "sum");
+	m_config->setString("constant[2][@number]", "1 + ${FakeNumber}"); // 43
+	m_config->setString("constant[3][@name]", "time");
+	m_config->setString("constant[3][@time]", "${sum} s"); // 43000000
 	m_config->setString("alias[1][@name]", "simpleAlias");
 	m_config->setString("alias[1][@ref]", "simple");
 	m_config->setString("alias[2][@name]", "secondAlias");
@@ -212,6 +220,18 @@ void DependencyInjectorTest::testSimple()
 	CPPUNIT_ASSERT_EQUAL("1", fake->m_map["a"]);
 	CPPUNIT_ASSERT_EQUAL("2", fake->m_map["b"]);
 	CPPUNIT_ASSERT_EQUAL("3", fake->m_map["c"]);
+}
+
+void DependencyInjectorTest::testConstant()
+{
+	DependencyInjector injector(m_config);
+
+	CPPUNIT_ASSERT(m_config->has("label"));
+	CPPUNIT_ASSERT_EQUAL("Some text", m_config->getString("label"));
+	CPPUNIT_ASSERT(m_config->has("sum"));
+	CPPUNIT_ASSERT_EQUAL("43", m_config->getString("sum"));
+	CPPUNIT_ASSERT(m_config->has("time"));
+	CPPUNIT_ASSERT_EQUAL("43000000", m_config->getString("time"));
 }
 
 void DependencyInjectorTest::testCastToBase()

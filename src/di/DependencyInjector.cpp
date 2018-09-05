@@ -1,3 +1,4 @@
+#include <cmath>
 #include <list>
 
 #include <Poco/Exception.h>
@@ -166,6 +167,8 @@ DependencyInjector::DependencyInjector(
 		bool avoidEarly):
 	m_conf(conf)
 {
+	computeConstants();
+
 	if (!avoidEarly) {
 		try {
 			createEarly();
@@ -212,6 +215,69 @@ DependencyInjector::~DependencyInjector()
 	destroyAll();
 }
 
+void DependencyInjector::computeConstants()
+{
+	AbstractConfiguration::Keys tmp;
+	m_conf->keys(tmp);
+
+	AbstractConfiguration::Keys::const_iterator it;
+	for (it = tmp.begin(); it != tmp.end(); ++it) {
+		const string &key = *it;
+
+		if (key.find("constant[") == string::npos && key != "constant")
+			continue;
+
+		if (!m_conf->has(key + "[@name]"))
+			continue;
+
+		const string &name = m_conf->getString(key + "[@name]");
+		string value;
+
+		logger().trace("visiting constant " + name, __FILE__, __LINE__);
+
+		if (m_conf->has(key + "[@text]")) {
+			value = m_conf->getString(key + "[@text]");
+
+			logger().debug(
+				"evaluating constant " + name + " value " + value,
+				__FILE__, __LINE__);
+
+			m_conf->setString(name, value);
+		}
+		else if (m_conf->has(key + "[@time]")) {
+			value = m_conf->getString(key + "[@time]");
+			const auto result = TimespanParser::parse(value);
+
+			logger().debug(
+				"evaluating constant " + name
+				+ " value " + value
+				+ " as " + to_string(result.totalMicroseconds()),
+				__FILE__, __LINE__);
+
+			m_conf->setInt64(name, result.totalMicroseconds());
+		}
+		else if (m_conf->has(key + "[@number]")) {
+			value = m_conf->getString(key + "[@number]");
+			SimpleCalc calc;
+			const double result = calc.evaluate(value);
+
+			logger().debug(
+				"evaluating constant " + name
+				+ " value " + value
+				+ " as " + to_string(result),
+				__FILE__, __LINE__);
+
+			if (::floor(result) == result)
+				m_conf->setInt64(name, static_cast<Int64>(result));
+			else
+				m_conf->setDouble(name, result);
+		}
+		else {
+			throw NotFoundException("missing attribute text, time or number");
+		}
+	}
+}
+
 void DependencyInjector::createEarly()
 {
 	AbstractConfiguration::Keys tmp;
@@ -221,7 +287,10 @@ void DependencyInjector::createEarly()
 	for (it = tmp.begin(); it != tmp.end(); ++it) {
 		const string &key = *it;
 
-		if (key.find("instance[") == string::npos)
+		if (key.find("instance[") == string::npos && key != "instance")
+			continue;
+
+		if (!m_conf->has(key + "[@name]"))
 			continue;
 
 		const string &init = m_conf->getString(
