@@ -303,22 +303,15 @@ void DependencyInjector::createEarly()
 	}
 }
 
-DIWrapper *DependencyInjector::create(const string &name, bool disown)
+DIWrapper *DependencyInjector::resolveAndCreate(const string &name, bool disown)
 {
-	DIWrapper *existing = find(name);
-	if (existing != NULL) {
-		logger().debug("instance " + name + " reused",
-				__FILE__, __LINE__);
-		return existing;
-	}
-
 	InstanceInfo info(name);
 	const string &ref = info.resolveAlias(m_conf);
 
 	if (ref.empty())
 		return createNoAlias(info, disown);
 
-	existing = find(ref);
+	DIWrapper *existing = find(ref);
 	if (existing != NULL) {
 		logger().debug("instance " + name
 				+ " reused as alias to " + ref,
@@ -328,6 +321,18 @@ DIWrapper *DependencyInjector::create(const string &name, bool disown)
 
 	InstanceInfo aliasInfo(ref);
 	return createNoAlias(aliasInfo, disown);
+}
+
+DIWrapper *DependencyInjector::create(const string &name, bool disown)
+{
+	DIWrapper *existing = find(name);
+	if (existing != NULL) {
+		logger().debug("instance " + name + " reused",
+				__FILE__, __LINE__);
+		return existing;
+	}
+
+	return resolveAndCreate(name, disown);
 }
 
 DIWrapper *DependencyInjector::find(const string &name)
@@ -366,6 +371,33 @@ DIWrapper *DependencyInjector::createNew(const InstanceInfo &info)
 	return factory.create();
 }
 
+void DependencyInjector::createAndInjectRef(
+		const string &targetName,
+		DIWrapper *target,
+		const string &name,
+		const string &value)
+{
+	logger().debug("injecting " + value + " as " + name
+			+ " into " + targetName);
+
+	DIWrapper *ref = NULL;
+
+	try {
+		ref = create(value);
+	} catch (const Exception &e) {
+		logger().error("failed to create ref " + value,
+				__FILE__, __LINE__);
+		e.rethrow();
+	}
+
+	if (ref == NULL) {
+		throw NullPointerException(
+				"failed to create ref " + value);
+	}
+
+	target->injectRef(name, *ref);
+}
+
 bool DependencyInjector::tryInjectRef(
 		const InstanceInfo &info,
 		DIWrapper *target,
@@ -375,29 +407,26 @@ bool DependencyInjector::tryInjectRef(
 	if (m_conf->has(key + "[@ref]")) {
 		const string value = m_conf->getString(key + "[@ref]");
 
-		logger().debug("injecting " + value + " as " + name
-				+ " into " + info.name());
-
-		DIWrapper *ref = NULL;
-
-		try {
-			ref = create(value);
-		} catch (const Exception &e) {
-			logger().error("failed to create ref " + value,
-					__FILE__, __LINE__);
-			e.rethrow();
-		}
-
-		if (ref == NULL) {
-			throw NullPointerException(
-					"failed to create ref " + value);
-		}
-
-		target->injectRef(name, *ref);
+		createAndInjectRef(info.name(), target, name, value);
 		return true;
 	}
 
 	return false;
+}
+
+void DependencyInjector::evalAndInjectNumber(
+		const string &targetName,
+		DIWrapper *target,
+		const string &name,
+		const string &value)
+{
+		SimpleCalc calc;
+		const double number = calc.evaluate(value);
+
+		logger().debug("injecting number " + to_string(number)
+				+ " as " + name + " into " + targetName);
+
+		target->injectNumber(name, number);
 }
 
 bool DependencyInjector::tryInjectNumber(
@@ -407,14 +436,8 @@ bool DependencyInjector::tryInjectNumber(
 		const string &name)
 {
 	if (m_conf->has(key + "[@number]")) {
-		SimpleCalc calc;
 		const string &tmp = m_conf->getString(key + "[@number]");
-		const double value = calc.evaluate(tmp);
-
-		logger().debug("injecting number " + to_string(value)
-				+ " as " + name + " into " + info.name());
-
-		target->injectNumber(name, value);
+		evalAndInjectNumber(info.name(), target, name, tmp);
 		return true;
 	}
 

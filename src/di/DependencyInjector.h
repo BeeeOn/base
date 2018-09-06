@@ -102,7 +102,7 @@ class InstanceInfo;
  * Poco::SharedPtr<Main> main = di.create<Main>("main");
  * </pre>
  */
-class DependencyInjector : public Loggable {
+class DependencyInjector : protected Loggable {
 public:
 	typedef std::map<std::string, DIWrapper *> WrapperMap;
 	typedef std::vector<DIWrapper *> WrapperVector;
@@ -173,6 +173,10 @@ private:
 	 */
 	void destroyAll();
 
+	DIWrapper *resolveAndCreate(
+			const std::string &name,
+			bool disown);
+
 	DIWrapper *createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);
@@ -184,10 +188,22 @@ private:
 			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
+
+	void createAndInjectRef(
+			const std::string &targetName,
+			DIWrapper *target,
+			const std::string &name,
+			const std::string &value);
 	bool tryInjectRef(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,
 			const std::string &name);
+
+	void evalAndInjectNumber(
+			const std::string &targetName,
+			DIWrapper *target,
+			const std::string &name,
+			const std::string &value);
 	bool tryInjectNumber(const InstanceInfo &info,
 			DIWrapper *target,
 			const std::string &key,
