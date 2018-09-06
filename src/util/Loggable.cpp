@@ -6,6 +6,7 @@
 
 #include "util/ClassInfo.h"
 #include "util/Loggable.h"
+#include "util/WithTrace.h"
 
 using namespace std;
 using namespace Poco;
@@ -64,4 +65,37 @@ void Loggable::configureSimple(
 	PatternFormatter *formatter = new PatternFormatter;
 	formatter->setProperty(PatternFormatter::PROP_PATTERN, "%q %t (%U:%u)");
 	logger.setChannel(new FormattingChannel(formatter, new ConsoleChannel));
+}
+
+void Loggable::logException(
+		Logger &logger,
+		Message::Priority priority,
+		const Exception &e,
+		const char *file,
+		size_t line)
+{
+	const Exception *nested = e.nested();
+	string text = e.displayText();
+
+	if (nested) {
+		if (Throwable::traceOf(e).size() > 0)
+			text += "\n";
+		else
+			text += " ";
+
+		text += "caused by ";
+		text += nested->displayText();
+		text += "";
+	}
+
+	Message msg;
+	msg.setSource(logger.name());
+	msg.setPriority(priority);
+	msg.setText(text);
+	msg.setSourceFile(file);
+	msg.setSourceLine(line);
+	msg.set("exception", ClassInfo(e).name());
+	msg.set("code", to_string(e.code()));
+
+	logger.log(msg);
 }

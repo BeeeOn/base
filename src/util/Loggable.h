@@ -4,6 +4,8 @@
 #include <typeinfo>
 #include <string>
 
+#include <Poco/Message.h>
+
 namespace Poco {
 
 class Logger;
@@ -34,6 +36,13 @@ public:
 	static void configureSimple(
 			Poco::Logger &logger, const std::string &level);
 
+	static void logException(
+			Poco::Logger &logger,
+			const Poco::Message::Priority priority,
+			const Poco::Exception &e,
+			const char *file,
+			size_t line);
+
 protected:
 	void setupLogger(Poco::Logger *logger = 0) const;
 
@@ -52,7 +61,8 @@ private:
 
 #define BEEEON_CATCH_CHAIN(logger)                                           \
 	catch (const Poco::Exception &e) {                                   \
-		(logger).log(e, __FILE__, __LINE__);                         \
+		Loggable::logException((logger),                             \
+			Poco::Message::PRIO_ERROR, e, __FILE__, __LINE__);   \
 	}                                                                    \
 	catch (const std::exception &e) {                                    \
 		(logger).critical(e.what(), __FILE__, __LINE__);             \
@@ -66,7 +76,8 @@ private:
 
 #define BEEEON_CATCH_CHAIN_MESSAGE(logger, message)                          \
 	catch (const Poco::Exception &e) {                                   \
-		(logger).log(e, __FILE__, __LINE__);                         \
+		Loggable::logException((logger),                             \
+			Poco::Message::PRIO_ERROR, e, __FILE__, __LINE__);   \
 		(logger).error(message, __FILE__, __LINE__);                 \
 	}                                                                    \
 	catch (const std::exception &e) {                                    \
@@ -84,7 +95,8 @@ private:
 
 #define BEEEON_CATCH_CHAIN_RETHROW(logger)                                   \
 	catch (const Poco::Exception &e) {                                   \
-		(logger).log(e, __FILE__, __LINE__);                         \
+		Loggable::logException((logger),                             \
+			Poco::Message::PRIO_ERROR, e, __FILE__, __LINE__);   \
 		e.rethrow();                                                 \
 	}                                                                    \
 	catch (const std::exception &e) {                                    \
@@ -102,7 +114,8 @@ private:
 
 #define BEEEON_CATCH_CHAIN_ACTION(logger, action)                            \
 	catch (const Poco::Exception &e) {                                   \
-		(logger).log(e, __FILE__, __LINE__);                         \
+		Loggable::logException((logger),                             \
+			Poco::Message::PRIO_ERROR, e, __FILE__, __LINE__);   \
 		action;                                                      \
 	}                                                                    \
 	catch (const std::exception &e) {                                    \
@@ -120,7 +133,8 @@ private:
 
 #define BEEEON_CATCH_CHAIN_ACTION_RETHROW(logger, action)                    \
 	catch (const Poco::Exception &e) {                                   \
-		(logger).log(e, __FILE__, __LINE__);                         \
+		Loggable::logException((logger),                             \
+			Poco::Message::PRIO_ERROR, e, __FILE__, __LINE__);   \
 		action;                                                      \
 		e.rethrow();                                                 \
 	}                                                                    \
