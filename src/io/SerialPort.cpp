@@ -6,6 +6,7 @@
 
 #include <cerrno>
 
+#include <Poco/Error.h>
 #include <Poco/Exception.h>
 
 #include "io/SerialPort.h"
@@ -16,28 +17,31 @@ using namespace std;
 
 static const int BUFFER_SIZE = 1024;
 
-void throwFromErrno(const std::string &func, int err)
+static void throwFromErrno(const std::string &func)
 {
-	switch (errno) {
+	const int err = Error::last();
+	const auto &msg = func + ": " + Error::getMessage(err);
+
+	switch (err) {
 	case EINTR:
-		throw SignalException(func + ": " + strerror(err), err);
+		throw SignalException(msg, err);
 	case EINVAL:
-		throw InvalidArgumentException(func + ": " + strerror(err), err);
+		throw InvalidArgumentException(msg, err);
 	case EBADF:
 	case EFAULT:
 	case EPERM:
-		throw InvalidAccessException(func + ": " + strerror(err), err);
+		throw InvalidAccessException(msg, err);
 	case EACCES:
-		throw FileAccessDeniedException(func + ": " + strerror(err), err);
+		throw FileAccessDeniedException(msg, err);
 	case EIO:
-		throw IOException(func + ": " + strerror(err), err);
+		throw IOException(msg, err);
 	case ENODEV:
 	case ENOENT:
 	case ENXIO:
 	case ENAMETOOLONG:
-		throw FileNotFoundException(func + ": " + strerror(err), err);
+		throw FileNotFoundException(msg, err);
 	default:
-		throw SystemException(func + ": " + strerror(err), err);
+		throw SystemException(msg, err);
 	}
 }
 
@@ -61,10 +65,10 @@ static void prepareBaudRate(struct termios &term, int baudrate)
 	}
 
 	if (cfsetspeed(&term, speed) == -1)
-		throwFromErrno("cfsetspeed", errno);
+		throwFromErrno("cfsetspeed");
 }
 
-void prepareStopBits(struct termios &term, SerialPort::StopBits stopBits)
+static void prepareStopBits(struct termios &term, SerialPort::StopBits stopBits)
 {
 	switch (stopBits) {
 	case SerialPort::STOPBITS_1:
@@ -78,7 +82,7 @@ void prepareStopBits(struct termios &term, SerialPort::StopBits stopBits)
 	}
 }
 
-void prepareParity(struct termios &term, SerialPort::Parity parity)
+static void prepareParity(struct termios &term, SerialPort::Parity parity)
 {
 	switch (parity) {
 	case SerialPort::PARITY_NONE:
@@ -97,7 +101,7 @@ void prepareParity(struct termios &term, SerialPort::Parity parity)
 	}
 }
 
-void prepareDataBits(struct termios &term, SerialPort::DataBits dataBits)
+static void prepareDataBits(struct termios &term, SerialPort::DataBits dataBits)
 {
 	switch (dataBits) {
 	case SerialPort::DATABITS_5:
@@ -141,7 +145,7 @@ void SerialPort::installBlocking()
 
 	flags = fcntl(m_fd, F_GETFL, 0);
 	if(flags == -1)
-		throwFromErrno("fcntl", errno);
+		throwFromErrno("fcntl");
 
 	if (!(flags & O_NONBLOCK))
 		return;
@@ -149,13 +153,13 @@ void SerialPort::installBlocking()
 	// clear the blocking flag
 	flags &= ~O_NONBLOCK;
 	if (fcntl(m_fd, F_SETFL, flags) == -1)
-		throwFromErrno("fcntl", errno);
+		throwFromErrno("fcntl");
 }
 
 void SerialPort::installNonBlocking()
 {
 	if (fcntl(m_fd, F_SETFL, O_NONBLOCK) == -1)
-		throwFromErrno("fcntl", errno);
+		throwFromErrno("fcntl");
 }
 
 void SerialPort::open()
@@ -173,7 +177,7 @@ void SerialPort::open()
 	m_fd = ::open(m_devicePath.c_str(), O_RDWR | O_NOCTTY | O_NDELAY);
 
 	if (m_fd < 0)
-		throwFromErrno("open", errno);
+		throwFromErrno("open");
 
 	struct termios term;
 	::memset(&term, 0, sizeof(term));
@@ -190,7 +194,7 @@ void SerialPort::open()
 			installBlocking();
 
 		if (tcsetattr(m_fd, TCSAFLUSH, &term) < 0)
-			throwFromErrno("tcsetattr", errno);
+			throwFromErrno("tcsetattr");
 	}
 	catch (const Exception &ex) {
 		close();
@@ -198,24 +202,24 @@ void SerialPort::open()
 	}
 }
 
-unsigned int SerialPort::write(const char *buffer, size_t size)
+size_t SerialPort::write(const char *buffer, size_t size)
 {
 	ssize_t ret = ::write(m_fd, buffer, size);
 
 	if (ret < 0) {
-		if (m_nonBlocking && errno == EAGAIN)
+		if (m_nonBlocking && Error::last() == EAGAIN)
 			return 0;
 
-		if (errno == EIO)
-			throw WriteFileException("write: " + string(strerror(errno)), errno);
+		if (Error::last() == EIO)
+			throw WriteFileException("write: " + Error::getMessage(Error::last()));
 
-		throwFromErrno("write", errno);
+		throwFromErrno("write");
 	}
 
 	return ret;
 }
 
-unsigned int SerialPort::write(const string &data)
+size_t SerialPort::write(const string &data)
 {
 	return write(data.c_str(), data.length());
 }
@@ -227,13 +231,14 @@ string SerialPort::readDirect(int fd)
 	ssize_t ret = ::read(fd, buf, sizeof(buf));
 
 	if (ret < 0) {
-		if (errno == EAGAIN)
+		switch (Error::last()) {
+		case EAGAIN:
 			return "";
-
-		if (errno == EIO)
-			throw ReadFileException("read: " + string(strerror(errno)), errno);
-
-		throwFromErrno("read", errno);
+		case EIO:
+			throw ReadFileException("read: " + Error::getMessage(Error::last()));
+		default:
+			throwFromErrno("read");
+		}
 	}
 
 	return string(buf, ret);
@@ -252,7 +257,7 @@ string SerialPort::read(const Timespan &timeout = Timespan(0))
 	while (true) {
 		int ret;
 		if ((ret = poll(pfd, 1, timeout.totalMilliseconds())) < 0)
-			throwFromErrno("poll", errno);
+			throwFromErrno("poll");
 
 		if (ret == 0)
 			throw TimeoutException(m_devicePath + ": timeout expired");
@@ -311,5 +316,5 @@ bool SerialPort::isOpen()
 void SerialPort::flush()
 {
 	if (tcflush(m_fd, TCIFLUSH) == -1 || tcflush(m_fd, TCOFLUSH) == -1)
-		throwFromErrno("tcflush", errno);
+		throwFromErrno("tcflush");
 }
