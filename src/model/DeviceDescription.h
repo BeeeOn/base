@@ -41,6 +41,7 @@ public:
 	Poco::Timespan refreshTime() const;
 
 	std::string toString() const;
+	std::string toPrettyString() const;
 
 private:
 	static std::string normalizeName(const std::string& bytes);
