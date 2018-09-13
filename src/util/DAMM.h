@@ -1,5 +1,4 @@
-#ifndef BEEEON_DAMM_H
-#define BEEEON_DAMM_H
+#pragma once
 
 namespace BeeeOn {
 
@@ -20,5 +19,3 @@ private:
 };
 
 }
-
-#endif

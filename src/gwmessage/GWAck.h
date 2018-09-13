@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_ACK_H
-#define BEEEON_GW_MESSAGE_ACK_H
+#pragma once
 
 #include <Poco/JSON/Object.h>
 
@@ -39,5 +38,3 @@ public:
 };
 
 }
-
-#endif

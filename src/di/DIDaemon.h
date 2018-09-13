@@ -1,5 +1,4 @@
-#ifndef BEEEON_DI_DAEMON_H
-#define BEEEON_DI_DAEMON_H
+#pragma once
 
 #include <string>
 
@@ -77,5 +76,3 @@ private:
 };
 
 }
-
-#endif

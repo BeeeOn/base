@@ -1,5 +1,4 @@
-#ifndef BEEEON_ABOUT_H
-#define BEEEON_ABOUT_H
+#pragma once
 
 #include <string>
 
@@ -13,5 +12,3 @@ struct About {
 };
 
 }
-
-#endif

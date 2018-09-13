@@ -1,5 +1,4 @@
-#ifndef BEEEON_BACKTRACE_H
-#define BEEEON_BACKTRACE_H
+#pragma once
 
 #include <string>
 
@@ -52,5 +51,3 @@ BEEEON_BACKTRACE_GLIBC(m_backtrace, m_backtrace_size)
 };
 
 }
-
-#endif

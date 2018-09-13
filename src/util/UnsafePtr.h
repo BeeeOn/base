@@ -1,5 +1,4 @@
-#ifndef BEEEON_UNSAFE_PTR_H
-#define BEEEON_UNSAFE_PTR_H
+#pragma once
 
 #include <algorithm>
 
@@ -263,5 +262,3 @@ inline void swap(UnsafePtr<T> &a, UnsafePtr<T> &b)
 }
 
 }
-
-#endif

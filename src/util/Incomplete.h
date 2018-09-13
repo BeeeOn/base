@@ -1,5 +1,4 @@
-#ifndef BEEEON_INCOMPLETE_H
-#define BEEEON_INCOMPLETE_H
+#pragma once
 
 namespace BeeeOn {
 
@@ -154,5 +153,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_SENSOR_DATA_CONFIRM_H
-#define BEEEON_GW_MESSAGE_SENSOR_DATA_CONFIRM_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
@@ -26,5 +25,3 @@ public:
 };
 
 }
-
-#endif

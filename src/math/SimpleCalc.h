@@ -1,5 +1,4 @@
-#ifndef BEEEON_SIMPLE_CALC_H
-#define BEEEON_SIMPLE_CALC_H
+#pragma once
 
 namespace BeeeOn {
 
@@ -38,5 +37,3 @@ protected:
 };
 
 }
-
-#endif

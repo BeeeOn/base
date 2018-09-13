@@ -1,5 +1,4 @@
-#ifndef BEEEON_VALUE_GENERATOR_H
-#define BEEEON_VALUE_GENERATOR_H
+#pragma once
 
 namespace Poco {
 
@@ -111,5 +110,3 @@ private:
 };
 
 }
-
-#endif

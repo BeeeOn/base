@@ -1,5 +1,4 @@
-#ifndef BEEEON_WITH_TRACE
-#define BEEEON_WITH_TRACE
+#pragma once
 
 #include "util/Backtrace.h"
 
@@ -91,5 +90,3 @@ private:
 }
 
 }
-
-#endif

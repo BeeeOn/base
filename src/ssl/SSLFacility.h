@@ -1,5 +1,4 @@
-#ifndef BEEEON_SSL_FACILITY_H
-#define BEEEON_SSL_FACILITY_H
+#pragma once
 
 #include <string>
 #include <Poco/Mutex.h>
@@ -115,5 +114,3 @@ protected:
 };
 
 }
-
-#endif

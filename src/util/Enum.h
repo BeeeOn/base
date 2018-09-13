@@ -1,5 +1,4 @@
-#ifndef BEEEON_ENUM_H
-#define BEEEON_ENUM_H
+#pragma once
 
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
@@ -351,5 +350,3 @@ inline std::string operator +(const char *s, const Enum<Base, Raw, NamesMapIniti
 }
 
 }
-
-#endif

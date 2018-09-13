@@ -1,5 +1,4 @@
-#ifndef BEEEON_TIMESPAN_PARSER_H
-#define BEEEON_TIMESPAN_PARSER_H
+#pragma once
 
 #include <string>
 
@@ -40,5 +39,3 @@ public:
 };
 
 }
-
-#endif

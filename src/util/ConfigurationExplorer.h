@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONFIGURATION_EXPLORER_H
-#define BEEEON_CONFIGURATION_EXPLORER_H
+#pragma once
 
 namespace BeeeOn {
 
@@ -13,5 +12,3 @@ public:
 };
 
 }
-
-#endif

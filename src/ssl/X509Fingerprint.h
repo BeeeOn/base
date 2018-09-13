@@ -1,5 +1,4 @@
-#ifndef BEEEON_X509_FINGERPRINT_H
-#define BEEEON_X509_FINGERPRINT_H
+#pragma once
 
 #include <Poco/DigestEngine.h>
 
@@ -28,5 +27,3 @@ private:
 };
 
 }
-
-#endif

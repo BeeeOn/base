@@ -1,5 +1,4 @@
-#ifndef BEEEON_MODULE_TYPE_H
-#define BEEEON_MODULE_TYPE_H
+#pragma once
 
 #include <set>
 
@@ -339,5 +338,3 @@ private:
 };
 
 }
-
-#endif

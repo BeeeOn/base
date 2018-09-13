@@ -1,5 +1,4 @@
-#ifndef BEEEON_OCCASIONALLY_H
-#define BEEEON_OCCASIONALLY_H
+#pragma once
 
 #include <functional>
 #include <Poco/Timestamp.h>
@@ -29,5 +28,3 @@ private:
 };
 
 }
-
-#endif

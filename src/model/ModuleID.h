@@ -1,5 +1,4 @@
-#ifndef BEEEON_MODULE_ID_H
-#define BEEEON_MODULE_ID_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -73,5 +72,3 @@ private:
 };
 
 }
-
-#endif

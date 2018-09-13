@@ -1,5 +1,4 @@
-#ifndef BEEEON_NO_TRANSLATOR_H
-#define BEEEON_NO_TRANSLATOR_H
+#pragma once
 
 #include "l10n/Translator.h"
 
@@ -23,5 +22,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_CLASS_INFO_H
-#define BEEEON_CLASS_INFO_H
+#pragma once
 
 #include <string>
 #include <typeindex>
@@ -120,5 +119,3 @@ BEEEON_CLASS_REGISTER(T, #T, Class##__COUNTER__)\
 }
 
 }
-
-#endif

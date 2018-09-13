@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOOP_RUNNER_H
-#define BEEEON_LOOP_RUNNER_H
+#pragma once
 
 #include <list>
 
@@ -69,5 +68,3 @@ private:
 };
 
 }
-
-#endif

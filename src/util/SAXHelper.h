@@ -1,5 +1,4 @@
-#ifndef BEEEON_SAX_HELPER_H
-#define BEEEON_SAX_HELPER_H
+#pragma once
 
 #include <stack>
 
@@ -288,5 +287,3 @@ private:
 };
 
 }
-
-#endif

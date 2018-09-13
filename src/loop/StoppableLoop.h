@@ -1,5 +1,4 @@
-#ifndef BEEEON_STOPPABLE_LOOP_H
-#define BEEEON_STOPPABLE_LOOP_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
@@ -54,5 +53,3 @@ private:
 };
 
 }
-
-#endif

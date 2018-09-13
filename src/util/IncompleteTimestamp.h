@@ -1,5 +1,4 @@
-#ifndef BEEEON_INCOMPLETE_TIMESTAMP_H
-#define BEEEON_INCOMPLETE_TIMESTAMP_H
+#pragma once
 
 #include <ostream>
 
@@ -41,5 +40,3 @@ typedef Incomplete<
 > IncompleteTimestamp;
 
 }
-
-#endif

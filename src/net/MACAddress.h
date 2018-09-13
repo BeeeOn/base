@@ -1,5 +1,4 @@
-#ifndef BEEEON_MAC_ADDRESS_H
-#define BEEEON_MAC_ADDRESS_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -65,5 +64,3 @@ private:
 };
 
 }
-
-#endif //BEEEON_MAC_ADDRESS_H

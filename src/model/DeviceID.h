@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_ID_H
-#define BEEEON_DEVICE_ID_H
+#pragma once
 
 #include <cstdint>
 #include <string>
@@ -112,5 +111,3 @@ private:
 };
 
 }
-
-#endif

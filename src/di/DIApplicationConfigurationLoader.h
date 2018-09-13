@@ -1,5 +1,4 @@
-#ifndef BEEEON_DI_APPLICATION_CONFIGURATION_LOADER_H
-#define BEEEON_DI_APPLICATION_CONFIGURATION_LOADER_H
+#pragma once
 
 #include "di/DIXmlLoader.h"
 #include "util/ApplicationConfigurationLoader.h"
@@ -22,5 +21,3 @@ private:
 };
 
 }
-
-#endif

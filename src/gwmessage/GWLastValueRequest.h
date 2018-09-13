@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_LAST_VALUE_REQUEST_H
-#define BEEEON_GW_MESSAGE_LAST_VALUE_REQUEST_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
@@ -34,5 +33,3 @@ protected:
 };
 
 }
-
-#endif

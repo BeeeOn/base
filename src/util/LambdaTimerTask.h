@@ -1,5 +1,4 @@
-#ifndef BEEEON_LAMBDA_TIMER_TASK_H
-#define BEEEON_LAMBDA_TIMER_TASK_H
+#pragma once
 
 #include <functional>
 
@@ -21,5 +20,3 @@ private:
 };
 
 }
-
-#endif

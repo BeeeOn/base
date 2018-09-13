@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_VALUE_H
-#define BEEEON_SENSOR_VALUE_H
+#pragma once
 
 #include "model/ModuleID.h"
 
@@ -89,5 +88,3 @@ private:
 };
 
 }
-
-#endif

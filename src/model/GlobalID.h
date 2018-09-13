@@ -1,5 +1,4 @@
-#ifndef BEEEON_GLOBAL_ID_H
-#define BEEEON_GLOBAL_ID_H
+#pragma once
 
 #include <vector>
 
@@ -99,5 +98,3 @@ private:
 };
 
 }
-
-#endif

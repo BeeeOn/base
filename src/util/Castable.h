@@ -1,5 +1,4 @@
-#ifndef BEEEON_TYPE_CASTABLE_H
-#define BEEEON_TYPE_CASTABLE_H
+#pragma once
 
 #include <typeinfo>
 
@@ -38,4 +37,3 @@ protected:
 };
 
 }
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_JSON_UTIL_H
-#define BEEEON_JSON_UTIL_H
+#pragma once
 
 #include <cmath>
 #include <string>
@@ -20,5 +19,3 @@ public:
 };
 
 }
-
-#endif

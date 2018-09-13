@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_REQUEST_H
-#define BEEEON_GW_MESSAGE_REQUEST_H
+#pragma once
 
 #include <functional>
 
@@ -62,5 +61,3 @@ protected:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_ENTITY_H
-#define BEEEON_ENTITY_H
+#pragma once
 
 #include <string>
 
@@ -106,5 +105,3 @@ const std::string Entity<TypeID>::toString() const
 }
 
 }
-
-#endif

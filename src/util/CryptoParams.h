@@ -1,5 +1,4 @@
-#ifndef BEEEON_CRYPTO_PARAMS_H
-#define BEEEON_CRYPTO_PARAMS_H
+#pragma once
 
 #include <Poco/Crypto/CipherKey.h>
 
@@ -43,5 +42,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_SENSOR_DATA_H
-#define BEEEON_SENSOR_DATA_H
+#pragma once
 
 #include <vector>
 
@@ -60,5 +59,3 @@ private:
 };
 
 }
-
-#endif

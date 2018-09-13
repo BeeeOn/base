@@ -1,5 +1,4 @@
-#ifndef BEEEON_REJECT_CERTIFICATE_HANDLER_H
-#define BEEEON_REJECT_CERTIFICATE_HANDLER_H
+#pragma once
 
 #include <Poco/Net/InvalidCertificateHandler.h>
 
@@ -27,5 +26,3 @@ public:
 };
 
 }
-
-#endif

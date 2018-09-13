@@ -1,5 +1,4 @@
-#ifndef BEEEON_SSL_SERVER_H
-#define BEEEON_SSL_SERVER_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Net/InvalidCertificateHandler.h>
@@ -29,5 +28,3 @@ protected:
 };
 
 }
-
-#endif
