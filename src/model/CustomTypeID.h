@@ -1,5 +1,4 @@
-#ifndef BEEEON_CUSTOM_TYPE_ID_H
-#define BEEEON_CUSTOM_TYPE_ID_H
+#pragma once
 
 #include <string>
 
@@ -36,5 +35,3 @@ private:
 };
 
 }
-
-#endif

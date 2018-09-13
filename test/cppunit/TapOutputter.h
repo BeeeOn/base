@@ -1,5 +1,4 @@
-#ifndef BEEEON_TAP_OUTPUTTER_H
-#define BEEEON_TAP_OUTPUTTER_H
+#pragma once
 
 #include <iosfwd>
 #include <set>
@@ -53,5 +52,3 @@ private:
 };
 
 }
-
-#endif

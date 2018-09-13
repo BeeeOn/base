@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_H
-#define BEEEON_GW_MESSAGE_H
+#pragma once
 
 #include <string>
 
@@ -90,5 +89,3 @@ private:
 };
 
 }
-
-#endif

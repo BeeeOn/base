@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_TYPE_H
-#define BEEEON_GW_MESSAGE_TYPE_H
+#pragma once
 
 #include "util/Enum.h"
 
@@ -34,5 +33,3 @@ struct GWMessageTypeEnum {
 typedef Enum<GWMessageTypeEnum> GWMessageType;
 
 }
-
-#endif

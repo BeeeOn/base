@@ -1,5 +1,4 @@
-#ifndef BEEEON_SYSTEM_LOCALE_MANAGER_H
-#define BEEEON_SYSTEM_LOCALE_MANAGER_H
+#pragma once
 
 #include "l10n/LocaleManager.h"
 
@@ -12,5 +11,3 @@ public:
 };
 
 }
-
-#endif

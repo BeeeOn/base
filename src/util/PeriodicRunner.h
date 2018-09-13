@@ -1,5 +1,4 @@
-#ifndef BEEEON_PERIODIC_RUNNER_H
-#define BEEEON_PERIODIC_RUNNER_H
+#pragma once
 
 #include <functional>
 
@@ -51,5 +50,3 @@ private:
 };
 
 }
-
-#endif

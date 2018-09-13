@@ -1,5 +1,4 @@
-#ifndef BEEEON_FD_STREAM_H
-#define BEEEON_FD_STREAM_H
+#pragma once
 
 #include <iostream>
 
@@ -72,5 +71,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_DEVICE_LIST_RESPONSE_H
-#define BEEEON_GW_MESSAGE_DEVICE_LIST_RESPONSE_H
+#pragma once
 
 #include <map>
 #include <vector>
@@ -37,5 +36,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef TOKEN_ID_H
-#define TOKEN_ID_H
+#pragma once
 
 #include <string>
 
@@ -68,5 +67,3 @@ private:
 };
 
 }
-
-#endif

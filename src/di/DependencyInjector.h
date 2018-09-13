@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEPENDENCY_INJECTOR_H
-#define BEEEON_DEPENDENCY_INJECTOR_H
+#pragma once
 
 #include <map>
 #include <Poco/Exception.h>
@@ -232,5 +231,3 @@ private:
 };
 
 }
-
-#endif

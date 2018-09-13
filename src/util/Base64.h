@@ -1,5 +1,4 @@
-#ifndef BEEEON_BASE64_H
-#define BEEEON_BASE64_H
+#pragma once
 
 #include <sstream>
 #include <Poco/Base64Encoder.h>
@@ -48,5 +47,3 @@ public:
 };
 
 }
-
-#endif

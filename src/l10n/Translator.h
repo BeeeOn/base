@@ -1,5 +1,4 @@
-#ifndef BEEEON_TRANSLATOR_H
-#define BEEEON_TRANSLATOR_H
+#pragma once
 
 #include <iostream>
 #include <vector>
@@ -111,5 +110,3 @@ public:
 };
 
 }
-
-#endif

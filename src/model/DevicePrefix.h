@@ -1,5 +1,4 @@
-#ifndef BEEEON_DEVICE_PREFIX_H
-#define BEEEON_DEVICE_PREFIX_H
+#pragma once
 
 #include "util/Enum.h"
 
@@ -42,4 +41,3 @@ typedef Enum<DevicePrefixEnum, DevicePrefixEnum::Raw,
 
 
 }
-#endif

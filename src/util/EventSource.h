@@ -1,5 +1,4 @@
-#ifndef BEEEON_EVENT_SOURCE_H
-#define BEEEON_EVENT_SOURCE_H
+#pragma once
 
 #include <list>
 #include <typeinfo>
@@ -126,5 +125,3 @@ void EventSource<Listener>::fireEvent(const Event &e, const Method &m)
 }
 
 }
-
-#endif

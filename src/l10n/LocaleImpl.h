@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCALE_IMPL_H
-#define BEEEON_LOCALE_IMPL_H
+#pragma once
 
 namespace BeeeOn {
 
@@ -46,6 +45,3 @@ public:
 };
 
 }
-
-#endif
-

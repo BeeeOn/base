@@ -1,5 +1,4 @@
-#ifndef BEEEON_CONFIGURATION_LOADER_H
-#define BEEEON_CONFIGURATION_LOADER_H
+#pragma once
 
 #include <Poco/Util/AbstractConfiguration.h>
 
@@ -32,5 +31,3 @@ private:
 };
 
 }
-
-#endif

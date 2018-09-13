@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_DEVICE_ACCEPT_REQUEST_H
-#define BEEEON_GW_MESSAGE_DEVICE_ACCEPT_REQUEST_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
@@ -26,5 +25,3 @@ public:
 };
 
 }
-
-#endif

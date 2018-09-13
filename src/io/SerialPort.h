@@ -1,5 +1,4 @@
-#ifndef BEEEON_SERIAL_PORT_H
-#define BEEEON_SERIAL_PORT_H
+#pragma once
 
 #include <string>
 
@@ -63,5 +62,3 @@ private:
 };
 
 }
-
-#endif

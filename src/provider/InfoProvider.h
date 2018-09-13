@@ -1,5 +1,4 @@
-#ifndef BEEEON_INFO_PROVIDER_H
-#define BEEEON_INFO_PROVIDER_H
+#pragma once
 
 #include <set>
 
@@ -168,5 +167,3 @@ void XmlInfoProvider<T>::parseFile(const std::string &path,
 }
 
 }
-
-#endif

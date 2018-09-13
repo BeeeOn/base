@@ -1,5 +1,4 @@
-#ifndef BEEEON_CRYPTO_CONFIG_H
-#define BEEEON_CRYPTO_CONFIG_H
+#pragma once
 
 #include <string>
 
@@ -46,5 +45,3 @@ private:
 };
 
 }
-
-#endif

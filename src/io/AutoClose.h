@@ -1,5 +1,4 @@
-#ifndef BEEEON_AUTO_CLOSE_H
-#define BEEEON_AUTO_CLOSE_H
+#pragma once
 
 #include <Poco/Logger.h>
 
@@ -87,5 +86,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_UTIL_SECURE_XML_PARSER_H
-#define BEEEON_UTIL_SECURE_XML_PARSER_H
+#pragma once
 
 #include <istream>
 
@@ -47,5 +46,3 @@ private:
 };
 
 }
-
-#endif

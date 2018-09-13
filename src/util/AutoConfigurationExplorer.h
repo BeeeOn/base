@@ -1,5 +1,4 @@
-#ifndef BEEEON_GUIDED_CONFIGURATION_EXPLORER_H
-#define BEEEON_GUIDED_CONFIGURATION_EXPLORER_H
+#pragma once
 
 #include <string>
 
@@ -51,5 +50,3 @@ private:
 };
 
 }
-
-#endif

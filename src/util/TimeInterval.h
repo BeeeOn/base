@@ -1,5 +1,4 @@
-#ifndef BEEEON_TIME_INTERVAL_H
-#define BEEEON_TIME_INTERVAL_H
+#pragma once
 
 #include <Poco/Timespan.h>
 #include <Poco/Timestamp.h>
@@ -61,5 +60,3 @@ private:
 };
 
 }
-
-#endif

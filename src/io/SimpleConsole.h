@@ -1,5 +1,4 @@
-#ifndef BEEEON_SIMPLE_CONSOLE_H
-#define BEEEON_SIMPLE_CONSOLE_H
+#pragma once
 
 #include <iosfwd>
 
@@ -60,5 +59,3 @@ private:
 };
 
 }
-
-#endif

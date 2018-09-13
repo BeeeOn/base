@@ -1,5 +1,4 @@
-#ifndef BEEEON_POSIX_SIGNAL_H
-#define BEEEON_POSIX_SIGNAL_H
+#pragma once
 
 #include <functional>
 #include <string>
@@ -73,5 +72,3 @@ protected:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_TCP_CONSOLE_H
-#define BEEEON_TCP_CONSOLE_H
+#pragma once
 
 #include <iosfwd>
 
@@ -90,5 +89,3 @@ private:
 };
 
 }
-
-#endif

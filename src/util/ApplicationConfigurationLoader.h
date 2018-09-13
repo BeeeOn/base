@@ -1,5 +1,4 @@
-#ifndef BEEEON_APPLICATION_CONFIGURATION_LOADER_H
-#define BEEEON_APPLICATION_CONFIGURATION_LOADER_H
+#pragma once
 
 #include "util/FileLoader.h"
 #include "util/Loggable.h"
@@ -32,5 +31,3 @@ private:
 };
 
 }
-
-#endif

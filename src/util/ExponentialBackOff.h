@@ -1,5 +1,4 @@
-#ifndef BEEEON_EXPONENTIAL_BACKOFF_H
-#define BEEEON_EXPONENTIAL_BACKOFF_H
+#pragma once
 
 #include <Poco/Clock.h>
 #include <Poco/Random.h>
@@ -112,5 +111,3 @@ private:
 };
 
 }
-
-#endif

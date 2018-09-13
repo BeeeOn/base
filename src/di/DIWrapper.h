@@ -1,5 +1,4 @@
-#ifndef BEEEON_DI_WRAPPER_H
-#define BEEEON_DI_WRAPPER_H
+#pragma once
 
 #include <climits>
 #include <cmath>
@@ -1044,5 +1043,3 @@ BEEEON_OBJECT_IMPL(ns1##_##ns2##_##ns3##_##cls, ns1::ns2::ns3::cls)
 	_BEEEON_VA_SELECT(BEEEON_OBJECT_END, __VA_ARGS__)
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCALE_H
-#define BEEEON_LOCALE_H
+#pragma once
 
 #include <string>
 
@@ -52,5 +51,3 @@ private:
 };
 
 }
-
-#endif

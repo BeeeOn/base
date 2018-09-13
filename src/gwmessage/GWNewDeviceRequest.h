@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_NEW_DEVICE_REQUEST_H
-#define BEEEON_GW_MESSAGE_NEW_DEVICE_REQUEST_H
+#pragma once
 
 #include <list>
 #include <string>
@@ -56,5 +55,3 @@ public:
 };
 
 }
-
-#endif

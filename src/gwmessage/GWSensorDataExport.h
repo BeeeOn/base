@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_SENSOR_DATA_EXPORT_H
-#define BEEEON_GW_MESSAGE_SENSOR_DATA_EXPORT_H
+#pragma once
 
 #include <vector>
 
@@ -38,5 +37,3 @@ public:
 };
 
 }
-
-#endif

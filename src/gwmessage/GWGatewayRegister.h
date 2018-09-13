@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_GATEWAY_REGISTER_H
-#define BEEEON_GW_MESSAGE_GATEWAY_REGISTER_H
+#pragma once
 
 #include <string>
 
@@ -36,5 +35,3 @@ public:
 };
 
 }
-
-#endif

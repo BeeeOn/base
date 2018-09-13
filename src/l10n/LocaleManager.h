@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOCALE_MANAGER_H
-#define BEEEON_LOCALE_MANAGER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -19,5 +18,3 @@ public:
 };
 
 }
-
-#endif

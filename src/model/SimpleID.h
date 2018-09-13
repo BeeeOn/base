@@ -1,5 +1,4 @@
-#ifndef BEEEON_SIMPLE_ID_H
-#define BEEEON_SIMPLE_ID_H
+#pragma once
 
 #include <string>
 #include <climits>
@@ -125,5 +124,3 @@ inline std::ostream & operator <<(std::ostream &s, const SimpleID &id)
 }
 
 }
-
-#endif

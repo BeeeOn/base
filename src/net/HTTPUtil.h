@@ -1,5 +1,4 @@
-#ifndef BEEEON_HTTP_UTIL_H
-#define BEEEON_HTTP_UTIL_H
+#pragma once
 
 #include <string>
 
@@ -81,5 +80,3 @@ private:
 };
 
 }
-
-#endif

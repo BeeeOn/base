@@ -1,5 +1,4 @@
-#ifndef BEEEON_GW_MESSAGE_RESPONSE_H
-#define BEEEON_GW_MESSAGE_RESPONSE_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
@@ -52,5 +51,3 @@ public:
 };
 
 }
-
-#endif

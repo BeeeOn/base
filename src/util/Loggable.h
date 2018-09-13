@@ -1,5 +1,4 @@
-#ifndef BEEEON_LOGGABLE_H
-#define BEEEON_LOGGABLE_H
+#pragma once
 
 #include <typeinfo>
 #include <string>
@@ -153,6 +152,3 @@ private:
 		action;                                                      \
 		throw Poco::RuntimeException("unknown error");               \
 	}
-
-
-#endif

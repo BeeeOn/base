@@ -1,5 +1,4 @@
-#ifndef BEEEON_GATEWAY_ID_H
-#define BEEEON_GATEWAY_ID_H
+#pragma once
 
 #include <cstdint>
 #include <Poco/Exception.h>
@@ -107,5 +106,3 @@ private:
 };
 
 }
-
-#endif

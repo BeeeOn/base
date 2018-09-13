@@ -1,6 +1,4 @@
-#ifndef BEEEON_BETTER_ASSERT_H
-#define BEEEON_BETTER_ASSERT_H
-
+#pragma once
 #include <cppunit/TestAssert.h>
 #include <Poco/Exception.h>
 
@@ -102,5 +100,3 @@ static inline void assertEquals(
 }
 
 CPPUNIT_NS_END
-
-#endif

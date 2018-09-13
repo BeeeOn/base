@@ -1,5 +1,4 @@
-#ifndef BEEEON_FILE_LOADER_H
-#define BEEEON_FILE_LOADER_H
+#pragma once
 
 namespace Poco {
 
@@ -18,5 +17,3 @@ public:
 };
 
 }
-
-#endif

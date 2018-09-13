@@ -1,5 +1,4 @@
-#ifndef BEEEON_PRINTABLE_H
-#define BEEEON_PRINTABLE_H
+#pragma once
 
 #include <iosfwd>
 #include <string>
@@ -25,5 +24,3 @@ private:
 };
 
 }
-
-#endif

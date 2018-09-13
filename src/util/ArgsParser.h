@@ -1,5 +1,4 @@
-#ifndef BEEEON_ARGS_PARSER_H
-#define BEEEON_ARGS_PARSER_H
+#pragma once
 
 #include <string>
 #include <vector>
@@ -45,5 +44,3 @@ private:
 };
 
 }
-
-#endif

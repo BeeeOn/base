@@ -1,5 +1,4 @@
-#ifndef BEEEON_HASHED_LOCK_H
-#define BEEEON_HASHED_LOCK_H
+#pragma once
 
 #include <Poco/Exception.h>
 #include <Poco/SharedPtr.h>
@@ -145,5 +144,3 @@ void HashedLock<Lock, ID, Hash>::assureInitialized()
 }
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_BACKOFF_H
-#define BEEEON_BACKOFF_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/Timespan.h>
@@ -48,5 +47,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef GATEWAY_HTTP_ENTIRE_RESPONSE_H
-#define GATEWAY_HTTP_ENTIRE_RESPONSE_H
+#pragma once
 
 #include <string>
 
@@ -37,5 +36,3 @@ private:
 };
 
 }
-
-#endif

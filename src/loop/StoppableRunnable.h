@@ -1,5 +1,4 @@
-#ifndef BEEEON_STOPPABLE_RUNNABLE_H
-#define BEEEON_STOPPABLE_RUNNABLE_H
+#pragma once
 
 #include <Poco/Runnable.h>
 
@@ -16,5 +15,3 @@ public:
 };
 
 }
-
-#endif

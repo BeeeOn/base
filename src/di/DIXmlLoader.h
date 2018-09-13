@@ -1,5 +1,4 @@
-#ifndef BEEEON_DI_XML_LOADER_H
-#define BEEEON_DI_XML_LOADER_H
+#pragma once
 
 #include <istream>
 
@@ -30,5 +29,3 @@ private:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_SKIPPABLE_AUTO_REGISTER_SUITE_H
-#define BEEEON_SKIPPABLE_AUTO_REGISTER_SUITE_H
+#pragma once
 
 #include <cppunit/extensions/AutoRegisterSuite.h>
 
@@ -30,5 +29,3 @@ private:
 		CPPUNIT_MAKE_UNIQUE_NAME(skippableAutoRegisterRegistry__)(func)
 
 }
-
-#endif

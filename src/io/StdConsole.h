@@ -1,5 +1,4 @@
-#ifndef BEEEON_STD_CONSOLE_H
-#define BEEEON_STD_CONSOLE_H
+#pragma once
 
 #include "io/StreamConsole.h"
 
@@ -14,5 +13,3 @@ public:
 };
 
 }
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef BEEEON_HAVING_THREAD_POOL_H
-#define BEEEON_HAVING_THREAD_POOL_H
+#pragma once
 
 #include <Poco/SharedPtr.h>
 #include <Poco/ThreadPool.h>
@@ -31,5 +30,3 @@ private:
 };
 
 }
-
-#endif
