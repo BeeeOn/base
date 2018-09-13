@@ -1,5 +1,4 @@
-#ifndef BEEEON_TEST_TIMING_LISTENER_H
-#define BEEEON_TEST_TIMING_LISTENER_H
+#pragma once
 
 #include <iosfwd>
 
@@ -22,5 +21,3 @@ private:
 };
 
 }
-
-#endif
