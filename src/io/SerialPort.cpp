@@ -283,6 +283,11 @@ void SerialPort::setDevicePath(const string &devicePath)
 	m_devicePath = devicePath;
 }
 
+string SerialPort::devicePath() const
+{
+	return m_devicePath;
+}
+
 void SerialPort::setBaudRate(int baudRate)
 {
 	m_baudRate = baudRate;

@@ -30,6 +30,8 @@ public:
 	~SerialPort();
 
 	void setDevicePath(const std::string &devicePath);
+	std::string devicePath() const;
+
 	void setBaudRate(int baudRate);
 	void setStopBits(StopBits stopBits);
 	void setParity(Parity parity);
