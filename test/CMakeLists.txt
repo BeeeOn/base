@@ -65,6 +65,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/MultiExceptionTest.cpp
 	${PROJECT_SOURCE_DIR}/util/OnceTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ParallelExecutorTest.cpp
+	${PROJECT_SOURCE_DIR}/util/RandomBackOffTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutorTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ThreadWrapperAsyncWorkTest.cpp

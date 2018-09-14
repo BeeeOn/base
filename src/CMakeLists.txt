@@ -124,6 +124,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/ParallelExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/PeriodicRunner.cpp
 	${PROJECT_SOURCE_DIR}/util/PosixSignal.cpp
+	${PROJECT_SOURCE_DIR}/util/RandomBackOff.cpp
 	${PROJECT_SOURCE_DIR}/util/SAXHelper.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutor.cpp
