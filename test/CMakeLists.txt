@@ -68,6 +68,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/util/RandomBackOffTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParserTest.cpp
 	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutorTest.cpp
+	${PROJECT_SOURCE_DIR}/util/SingleInstanceCheckerTest.cpp
 	${PROJECT_SOURCE_DIR}/util/ThreadWrapperAsyncWorkTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeIntervalTest.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParserTest.cpp
