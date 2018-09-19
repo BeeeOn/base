@@ -458,6 +458,11 @@ void GWMessageTest::testParseNewDevice()
 						{"attribute" : "manual-only"},
 						{"attribute" : "controllable"}
 					]
+				},
+				{
+					"type" : "enum",
+					"subtype": "SOME_ID",
+					"attributes": []
 				}
 			]
 	})");
@@ -485,6 +490,12 @@ void GWMessageTest::testParseNewDevice()
 	CPPUNIT_ASSERT_EQUAL("pressure", type->type().toString());
 	CPPUNIT_ASSERT_EQUAL(3, type->attributes().size());
 	CPPUNIT_ASSERT_EQUAL("manual-only", type->attributes().begin()->toString());
+
+	++type;
+	CPPUNIT_ASSERT(type != types.end());
+	CPPUNIT_ASSERT_EQUAL("enum", type->type().toString());
+	CPPUNIT_ASSERT_EQUAL("SOME_ID", type->customTypeID().toString());
+	CPPUNIT_ASSERT(type->attributes().empty());
 
 	++type;
 	CPPUNIT_ASSERT(type == types.end());
