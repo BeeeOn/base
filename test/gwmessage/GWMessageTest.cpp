@@ -473,15 +473,21 @@ void GWMessageTest::testParseNewDevice()
 	CPPUNIT_ASSERT(Timespan(30, 0) == request->refreshTime());
 
 	const list<ModuleType> &types = request->moduleTypes();
+	auto type = types.begin();
 
-	CPPUNIT_ASSERT_EQUAL("humidity", types.begin()->type().toString());
-	CPPUNIT_ASSERT_EQUAL("inner", types.begin()->attributes().begin()->toString());
-	CPPUNIT_ASSERT_EQUAL("pressure", types.rbegin()->type().toString());
+	CPPUNIT_ASSERT(type != types.end());
+	CPPUNIT_ASSERT_EQUAL("humidity", type->type().toString());
+	CPPUNIT_ASSERT_EQUAL(1, type->attributes().size());
+	CPPUNIT_ASSERT_EQUAL("inner", type->attributes().begin()->toString());
 
-	const set<ModuleType::Attribute> &attributes = types.rbegin()->attributes();
-	CPPUNIT_ASSERT(attributes.size() == 3);
-	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::ATTR_OUTER) != attributes.end());
-	CPPUNIT_ASSERT(attributes.find(ModuleType::Attribute::ATTR_MANUAL_ONLY) != attributes.end());
+	++type;
+	CPPUNIT_ASSERT(type != types.end());
+	CPPUNIT_ASSERT_EQUAL("pressure", type->type().toString());
+	CPPUNIT_ASSERT_EQUAL(3, type->attributes().size());
+	CPPUNIT_ASSERT_EQUAL("manual-only", type->attributes().begin()->toString());
+
+	++type;
+	CPPUNIT_ASSERT(type == types.end());
 }
 
 void GWMessageTest::testCreateNewDevice()
