@@ -52,6 +52,7 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testParseSensorDataExport);
 	CPPUNIT_TEST(testCreateSensorDataExport);
 	CPPUNIT_TEST(testGetConfirmFromSensorDataExport);
+	CPPUNIT_TEST(testParseNewDeviceLegacy);
 	CPPUNIT_TEST(testParseNewDevice);
 	CPPUNIT_TEST(testCreateNewDevice);
 	CPPUNIT_TEST(testParseNewDeviceGroup);
@@ -88,6 +89,7 @@ public:
 	void testParseSensorDataExport();
 	void testCreateSensorDataExport();
 	void testGetConfirmFromSensorDataExport();
+	void testParseNewDeviceLegacy();
 	void testParseNewDevice();
 	void testCreateNewDevice();
 	void testParseNewDeviceGroup();
@@ -434,7 +436,7 @@ void GWMessageTest::testGetConfirmFromSensorDataExport()
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", confirm->id().toString());
 }
 
-void GWMessageTest::testParseNewDevice()
+void GWMessageTest::testParseNewDeviceLegacy()
 {
 	GWMessage::Ptr message = GWMessage::fromJSON(
 	R"({
@@ -458,6 +460,67 @@ void GWMessageTest::testParseNewDevice()
 						{"attribute" : "manual-only"},
 						{"attribute" : "controllable"}
 					]
+				},
+				{
+					"type" : "enum",
+					"subtype": "SOME_ID",
+					"attributes": []
+				}
+			]
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::NEW_DEVICE_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWNewDeviceRequest>().isNull());
+
+	GWNewDeviceRequest::Ptr request = message.cast<GWNewDeviceRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL("Good Company", request->vendor());
+	CPPUNIT_ASSERT_EQUAL("Nice Product", request->productName());
+	CPPUNIT_ASSERT(Timespan(30, 0) == request->refreshTime());
+
+	const list<ModuleType> &types = request->moduleTypes();
+	auto type = types.begin();
+
+	CPPUNIT_ASSERT(type != types.end());
+	CPPUNIT_ASSERT_EQUAL("humidity", type->type().toString());
+	CPPUNIT_ASSERT_EQUAL(1, type->attributes().size());
+	CPPUNIT_ASSERT_EQUAL("inner", type->attributes().begin()->toString());
+
+	++type;
+	CPPUNIT_ASSERT(type != types.end());
+	CPPUNIT_ASSERT_EQUAL("pressure", type->type().toString());
+	CPPUNIT_ASSERT_EQUAL(3, type->attributes().size());
+	CPPUNIT_ASSERT_EQUAL("manual-only", type->attributes().begin()->toString());
+
+	++type;
+	CPPUNIT_ASSERT(type != types.end());
+	CPPUNIT_ASSERT_EQUAL("enum", type->type().toString());
+	CPPUNIT_ASSERT_EQUAL("SOME_ID", type->customTypeID().toString());
+	CPPUNIT_ASSERT(type->attributes().empty());
+
+	++type;
+	CPPUNIT_ASSERT(type == types.end());
+}
+
+void GWMessageTest::testParseNewDevice()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "new_device_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"vendor" : "Good Company",
+			"product_name" : "Nice Product",
+			"refresh_time" : 30,
+			"module_types" : [
+				{
+					"type" : "humidity",
+					"attributes" : ["inner"]
+				},
+				{
+					"type" : "pressure",
+					"attributes" : ["outer", "manual-only", "controllable"]
 				},
 				{
 					"type" : "enum",
@@ -574,7 +637,7 @@ void GWMessageTest::testParseNewDeviceGroup()
 						{
 							"type" : "humidity",
 							"attributes" : [
-								{"attribute" : "inner"}
+								"inner"
 							]
 						}
 					]
@@ -587,7 +650,7 @@ void GWMessageTest::testParseNewDeviceGroup()
 						{
 							"type" : "temperature",
 							"attributes" : [
-								{"attribute" : "inner"}
+								"inner"
 							]
 						}
 					]

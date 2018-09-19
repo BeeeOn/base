@@ -133,10 +133,16 @@ list<ModuleType> GWNewDeviceRequest::parseModuleTypes(const JSON::Array::Ptr arr
 		JSON::Array::Ptr arrayOfAttributes = typeObject->getArray("attributes");
 
 		for(size_t j = 0; j < arrayOfAttributes->size(); j++) {
-			const JSON::Object::Ptr attributeObject = arrayOfAttributes->getObject(j);
+			if (arrayOfAttributes->isObject(j)) { // legacy
+				const JSON::Object::Ptr attributeObject = arrayOfAttributes->getObject(j);
 
-			attributes.emplace(ModuleType::Attribute::parse(
-				attributeObject->getValue<string>("attribute")));
+				attributes.emplace(ModuleType::Attribute::parse(
+					attributeObject->getValue<string>("attribute")));
+			}
+			else {
+				attributes.emplace(ModuleType::Attribute::parse(
+					arrayOfAttributes->getElement<string>(j)));
+			}
 		}
 
 		if (typeObject->has("subtype")) {
