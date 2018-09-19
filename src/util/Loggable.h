@@ -3,6 +3,7 @@
 #include <typeinfo>
 #include <string>
 
+#include <Poco/Exception.h>
 #include <Poco/Message.h>
 
 namespace Poco {
