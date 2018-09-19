@@ -174,7 +174,8 @@ DependencyInjector::DependencyInjector(
 			createEarly();
 		}
 		BEEEON_CATCH_CHAIN_ACTION(logger(),
-			destroyAll())
+			destroyAll();
+			throw)
 	}
 }
 
