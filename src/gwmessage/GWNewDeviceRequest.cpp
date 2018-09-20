@@ -98,6 +98,9 @@ JSON::Array::Ptr GWNewDeviceRequest::serializeModuleTypes(const list<ModuleType>
 		JSON::Object::Ptr typeObject(new JSON::Object);
 		typeObject->set("type", type.type().toString());
 
+		if (!type.customTypeID().isNull())
+			typeObject->set("subtype", type.customTypeID().toString());
+
 		JSON::Array::Ptr arrayOfAttributes(new JSON::Array);
 
 		for (const auto &attribute : type.attributes()){
@@ -130,13 +133,25 @@ list<ModuleType> GWNewDeviceRequest::parseModuleTypes(const JSON::Array::Ptr arr
 		JSON::Array::Ptr arrayOfAttributes = typeObject->getArray("attributes");
 
 		for(size_t j = 0; j < arrayOfAttributes->size(); j++) {
-			const JSON::Object::Ptr attributeObject = arrayOfAttributes->getObject(j);
+			if (arrayOfAttributes->isObject(j)) { // legacy
+				const JSON::Object::Ptr attributeObject = arrayOfAttributes->getObject(j);
 
-			attributes.emplace(ModuleType::Attribute::parse(
-				attributeObject->getValue<string>("attribute")));
+				attributes.emplace(ModuleType::Attribute::parse(
+					attributeObject->getValue<string>("attribute")));
+			}
+			else {
+				attributes.emplace(ModuleType::Attribute::parse(
+					arrayOfAttributes->getElement<string>(j)));
+			}
 		}
 
-		types.push_back(ModuleType(type, attributes));
+		if (typeObject->has("subtype")) {
+			const auto customType = typeObject->getValue<string>("subtype");
+			types.push_back(ModuleType(type, customType, attributes));
+		}
+		else {
+			types.push_back(ModuleType(type, attributes));
+		}
 	}
 
 	return types;
