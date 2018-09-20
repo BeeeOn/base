@@ -13,6 +13,7 @@
 	name    ID       #IMPLIED
 	class   CDATA    #REQUIRED
 	init    (early|lazy) "lazy"
+	library CDATA    #IMPLIED
 >
 
 <!ELEMENT alias EMPTY>

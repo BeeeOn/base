@@ -2,12 +2,14 @@
 #include <list>
 
 #include <Poco/Exception.h>
+#include <Poco/Path.h>
 #include <Poco/StringTokenizer.h>
 #include <Poco/Dynamic/Var.h>
 
 #include "di/DependencyInjector.h"
 #include "math/SimpleCalc.h"
 #include "util/ClassInfo.h"
+#include "util/MultiException.h"
 #include "util/TimespanParser.h"
 
 using namespace std;
@@ -44,6 +46,12 @@ public:
 				"attribute 'class' not specified for instance "
 				+ m_name);
 		}
+	}
+
+	string library(AutoPtr<AbstractConfiguration> conf) const
+	{
+		const string lib("instance[@name='" + m_name + "'][@library]");
+		return conf->getString(lib, "");
 	}
 
 	const string resolveAlias(AutoPtr<AbstractConfiguration> conf) const
@@ -164,8 +172,10 @@ void DependencyInjector::destroyRest(const WrapperVector vec) const
 
 DependencyInjector::DependencyInjector(
 		AutoPtr<AbstractConfiguration> conf,
+		const vector<string> &paths,
 		bool avoidEarly):
-	m_conf(conf)
+	m_conf(conf),
+	m_librariesPaths(paths)
 {
 	computeConstants();
 
@@ -361,9 +371,55 @@ DIWrapper *DependencyInjector::createNoAlias(
 	return injectDependencies(info, t);
 }
 
+void DependencyInjector::loadLibrary(SharedLibrary &library, const string &name) const
+{
+	MultiException ex("failed to load library " + name);
+	const string libName = "lib" + name + SharedLibrary::suffix();
+
+	const auto paths = m_librariesPaths;
+
+	if (paths.empty())
+		throw LibraryLoadException("no ldpath has been specified");
+
+	for (const auto &dir : paths) {
+		const Path path(dir, libName);
+
+		if (logger().debug()) {
+			logger().debug(
+				"attempt to load library " + name
+				+ " from " + path.toString(),
+				__FILE__, __LINE__);
+		}
+
+		try {
+			library.load(path.toString(), SharedLibrary::SHLIB_GLOBAL);
+		}
+		catch (const LibraryAlreadyLoadedException &) {
+			break;
+		}
+		catch (const LibraryLoadException &e) {
+			ex.caught(e);
+		}
+	}
+
+	if (!ex.empty())
+		throw ex;
+}
+
 DIWrapper *DependencyInjector::createNew(const InstanceInfo &info)
 {
 	info.validate(m_conf);
+	const string lib = info.library(m_conf);
+
+	if (!lib.empty()) {
+		auto &library = m_libraries[lib];
+
+		if (!library.isLoaded()) {
+			logger().notice("loading library " + lib);
+			loadLibrary(library, lib);
+		}
+	}
+
 	const string cls = info.resolveClass(m_conf);
 
 	logger().debug("creating " + info.name() + " as " + cls);
