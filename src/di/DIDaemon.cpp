@@ -1,8 +1,10 @@
 #include <iostream>
+#include <vector>
 
 #include <Poco/Environment.h>
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
+#include <Poco/StringTokenizer.h>
 #include <Poco/Version.h>
 #include <Poco/Util/OptionSet.h>
 #include <Poco/Util/OptionCallback.h>
@@ -175,7 +177,10 @@ int DIDaemon::main(const std::vector<std::string> &)
 
 void DIDaemon::startRunner(const string &name)
 {
-	DependencyInjector di(config().createView("factory"), noEarlyRequested());
+	DependencyInjector di(
+		config().createView("factory"),
+		libraryPaths(),
+		noEarlyRequested());
 	SharedPtr<StoppableLoop> runner = di.create<StoppableLoop>(name);
 
 	logger().notice("starting runner " + name,
@@ -303,6 +308,16 @@ bool DIDaemon::versionRequested() const
 bool DIDaemon::noEarlyRequested() const
 {
 	return m_noEarlyRequested;
+}
+
+vector<string> DIDaemon::libraryPaths()
+{
+	StringTokenizer paths(
+		config().getString("application.di.ldpath", ""),
+		":;",
+		StringTokenizer::TOK_TRIM | StringTokenizer::TOK_IGNORE_EMPTY);
+
+	return {paths.begin(), paths.end()};
 }
 
 string DIDaemon::runnerName()

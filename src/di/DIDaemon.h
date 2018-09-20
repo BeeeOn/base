@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <Poco/ErrorHandler.h>
 #include <Poco/Exception.h>
@@ -57,6 +58,7 @@ protected:
 	bool helpRequested() const;
 	bool versionRequested() const;
 	bool noEarlyRequested() const;
+	std::vector<std::string> libraryPaths();
 	std::string runnerName();
 	std::string version() const;
 

@@ -4,6 +4,7 @@
 #include <Poco/Exception.h>
 #include <Poco/AutoPtr.h>
 #include <Poco/SharedPtr.h>
+#include <Poco/SharedLibrary.h>
 #include <Poco/Logger.h>
 #include <Poco/Util/AbstractConfiguration.h>
 #include "di/DIWrapper.h"
@@ -95,6 +96,7 @@ class InstanceInfo;
  *	<instance name="stdoutErrorListener"
  * 			class="BeeeOn::StdoutErrorListener" />
  *	<alias name="errorListener" ref="stdoutErrorListener" />
+ *	<instance name="plugin" class="BeeeOn::Plugin1" library="plugin" />
  * </factory>
  *
  * DependencyInjector di(config.createView("factory"));
@@ -108,6 +110,7 @@ public:
 
 	DependencyInjector(
 		Poco::AutoPtr<Poco::Util::AbstractConfiguration> conf,
+		const std::vector<std::string> &libraryPaths = {},
 		bool avoidEarly = false);
 
 	~DependencyInjector();
@@ -179,7 +182,19 @@ private:
 	DIWrapper *createNoAlias(
 			const InstanceInfo &info,
 			bool disown = false);
+
+	/**
+	 * @brief Load the given library by name.
+	 * @throws MultiException - no such library has been found
+	 */
+	void loadLibrary(Poco::SharedLibrary &library, const std::string &name) const;
+
+	/**
+	 * @brief Create the instance. If there is shared library specified for
+	 * that instance, try to load the library first.
+	 */
 	DIWrapper *createNew(const InstanceInfo &info);
+
 	DIWrapper *injectDependencies(
 			const InstanceInfo &info,
 			DIWrapper *target);
@@ -228,6 +243,8 @@ private:
 	WrapperMap m_set;
 	WrapperVector m_free;
 	Poco::AutoPtr<Poco::Util::AbstractConfiguration> m_conf;
+	std::vector<std::string> m_librariesPaths;
+	std::map<std::string, Poco::SharedLibrary> m_libraries;
 };
 
 }
