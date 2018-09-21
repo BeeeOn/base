@@ -88,6 +88,22 @@ string DeviceDescription::toString() const
 	return result;
 }
 
+string DeviceDescription::toPrettyString() const
+{
+	string summary = m_deviceID.toString() + " : " + m_vendor + " " + m_productName;
+	summary.append("\n * RT : " + to_string(m_refreshTime.totalMilliseconds()) + "ms");
+
+	size_t j = 0;
+	for (const auto &m : m_dataTypes) {
+		summary.append("\n * " + to_string(j++) + " : " + m.type().toString());
+
+		for (const auto &a : m.attributes())
+			summary.append("," + a.toString());
+	}
+
+	return summary;
+}
+
 string DeviceDescription::normalizeName(const string& bytes)
 {
 	const UTF8Encoding utf8;
