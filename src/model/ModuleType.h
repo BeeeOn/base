@@ -102,8 +102,8 @@ public:
 			 */
 			TYPE_NOISE = 11,
 			/**
-			 * Value 0: open
-			 * Value 1: closed
+			 * Value 0: closed
+			 * Value 1: open
 			 */
 			TYPE_OPEN_CLOSE = 12,
 			/**
