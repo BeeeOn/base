@@ -16,6 +16,23 @@ namespace BeeeOn {
  * @brief Represents a message sent by the server to the gateway, intended
  * to inform gateway that the user accepted the discovered device. It means
  * request to pair the device with the gateway.
+ *
+ * Optionally, the refresh time can be configured by this command. Also,
+ * the section "config" can contain certain configuration entries that might
+ * help to initialize the device.
+ *
+ * An example message:
+ * <pre>
+ * {
+ *   "id": "603a5085-1b00-4c5e-ac70-dde674a49b0c",
+ *   "message_type": "device_accept_request",
+ *   "device_id": "0xa300000000000001"
+ *   "refresh_time": "15",
+ *   "config": {
+ *      "ip-address": "192.168.0.1"
+ *   }
+ * }
+ * </pre>
  */
 class GWDeviceAcceptRequest : public GWRequest, Loggable {
 public:
