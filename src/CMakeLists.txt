@@ -120,6 +120,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/LambdaTimerTask.cpp
 	${PROJECT_SOURCE_DIR}/util/Loggable.cpp
 	${PROJECT_SOURCE_DIR}/util/MultiException.cpp
+	${PROJECT_SOURCE_DIR}/util/NonAsyncExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/Occasionally.cpp
 	${PROJECT_SOURCE_DIR}/util/Once.cpp
 	${PROJECT_SOURCE_DIR}/util/ParallelExecutor.cpp
