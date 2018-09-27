@@ -16,4 +16,5 @@ add_subdirectory(test)
 endif()
 
 install(FILES dtd/factory.dtd
-	DESTINATION "share/beeeon/dtd")
+	DESTINATION "share/beeeon/dtd"
+	COMPONENT core)
