@@ -96,7 +96,8 @@ class Factory:
 
 					logging.debug("apply to '%s'" % result)
 
-					replaced = result.replace(name, leaf_value)
+					regex = re.compile(re.escape(name), re.IGNORECASE)
+					replaced = regex.sub(leaf_value, result)
 					if replaced != result:
 						logging.debug("key '%s' replaced" % name)
 						changes += 1
