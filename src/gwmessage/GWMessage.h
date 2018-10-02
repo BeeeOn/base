@@ -61,6 +61,11 @@ public:
 	std::string toString() const;
 
 	/**
+	 * @returns brief representation of the message (useful for logging).
+	 */
+	std::string toBriefString() const;
+
+	/**
 	 * @brief Factory method for creating subclasses of the GWMessage
 	 * from the json string.
 	 *

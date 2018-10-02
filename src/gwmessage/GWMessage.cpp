@@ -61,6 +61,12 @@ std::string GWMessage::toString() const
 	return Dynamic::Var::toString(m_json);
 }
 
+string GWMessage::toBriefString() const
+{
+	const auto id = json()->has("id")? this->id() : GlobalID();
+	return type().toString() + " " + id.toString();
+}
+
 GWMessage::Ptr GWMessage::fromJSON(const std::string &json)
 {
 	return fromJSON(JsonUtil::parse(json));
