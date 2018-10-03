@@ -222,3 +222,53 @@ void SSLFacility::setExtendedCertificateVerification(bool enable)
 {
 	m_extendedCertificateVerification = enable;
 }
+
+File SSLFacility::caLocation() const
+{
+	return m_caLocation;
+}
+
+File SSLFacility::privateKey() const
+{
+	return m_privateKey;
+}
+
+string SSLFacility::passphrase() const
+{
+	return m_passphrase;
+}
+
+File SSLFacility::certificate() const
+{
+	return m_certificate;
+}
+
+SSLFacility::VerificationMode SSLFacility::verificationMode() const
+{
+	return m_verificationMode;
+}
+
+set<string> SSLFacility::disabledProtocols() const
+{
+	set<string> names;
+
+#if POCO_VERSION >= 0x01070000
+	if (m_disabledProtocols & Context::PROTO_SSLV2)
+		names.emplace("sslv2");
+	if (m_disabledProtocols & Context::PROTO_SSLV3)
+		names.emplace("sslv3");
+	if (m_disabledProtocols & Context::PROTO_TLSV1)
+		names.emplace("tlsv1");
+	if (m_disabledProtocols & Context::PROTO_TLSV1_1)
+		names.emplace("tlsv1_1");
+	if (m_disabledProtocols & Context::PROTO_TLSV1_2)
+		names.emplace("tlsv1_2");
+#endif
+
+	return names;
+}
+
+string SSLFacility::cipherList() const
+{
+	return m_cipherList;
+}

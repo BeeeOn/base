@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <set>
+
+#include <Poco/File.h>
 #include <Poco/Mutex.h>
 #include <Poco/Net/Context.h>
 
@@ -87,6 +90,14 @@ public:
 	void setSessionCache(const std::string &enable);
 	void setDisabledProtocols(const std::string &protocols);
 	void setExtendedCertificateVerification(bool enable);
+
+	Poco::File caLocation() const;
+	Poco::File privateKey() const;
+	std::string passphrase() const;
+	Poco::File certificate() const;
+	Poco::Net::Context::VerificationMode verificationMode() const;
+	std::set<std::string> disabledProtocols() const;
+	std::string cipherList() const;
 
 	Poco::Net::Context::Ptr context();
 	void initContext();
