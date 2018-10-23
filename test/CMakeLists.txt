@@ -34,6 +34,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/loop/LoopRunnerTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/StopControlTest.cpp
 	${PROJECT_SOURCE_DIR}/loop/ToolTest.cpp
+	${PROJECT_SOURCE_DIR}/math/LogicalExpressionTest.cpp
 	${PROJECT_SOURCE_DIR}/math/SimpleCalcTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceDescriptionTest.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceIDTest.cpp
