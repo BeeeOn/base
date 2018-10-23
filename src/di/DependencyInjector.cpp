@@ -9,6 +9,7 @@
 #include "di/DependencyInjector.h"
 #include "math/SimpleCalc.h"
 #include "util/ClassInfo.h"
+#include "math/LogicalExpression.h"
 #include "util/MultiException.h"
 #include "util/TimespanParser.h"
 
@@ -282,6 +283,21 @@ void DependencyInjector::computeConstants()
 				m_conf->setInt64(name, static_cast<Int64>(result));
 			else
 				m_conf->setDouble(name, result);
+		}
+		else if (m_conf->has(key + "[@yes-when]")) {
+			value = m_conf->getString(key + "[@yes-when]");
+			const auto expr = LogicalExpression::parse(value);
+
+			logger().debug(
+				"evaluating constant " + name
+				+ " value " + value
+				+ " as " + to_string(expr.result()),
+				__FILE__, __LINE__);
+
+			if (expr.result())
+				m_conf->setString(name, "yes");
+			else
+				m_conf->setString(name, "no");
 		}
 		else {
 			throw NotFoundException("missing attribute text, time or number");
