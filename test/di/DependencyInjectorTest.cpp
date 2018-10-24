@@ -140,6 +140,8 @@ void DependencyInjectorTest::setUp()
 	m_config->setString("constant[2][@number]", "1 + ${FakeNumber}"); // 43
 	m_config->setString("constant[3][@name]", "time");
 	m_config->setString("constant[3][@time]", "${sum} s"); // 43000000
+	m_config->setString("constant[4][@name]", "enabled");
+	m_config->setString("constant[4][@yes-when]", "${sum} == 43"); // yes
 	m_config->setString("alias[1][@name]", "simpleAlias");
 	m_config->setString("alias[1][@ref]", "simple");
 	m_config->setString("alias[2][@name]", "secondAlias");
@@ -232,6 +234,8 @@ void DependencyInjectorTest::testConstant()
 	CPPUNIT_ASSERT_EQUAL("43", m_config->getString("sum"));
 	CPPUNIT_ASSERT(m_config->has("time"));
 	CPPUNIT_ASSERT_EQUAL("43000000", m_config->getString("time"));
+	CPPUNIT_ASSERT(m_config->has("enabled"));
+	CPPUNIT_ASSERT_EQUAL("yes", m_config->getString("enabled"));
 }
 
 void DependencyInjectorTest::testCastToBase()

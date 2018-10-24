@@ -63,6 +63,7 @@ class InstanceInfo;
  *   + attribute text   - constant is a string
  *   + attribute time   - constant is a time
  *   + attribute number - constant is a number
+ *   + attribute yes-when - constant is result of the given logical expression
  *
  * The attributes can contain ${property} strings which are expanded
  * automatically.

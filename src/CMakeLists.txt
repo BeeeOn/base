@@ -72,6 +72,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/loop/StoppableRunnable.cpp
 	${PROJECT_SOURCE_DIR}/loop/StopControl.cpp
 	${PROJECT_SOURCE_DIR}/loop/Tool.cpp
+	${PROJECT_SOURCE_DIR}/math/LogicalExpression.cpp
 	${PROJECT_SOURCE_DIR}/math/SimpleCalc.cpp
 	${PROJECT_SOURCE_DIR}/model/CustomTypeID.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceDescription.cpp
