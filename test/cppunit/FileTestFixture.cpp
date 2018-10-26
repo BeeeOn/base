@@ -42,7 +42,7 @@ void FileTestFixture::setUpAsDirectory()
 
 	try {
 		m_file.setWriteable(true);
-		m_file.remove();
+		m_file.remove(true);
 	}
 	catch (const FileNotFoundException &) {
 		// this is possible and OK, no panic
