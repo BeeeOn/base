@@ -131,6 +131,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/SecureXmlParser.cpp
 	${PROJECT_SOURCE_DIR}/util/SequentialAsyncExecutor.cpp
 	${PROJECT_SOURCE_DIR}/util/SingleInstanceChecker.cpp
+	${PROJECT_SOURCE_DIR}/util/ThreadNamer.cpp
 	${PROJECT_SOURCE_DIR}/util/ThreadRecursionProtector.cpp
 	${PROJECT_SOURCE_DIR}/util/TimeInterval.cpp
 	${PROJECT_SOURCE_DIR}/util/TimespanParser.cpp
