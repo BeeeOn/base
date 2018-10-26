@@ -6,6 +6,7 @@
 #include "di/Injectable.h"
 #include "loop/LoopRunner.h"
 #include "util/ClassInfo.h"
+#include "util/ThreadNamer.h"
 
 using namespace std;
 using namespace BeeeOn;
@@ -166,6 +167,8 @@ LoopRunner::Stopper::Stopper(SharedPtr<StoppableLoop> loop):
 
 void LoopRunner::Stopper::run()
 {
+	ThreadNamer namer("stopper-of-" + repr(m_loop));
+
 	if (m_loop.isNull())
 		return;
 
