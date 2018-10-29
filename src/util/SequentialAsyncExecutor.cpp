@@ -4,6 +4,7 @@
 
 #include "di/Injectable.h"
 #include "util/SequentialAsyncExecutor.h"
+#include "util/ThreadNamer.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, SequentialAsyncExecutor)
 BEEEON_OBJECT_CASTABLE(AsyncExecutor)
@@ -50,6 +51,8 @@ void SequentialAsyncExecutor::invoke(std::function<void()> f)
 
 void SequentialAsyncExecutor::run()
 {
+	ThreadNamer namer("sequential-executor");
+
 	std::function<void()> task;
 
 	while (!m_stopRequested) {

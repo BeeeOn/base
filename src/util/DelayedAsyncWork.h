@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 
 #include <Poco/Event.h>
 #include <Poco/Logger.h>
@@ -10,6 +11,7 @@
 #include "util/AbstractAsyncWork.h"
 #include "util/Joiner.h"
 #include "util/Loggable.h"
+#include "util/ThreadNamer.h"
 
 namespace BeeeOn {
 
@@ -86,6 +88,8 @@ void DelayedAsyncWork<Result>::cancel()
 template <typename Result>
 void DelayedAsyncWork<Result>::run()
 {
+	ThreadNamer namer("delayed-by-" + std::to_string(m_delay.totalMilliseconds()));
+
 	if (m_event.tryWait(m_delay.totalMilliseconds())) {
 		m_cancelled(*this);
 		return; // cancelled

@@ -5,6 +5,7 @@
 #include "di/Injectable.h"
 #include "util/ParallelExecutor.h"
 #include "util/Occasionally.h"
+#include "util/ThreadNamer.h"
 
 BEEEON_OBJECT_BEGIN(BeeeOn, ParallelExecutor)
 BEEEON_OBJECT_CASTABLE(AsyncExecutor)
@@ -49,8 +50,7 @@ void ParallelExecutor::ThreadLambda::run()
 	ThreadLambda::Ptr self(this, true); // assure ref > 1
 	this->release(); // drop to ref >= 1
 
-	Thread *current = Thread::current();
-	current->setName(m_baseName + to_string(current->tid()));
+	ThreadNamer namer(m_baseName + to_string(Thread::currentTid()));
 
 	try {
 		m_func();
