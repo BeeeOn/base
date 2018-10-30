@@ -3,6 +3,7 @@
 #include <list>
 #include <string>
 
+#include <Poco/Nullable.h>
 #include <Poco/Timespan.h>
 
 #include "model/DeviceID.h"
@@ -16,6 +17,40 @@ namespace BeeeOn {
  */
 class DeviceDescription {
 public:
+	class Builder {
+	public:
+		Builder();
+
+		Builder &id(const DeviceID &id);
+		Builder &type(
+			const std::string &vendor,
+			const std::string &name);
+
+		template <typename Container>
+		Builder &modules(const Container &types)
+		{
+			m_modules.clear();
+
+			for (const auto type : types)
+				m_modules.emplace_back(type);
+
+			return *this;
+		}
+
+		Builder &refreshTime(const Poco::Timespan &time);
+		Builder &disabledRefreshTime();
+		Builder &noRefreshTime();
+
+		DeviceDescription build() const;
+
+	private:
+		Poco::Nullable<DeviceID> m_id;
+		Poco::Nullable<std::string> m_vendor;
+		Poco::Nullable<std::string> m_product;
+		std::list<ModuleType> m_modules;
+		Poco::Timespan m_refreshTime;
+	};
+
 	DeviceDescription(
 		const DeviceID &deviceID,
 		const std::string &vendor,

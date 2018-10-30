@@ -13,6 +13,63 @@ static const RegularExpression NAME_PATTERN(
 	RegularExpression::RE_UTF8
 );
 
+DeviceDescription::Builder::Builder():
+	m_refreshTime(-1)
+{
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::id(const DeviceID &id)
+{
+	m_id = id;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::type(
+		const string &vendor,
+		const string &name)
+{
+	m_vendor = vendor;
+	m_product = name;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::refreshTime(
+		const Timespan &time)
+{
+	m_refreshTime = time;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::disabledRefreshTime()
+{
+	m_refreshTime = 0;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::noRefreshTime()
+{
+	m_refreshTime = -1;
+	return *this;
+}
+
+template <typename T>
+static T notNull(const Nullable<T> value, const string &label)
+{
+	if (value.isNull())
+		throw InvalidArgumentException(label + " was not set in builder");
+
+	return value.value();
+}
+
+DeviceDescription DeviceDescription::Builder::build() const
+{
+	const DeviceID id = notNull(m_id, "device ID");
+	const auto vendor = notNull(m_vendor, "vendor name");
+	const auto product = notNull(m_product, "product name");
+
+	return DeviceDescription(id, vendor, product, m_modules, m_refreshTime);
+}
+
 DeviceDescription::DeviceDescription(
 	const DeviceID &deviceID,
 	const std::string &vendor,
