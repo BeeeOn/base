@@ -8,7 +8,7 @@ using namespace BeeeOn;
 using namespace Poco;
 using namespace std;
 
-static RegularExpression regex(
+static const RegularExpression NAME_PATTERN(
 	"[^\\p{L}\\p{Nd} \\.:!?()/,\\-_#''$€¥£©®+]",
 	RegularExpression::RE_UTF8
 );
@@ -111,7 +111,7 @@ string DeviceDescription::normalizeName(const string& bytes)
 	string result;
 
 	text.convert(bytes, result);
-	regex.subst(result, "?", RegularExpression::RE_GLOBAL);
+	NAME_PATTERN.subst(result, "?", RegularExpression::RE_GLOBAL);
 
 	return result;
 }
