@@ -63,29 +63,24 @@ static T notNull(const Nullable<T> value, const string &label)
 
 DeviceDescription DeviceDescription::Builder::build() const
 {
-	const DeviceID id = notNull(m_id, "device ID");
-	const auto vendor = notNull(m_vendor, "vendor name");
-	const auto product = notNull(m_product, "product name");
+	DeviceDescription description;
+	description.setID(notNull(m_id, "device ID"));
+	description.setVendor(notNull(m_vendor, "vendor name"));
+	description.setProductName(notNull(m_product, "product name"));
+	description.setDataTypes(m_modules);
+	description.setRefreshTime(m_refreshTime);
 
-	return DeviceDescription(id, vendor, product, m_modules, m_refreshTime);
+	return description;
 }
 
-DeviceDescription::DeviceDescription(
-	const DeviceID &deviceID,
-	const std::string &vendor,
-	const std::string &productName,
-	const std::list<ModuleType> &dataTypes,
-	Timespan refreshTime):
-		m_deviceID(deviceID),
-		m_vendor(normalizeName(vendor)),
-		m_productName(normalizeName(productName)),
-		m_dataTypes(dataTypes),
-		m_refreshTime(refreshTime)
+DeviceDescription::DeviceDescription():
+	m_refreshTime(-1)
 {
-	if (m_refreshTime < 0)
-		m_refreshTime = -1;
-	else if (m_refreshTime > 0 && m_refreshTime < Timespan::SECONDS)
-		m_refreshTime =  1 * Timespan::SECONDS;
+}
+
+void DeviceDescription::setID(const DeviceID &id)
+{
+	m_deviceID = id;
 }
 
 DeviceID DeviceDescription::id() const
@@ -93,9 +88,19 @@ DeviceID DeviceDescription::id() const
 	return m_deviceID;
 }
 
+void DeviceDescription::setVendor(const string &vendor)
+{
+	m_vendor = normalizeName(vendor);
+}
+
 string DeviceDescription::vendor() const
 {
 	return m_vendor;
+}
+
+void DeviceDescription::setProductName(const string &name)
+{
+	m_productName = normalizeName(name);
 }
 
 string DeviceDescription::productName() const
@@ -103,9 +108,24 @@ string DeviceDescription::productName() const
 	return m_productName;
 }
 
+void DeviceDescription::setDataTypes(const list<ModuleType> &types)
+{
+	m_dataTypes = types;
+}
+
 list<ModuleType> DeviceDescription::dataTypes() const
 {
 	return m_dataTypes;
+}
+
+void DeviceDescription::setRefreshTime(const Timespan &time)
+{
+	if (time < 0)
+		m_refreshTime = -1;
+	else if (time > 0 && time < Timespan::SECONDS)
+		m_refreshTime =  1 * Timespan::SECONDS;
+	else
+		m_refreshTime = time;
 }
 
 Timespan DeviceDescription::refreshTime() const

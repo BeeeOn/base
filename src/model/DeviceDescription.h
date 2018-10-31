@@ -51,17 +51,21 @@ public:
 		Poco::Timespan m_refreshTime;
 	};
 
-	DeviceDescription(
-		const DeviceID &deviceID,
-		const std::string &vendor,
-		const std::string &productName,
-		const std::list<ModuleType> &dataTypes,
-		Poco::Timespan refreshTime = -1);
+	DeviceDescription();
 
+	void setID(const DeviceID &id);
 	DeviceID id() const;
+
+	void setVendor(const std::string &vendor);
 	std::string vendor() const;
+
+	void setProductName(const std::string &name);
 	std::string productName() const;
+
+	void setDataTypes(const std::list<ModuleType> &types);
 	std::list<ModuleType> dataTypes() const;
+
+	void setRefreshTime(const Poco::Timespan &time);
 
 	/**
 	 * Refresh time can be in one of three forms:
