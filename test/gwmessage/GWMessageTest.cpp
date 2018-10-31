@@ -22,7 +22,6 @@
 #include "gwmessage/GWDeviceListResponse.h"
 #include "gwmessage/GWDeviceListRequest.h"
 #include "gwmessage/GWListenRequest.h"
-#include "gwmessage/GWPingRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
 #include "gwmessage/GWSearchRequest.h"
 #include "gwmessage/GWSetValueRequest.h"
@@ -73,8 +72,6 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateSearchIP);
 	CPPUNIT_TEST(testCreateSearchMAC);
 	CPPUNIT_TEST(testCreateSearchSerial);
-	CPPUNIT_TEST(testParsePing);
-	CPPUNIT_TEST(testCreatePing);
 	CPPUNIT_TEST(testParseUnpair);
 	CPPUNIT_TEST(testCreateUnpair);
 	CPPUNIT_TEST(testParseSetValueLegacy);
@@ -119,8 +116,6 @@ public:
 	void testCreateSearchIP();
 	void testCreateSearchMAC();
 	void testCreateSearchSerial();
-	void testParsePing();
-	void testCreatePing();
 	void testParseUnpair();
 	void testCreateUnpair();
 	void testParseSetValueLegacy();
@@ -1209,35 +1204,6 @@ void GWMessageTest::testCreateSearchSerial()
 			"criteria": {
 				"serial_number": "1234567890"
 			}
-		})"),
-		request->toString()
-	);
-}
-
-void GWMessageTest::testParsePing()
-{
-	GWMessage::Ptr message = GWMessage::fromJSON(
-	R"({
-			"message_type" : "ping_request",
-			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
-	})");
-
-	CPPUNIT_ASSERT_EQUAL(GWMessageType::PING_REQUEST, message->type().raw());
-	CPPUNIT_ASSERT(!message.cast<GWPingRequest>().isNull());
-
-	GWPingRequest::Ptr request = message.cast<GWPingRequest>();
-	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
-}
-
-void GWMessageTest::testCreatePing()
-{
-	GWPingRequest::Ptr request(new GWPingRequest);
-	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
-
-	CPPUNIT_ASSERT_EQUAL(
-		jsonReformat(R"({
-			"message_type": "ping_request",
-			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59"
 		})"),
 		request->toString()
 	);

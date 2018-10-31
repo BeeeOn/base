@@ -17,7 +17,6 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{LAST_VALUE_REQUEST, "last_value_request"},
 		{LAST_VALUE_RESPONSE, "last_value_response"},
 		{LISTEN_REQUEST, "listen_request"},
-		{PING_REQUEST, "ping_request"},
 		{RESPONSE_WITH_ACK, "response_with_ack"},
 		{SEARCH_REQUEST, "search_request"},
 		{SENSOR_DATA_CONFIRM, "sensor_data_confirm"},
