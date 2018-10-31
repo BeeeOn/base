@@ -80,14 +80,20 @@ void GWNewDeviceRequest::setDeviceDescription(const DeviceDescription &descripti
 
 DeviceDescription GWNewDeviceRequest::deviceDescription() const
 {
-	DeviceDescription description(
-		deviceID(),
-		vendor(),
-		productName(),
-		moduleTypes(),
-		refreshTime());
+	auto builder = DeviceDescription::Builder()
+		.id(deviceID())
+		.type(vendor(), productName())
+		.modules(moduleTypes());
 
-	return description;
+	const auto time = json()->getValue<int>("refresh_time");
+	if (time < 0)
+		builder.noRefreshTime();
+	else if (time == 0)
+		builder.disabledRefreshTime();
+	else
+		builder.refreshTime(time * Timespan::SECONDS);
+
+	return builder.build();
 }
 
 JSON::Array::Ptr GWNewDeviceRequest::serializeModuleTypes(const list<ModuleType> &types)

@@ -703,12 +703,12 @@ void GWMessageTest::testCreateNewDeviceGroup()
 	list<ModuleType> types1;
 	types1.push_back(type1);
 
-	DeviceDescription description1(
-		DeviceID::parse("0xfe01020304050607"),
-		"Good Company",
-		"Nice Product",
-		types1,
-		Timespan(30, 0));
+	DeviceDescription description1 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Good Company", "Nice Product")
+		.modules(types1)
+		.refreshTime(Timespan(30, 0))
+		.build();
 
 	set<ModuleType::Attribute> attributes2;
 	attributes2.emplace(ModuleType::Attribute::ATTR_INNER);
@@ -718,12 +718,12 @@ void GWMessageTest::testCreateNewDeviceGroup()
 	list<ModuleType> types2;
 	types2.push_back(type2);
 
-	DeviceDescription description2(
-		DeviceID::parse("0xfe01020304050608"),
-		"Good Company",
-		"Very Nice Product",
-		types2,
-		Timespan(30, 0));
+	DeviceDescription description2 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050608"))
+		.type("Good Company", "Very Nice Product")
+		.modules(types2)
+		.refreshTime(Timespan(30, 0))
+		.build();
 
 	request->addDeviceDescription(description1);
 	request->addDeviceDescription(description2);
