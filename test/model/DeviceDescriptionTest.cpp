@@ -34,12 +34,12 @@ void DeviceDescriptionTest::testCreate()
 	list<ModuleType> types;
 	types.push_back(type);
 
-	DeviceDescription description(
-		DeviceID::parse("0xfe01020304050607"),
-		"Good Company",
-		"Nice Product",
-		types,
-		Timespan(30, 0));
+	DeviceDescription description = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Good Company", "Nice Product")
+		.modules(types)
+		.refreshTime(Timespan(30, 0))
+		.build();
 
 	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", description.id().toString());
 	CPPUNIT_ASSERT_EQUAL("Good Company", description.vendor());
@@ -57,19 +57,19 @@ void DeviceDescriptionTest::testCreate()
  */
 void DeviceDescriptionTest::testProductNameAndVendor()
 {
-	DeviceDescription description1(
-		DeviceID::parse("0xfe01020304050607"),
-		"Company© #1®",
-		"Product #1®",
-		{});
+	DeviceDescription description1 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Company© #1®", "Product #1®")
+		.build();
+
 	CPPUNIT_ASSERT_EQUAL("Company© #1®", description1.vendor());
 	CPPUNIT_ASSERT_EQUAL("Product #1®", description1.productName());
 
-	DeviceDescription description2(
-		DeviceID::parse("0xfe01020304050607"),
-		"Skvělá továrna",
-		"Čistá žárovka",
-		{});
+	DeviceDescription description2 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Skvělá továrna",	"Čistá žárovka")
+		.build();
+
 	CPPUNIT_ASSERT_EQUAL("Skvělá továrna", description2.vendor());
 	CPPUNIT_ASSERT_EQUAL("Čistá žárovka", description2.productName());
 
@@ -77,35 +77,35 @@ void DeviceDescriptionTest::testProductNameAndVendor()
 	vendor[4] = 0;
 	string name = "Nice Product";
 	name[4] = 0;
-	DeviceDescription description3(
-		DeviceID::parse("0xfe01020304050607"),
-		vendor,
-		name,
-		{});
+	DeviceDescription description3 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type(vendor, name)
+		.build();
+
 	CPPUNIT_ASSERT_EQUAL("Good?Company", description3.vendor());
 	CPPUNIT_ASSERT_EQUAL("Nice?Product", description3.productName());
 
-	DeviceDescription description4(
-		DeviceID::parse("0xfe01020304050607"),
-		"Milan`s Company",
-		"Milan`s Macbook Pro",
-		{});
+	DeviceDescription description4 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Milan`s Company", "Milan`s Macbook Pro")
+		.build();
+
 	CPPUNIT_ASSERT_EQUAL("Milan?s Company", description4.vendor());
 	CPPUNIT_ASSERT_EQUAL("Milan?s Macbook Pro", description4.productName());
 
-	DeviceDescription description5(
-		DeviceID::parse("0xfe01020304050607"),
-		"&%@~;\\\"*|¬§¶¼\n\t\b\r",
-		"&%@~;\\\"*|¬§¶¼\n\t\b\r",
-		{});
+	DeviceDescription description5 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("&%@~;\\\"*|¬§¶¼\n\t\b\r", "&%@~;\\\"*|¬§¶¼\n\t\b\r")
+		.build();
+
 	CPPUNIT_ASSERT_EQUAL("?????????????????", description5.vendor());
 	CPPUNIT_ASSERT_EQUAL("?????????????????", description5.productName());
 
-	DeviceDescription description6(
-		DeviceID::parse("0xfe01020304050607"),
-		"\x41\xc1\x81\xe0\x81\x81",
-		"\x41\xc1\x81\xe0\x81\x81",
-		{});
+	DeviceDescription description6 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("\x41\xc1\x81\xe0\x81\x81", "\x41\xc1\x81\xe0\x81\x81")
+		.build();
+
 	CPPUNIT_ASSERT_EQUAL("A??", description6.vendor());
 	CPPUNIT_ASSERT_EQUAL("A??", description6.productName());
 }
@@ -115,36 +115,36 @@ void DeviceDescriptionTest::testProductNameAndVendor()
  */
 void DeviceDescriptionTest::testRefreshTime()
 {
-	DeviceDescription description1(
-		DeviceID::parse("0xfe01020304050607"),
-		"Good Company",
-		"Nice Product",
-		{},
-		0);
+	DeviceDescription description1 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Good Company", "Nice Product")
+		.disabledRefreshTime()
+		.build();
+
 	CPPUNIT_ASSERT(Timespan(0) == description1.refreshTime());
 
-	DeviceDescription description2(
-		DeviceID::parse("0xfe01020304050607"),
-		"Good Company",
-		"Nice Product",
-		{},
-		5 * Timespan::SECONDS);
+	DeviceDescription description2 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Good Company", "Nice Product")
+		.refreshTime(5 * Timespan::SECONDS)
+		.build();
+
 	CPPUNIT_ASSERT(Timespan(5 * Timespan::SECONDS) == description2.refreshTime());
 
-	DeviceDescription description3(
-		DeviceID::parse("0xfe01020304050607"),
-		"Good Company",
-		"Nice Product",
-		{},
-		50 * Timespan::MILLISECONDS);
+	DeviceDescription description3 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Good Company", "Nice Product")
+		.refreshTime(50 * Timespan::MILLISECONDS)
+		.build();
+
 	CPPUNIT_ASSERT(Timespan(1 * Timespan::SECONDS) == description3.refreshTime());
 
-	DeviceDescription description4(
-		DeviceID::parse("0xfe01020304050607"),
-		"Good Company",
-		"Nice Product",
-		{},
-		-5 * Timespan::SECONDS);
+	DeviceDescription description4 = DeviceDescription::Builder()
+		.id(DeviceID::parse("0xfe01020304050607"))
+		.type("Good Company", "Nice Product")
+		.noRefreshTime()
+		.build();
+
 	CPPUNIT_ASSERT(Timespan(-1) == description4.refreshTime());
 }
 

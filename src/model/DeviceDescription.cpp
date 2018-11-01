@@ -8,27 +8,79 @@ using namespace BeeeOn;
 using namespace Poco;
 using namespace std;
 
-static RegularExpression regex(
+static const RegularExpression NAME_PATTERN(
 	"[^\\p{L}\\p{Nd} \\.:!?()/,\\-_#''$€¥£©®+]",
 	RegularExpression::RE_UTF8
 );
 
-DeviceDescription::DeviceDescription(
-	const DeviceID &deviceID,
-	const std::string &vendor,
-	const std::string &productName,
-	const std::list<ModuleType> &dataTypes,
-	Timespan refreshTime):
-		m_deviceID(deviceID),
-		m_vendor(normalizeName(vendor)),
-		m_productName(normalizeName(productName)),
-		m_dataTypes(dataTypes),
-		m_refreshTime(refreshTime)
+DeviceDescription::Builder::Builder():
+	m_refreshTime(-1)
 {
-	if (m_refreshTime < 0)
-		m_refreshTime = -1;
-	else if (m_refreshTime > 0 && m_refreshTime < Timespan::SECONDS)
-		m_refreshTime =  1 * Timespan::SECONDS;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::id(const DeviceID &id)
+{
+	m_id = id;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::type(
+		const string &vendor,
+		const string &name)
+{
+	m_vendor = vendor;
+	m_product = name;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::refreshTime(
+		const Timespan &time)
+{
+	m_refreshTime = time;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::disabledRefreshTime()
+{
+	m_refreshTime = 0;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::noRefreshTime()
+{
+	m_refreshTime = -1;
+	return *this;
+}
+
+template <typename T>
+static T notNull(const Nullable<T> value, const string &label)
+{
+	if (value.isNull())
+		throw InvalidArgumentException(label + " was not set in builder");
+
+	return value.value();
+}
+
+DeviceDescription DeviceDescription::Builder::build() const
+{
+	DeviceDescription description;
+	description.setID(notNull(m_id, "device ID"));
+	description.setVendor(notNull(m_vendor, "vendor name"));
+	description.setProductName(notNull(m_product, "product name"));
+	description.setDataTypes(m_modules);
+	description.setRefreshTime(m_refreshTime);
+
+	return description;
+}
+
+DeviceDescription::DeviceDescription():
+	m_refreshTime(-1)
+{
+}
+
+void DeviceDescription::setID(const DeviceID &id)
+{
+	m_deviceID = id;
 }
 
 DeviceID DeviceDescription::id() const
@@ -36,9 +88,19 @@ DeviceID DeviceDescription::id() const
 	return m_deviceID;
 }
 
+void DeviceDescription::setVendor(const string &vendor)
+{
+	m_vendor = normalizeName(vendor);
+}
+
 string DeviceDescription::vendor() const
 {
 	return m_vendor;
+}
+
+void DeviceDescription::setProductName(const string &name)
+{
+	m_productName = normalizeName(name);
 }
 
 string DeviceDescription::productName() const
@@ -46,9 +108,24 @@ string DeviceDescription::productName() const
 	return m_productName;
 }
 
+void DeviceDescription::setDataTypes(const list<ModuleType> &types)
+{
+	m_dataTypes = types;
+}
+
 list<ModuleType> DeviceDescription::dataTypes() const
 {
 	return m_dataTypes;
+}
+
+void DeviceDescription::setRefreshTime(const Timespan &time)
+{
+	if (time < 0)
+		m_refreshTime = -1;
+	else if (time > 0 && time < Timespan::SECONDS)
+		m_refreshTime =  1 * Timespan::SECONDS;
+	else
+		m_refreshTime = time;
 }
 
 Timespan DeviceDescription::refreshTime() const
@@ -111,7 +188,7 @@ string DeviceDescription::normalizeName(const string& bytes)
 	string result;
 
 	text.convert(bytes, result);
-	regex.subst(result, "?", RegularExpression::RE_GLOBAL);
+	NAME_PATTERN.subst(result, "?", RegularExpression::RE_GLOBAL);
 
 	return result;
 }

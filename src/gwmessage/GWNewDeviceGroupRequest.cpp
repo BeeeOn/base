@@ -69,16 +69,22 @@ vector<DeviceDescription> GWNewDeviceGroupRequest::deviceDescriptions() const
 
 	for (uint32_t i = 0; i < array->size(); i++) {
 		JSON::Object::Ptr newDevice = array->getObject(i);
-
 		JSON::Array::Ptr arrayOfTypes = newDevice->getArray("module_types");
-		list<ModuleType> types = GWNewDeviceRequest::parseModuleTypes(arrayOfTypes);
 
-		DeviceID deviceId = DeviceID::parse(newDevice->getValue<string>("device_id"));
-		string productName = newDevice->getValue<string>("product_name");
-		Timespan refresh = newDevice->getValue<int>("refresh_time") * Timespan::SECONDS;
+		auto builder = DeviceDescription::Builder()
+			.id(DeviceID::parse(newDevice->getValue<string>("device_id")))
+			.type(vendor(), newDevice->getValue<string>("product_name"))
+			.modules(GWNewDeviceRequest::parseModuleTypes(arrayOfTypes));
 
-		DeviceDescription description(deviceId, vendor(), productName, types, refresh);
-		descriptions.emplace_back(description);
+		const int time = newDevice->getValue<int>("refresh_time");
+		if (time < 0)
+			builder.noRefreshTime();
+		else if (time == 0)
+			builder.disabledRefreshTime();
+		else
+			builder.refreshTime(time * Timespan::SECONDS);
+
+		descriptions.emplace_back(builder.build());
 	}
 
 	return descriptions;
