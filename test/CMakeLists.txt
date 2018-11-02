@@ -43,6 +43,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/model/GlobalIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleIDTest.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleTypeTest.cpp
+	${PROJECT_SOURCE_DIR}/model/RefreshTimeTest.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorDataTest.cpp
 	${PROJECT_SOURCE_DIR}/net/IPAddressRangeTest.cpp
 	${PROJECT_SOURCE_DIR}/net/MACAddressTest.cpp
