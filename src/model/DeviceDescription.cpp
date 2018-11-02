@@ -13,8 +13,7 @@ static const RegularExpression NAME_PATTERN(
 	RegularExpression::RE_UTF8
 );
 
-DeviceDescription::Builder::Builder():
-	m_refreshTime(-1)
+DeviceDescription::Builder::Builder()
 {
 }
 
@@ -36,19 +35,31 @@ DeviceDescription::Builder &DeviceDescription::Builder::type(
 DeviceDescription::Builder &DeviceDescription::Builder::refreshTime(
 		const Timespan &time)
 {
-	m_refreshTime = time;
+	if (time >= 1 * Timespan::SECONDS) {
+		m_refreshTime = RefreshTime::fromSeconds(time.totalSeconds());
+	}
+	else if (time == 0) {
+		m_refreshTime = RefreshTime::DISABLED;
+	}
+	else if (time < 0) {
+		m_refreshTime = RefreshTime::NONE;
+	}
+	else {
+		m_refreshTime = RefreshTime::fromSeconds(1);
+	}
+
 	return *this;
 }
 
 DeviceDescription::Builder &DeviceDescription::Builder::disabledRefreshTime()
 {
-	m_refreshTime = 0;
+	m_refreshTime = RefreshTime::DISABLED;
 	return *this;
 }
 
 DeviceDescription::Builder &DeviceDescription::Builder::noRefreshTime()
 {
-	m_refreshTime = -1;
+	m_refreshTime = RefreshTime::NONE;
 	return *this;
 }
 
@@ -73,8 +84,7 @@ DeviceDescription DeviceDescription::Builder::build() const
 	return description;
 }
 
-DeviceDescription::DeviceDescription():
-	m_refreshTime(-1)
+DeviceDescription::DeviceDescription()
 {
 }
 
@@ -118,17 +128,12 @@ list<ModuleType> DeviceDescription::dataTypes() const
 	return m_dataTypes;
 }
 
-void DeviceDescription::setRefreshTime(const Timespan &time)
+void DeviceDescription::setRefreshTime(const RefreshTime &time)
 {
-	if (time < 0)
-		m_refreshTime = -1;
-	else if (time > 0 && time < Timespan::SECONDS)
-		m_refreshTime =  1 * Timespan::SECONDS;
-	else
-		m_refreshTime = time;
+	m_refreshTime = time;
 }
 
-Timespan DeviceDescription::refreshTime() const
+RefreshTime DeviceDescription::refreshTime() const
 {
 	return m_refreshTime;
 }
@@ -159,7 +164,7 @@ string DeviceDescription::toString() const
 	result += m_deviceID.toString() + " ";
 	result += m_vendor + " ";
 	result += m_productName + " ";
-	result += to_string(m_refreshTime.totalSeconds()) + " ";
+	result += m_refreshTime.toString() + " ";
 	result += modules + " ";
 
 	return result;
@@ -168,7 +173,7 @@ string DeviceDescription::toString() const
 string DeviceDescription::toPrettyString() const
 {
 	string summary = m_deviceID.toString() + " : " + m_vendor + " " + m_productName;
-	summary.append("\n * RT : " + to_string(m_refreshTime.totalMilliseconds()) + "ms");
+	summary.append("\n * RT : " + m_refreshTime.toString() + " s");
 
 	size_t j = 0;
 	for (const auto &m : m_dataTypes) {

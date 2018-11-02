@@ -8,6 +8,7 @@
 
 #include "model/DeviceID.h"
 #include "model/ModuleType.h"
+#include "model/RefreshTime.h"
 
 namespace BeeeOn {
 
@@ -48,7 +49,7 @@ public:
 		Poco::Nullable<std::string> m_vendor;
 		Poco::Nullable<std::string> m_product;
 		std::list<ModuleType> m_modules;
-		Poco::Timespan m_refreshTime;
+		RefreshTime m_refreshTime;
 	};
 
 	DeviceDescription();
@@ -65,7 +66,7 @@ public:
 	void setDataTypes(const std::list<ModuleType> &types);
 	std::list<ModuleType> dataTypes() const;
 
-	void setRefreshTime(const Poco::Timespan &time);
+	void setRefreshTime(const RefreshTime &time);
 
 	/**
 	 * Refresh time can be in one of three forms:
@@ -77,7 +78,7 @@ public:
 	 *
 	 * @returns refresh time of the device
 	 */
-	Poco::Timespan refreshTime() const;
+	RefreshTime refreshTime() const;
 
 	std::string toString() const;
 	std::string toPrettyString() const;
@@ -90,7 +91,7 @@ private:
 	std::string m_vendor;
 	std::string m_productName;
 	std::list<ModuleType> m_dataTypes;
-	Poco::Timespan m_refreshTime;
+	RefreshTime m_refreshTime;
 };
 
 }

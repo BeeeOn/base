@@ -54,11 +54,7 @@ void GWNewDeviceGroupRequest::addDeviceDescription(const DeviceDescription& devi
 	newDevice->set("module_types",
 		GWNewDeviceRequest::serializeModuleTypes(deviceDescription.dataTypes()));
 
-	if (deviceDescription.refreshTime() < 0)
-		newDevice->set("refresh_time", -1);
-	else
-		newDevice->set("refresh_time", deviceDescription.refreshTime().totalSeconds());
-
+	newDevice->set("refresh_time", deviceDescription.refreshTime().seconds());
 	json()->getArray("devices")->add(Dynamic::Var(newDevice));
 }
 

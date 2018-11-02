@@ -44,7 +44,7 @@ void DeviceDescriptionTest::testCreate()
 	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", description.id().toString());
 	CPPUNIT_ASSERT_EQUAL("Good Company", description.vendor());
 	CPPUNIT_ASSERT_EQUAL("Nice Product", description.productName());
-	CPPUNIT_ASSERT(description.refreshTime() == Timespan(30, 0));
+	CPPUNIT_ASSERT(description.refreshTime() == RefreshTime::fromSeconds(30));
 
 	const list<ModuleType> &checkTypes = description.dataTypes();
 	CPPUNIT_ASSERT_EQUAL("humidity", checkTypes.begin()->type().toString());
