@@ -1,12 +1,14 @@
 #pragma once
 
 #include <map>
+
 #include <Poco/Exception.h>
 #include <Poco/AutoPtr.h>
 #include <Poco/SharedPtr.h>
 #include <Poco/SharedLibrary.h>
 #include <Poco/Logger.h>
 #include <Poco/Util/AbstractConfiguration.h>
+
 #include "di/DIWrapper.h"
 #include "util/Loggable.h"
 
