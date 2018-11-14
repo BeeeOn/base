@@ -181,7 +181,7 @@ void DIDaemon::startRunner(const string &name)
 		config().createView("factory"),
 		libraryPaths(),
 		noEarlyRequested());
-	SharedPtr<StoppableLoop> runner = di.create<StoppableLoop>(name);
+	StoppableLoop::Ptr runner = di.create<StoppableLoop>(name);
 
 	logger().notice("starting runner " + name,
 			__FILE__, __LINE__);

@@ -16,6 +16,8 @@ namespace BeeeOn {
 
 class StoppableLoop {
 public:
+	typedef Poco::SharedPtr<StoppableLoop> Ptr;
+
 	virtual ~StoppableLoop();
 
 	/**
