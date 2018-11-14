@@ -3,6 +3,7 @@
 #include <list>
 
 #include <Poco/Mutex.h>
+#include <Poco/SharedPtr.h>
 
 #include "loop/StoppableRunnable.h"
 #include "loop/StoppableLoop.h"
@@ -12,6 +13,8 @@ namespace BeeeOn {
 
 class LoopRunner : public StoppableLoop, public Loggable {
 public:
+	typedef Poco::SharedPtr<LoopRunner> Ptr;
+
 	LoopRunner();
 	~LoopRunner();
 
