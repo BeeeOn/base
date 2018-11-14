@@ -42,7 +42,7 @@ LoopRunner::~LoopRunner()
 	stop();
 }
 
-void LoopRunner::addRunnable(SharedPtr<StoppableRunnable> runnable)
+void LoopRunner::addRunnable(StoppableRunnable::Ptr runnable)
 {
 	addLoop(new StoppableLoopAdapter(runnable));
 }

@@ -15,7 +15,7 @@ public:
 	LoopRunner();
 	~LoopRunner();
 
-	void addRunnable(Poco::SharedPtr<StoppableRunnable> runnable);
+	void addRunnable(StoppableRunnable::Ptr runnable);
 	void addLoop(StoppableLoop::Ptr loop);
 	void setAutoStart(bool enable);
 

@@ -13,7 +13,7 @@ StoppableLoop::~StoppableLoop()
 }
 
 StoppableLoopAdapter::StoppableLoopAdapter(
-		SharedPtr<StoppableRunnable> runnable):
+		StoppableRunnable::Ptr runnable):
 	m_stopTimeout(10 * Timespan::SECONDS),
 	m_runnable(runnable),
 	m_thread(NULL)
@@ -35,7 +35,7 @@ void StoppableLoopAdapter::setStopTimeout(const Timespan &timeout)
 	m_stopTimeout = timeout;
 }
 
-SharedPtr<StoppableRunnable> StoppableLoopAdapter::runnable() const
+StoppableRunnable::Ptr StoppableLoopAdapter::runnable() const
 {
 	return m_runnable;
 }
