@@ -16,6 +16,8 @@ namespace BeeeOn {
 
 class StoppableLoop {
 public:
+	typedef Poco::SharedPtr<StoppableLoop> Ptr;
+
 	virtual ~StoppableLoop();
 
 	/**
@@ -33,7 +35,7 @@ class StoppableLoopAdapter :
 	public Loggable,
 	public StoppableLoop {
 public:
-	StoppableLoopAdapter(Poco::SharedPtr<StoppableRunnable> runnable);
+	StoppableLoopAdapter(StoppableRunnable::Ptr runnable);
 	~StoppableLoopAdapter();
 
 	void start() override;
@@ -41,14 +43,14 @@ public:
 
 	void setStopTimeout(const Poco::Timespan &timeout);
 
-	Poco::SharedPtr<StoppableRunnable> runnable() const;
+	StoppableRunnable::Ptr runnable() const;
 
 protected:
 	void doStop();
 
 private:
 	Poco::Timespan m_stopTimeout;
-	Poco::SharedPtr<StoppableRunnable> m_runnable;
+	StoppableRunnable::Ptr m_runnable;
 	Poco::Thread *m_thread;
 };
 

@@ -21,7 +21,7 @@ BEEEON_OBJECT_PROPERTY("stopParallel", &LoopRunner::setStopParallel)
 BEEEON_OBJECT_HOOK("done", &LoopRunner::autoStart)
 BEEEON_OBJECT_END(BeeeOn, LoopRunner)
 
-static string repr(const SharedPtr<StoppableLoop> loop)
+static string repr(const StoppableLoop::Ptr loop)
 {
 	SharedPtr<StoppableLoopAdapter> adapter = loop.cast<StoppableLoopAdapter>();
 
@@ -42,12 +42,12 @@ LoopRunner::~LoopRunner()
 	stop();
 }
 
-void LoopRunner::addRunnable(SharedPtr<StoppableRunnable> runnable)
+void LoopRunner::addRunnable(StoppableRunnable::Ptr runnable)
 {
 	addLoop(new StoppableLoopAdapter(runnable));
 }
 
-void LoopRunner::addLoop(SharedPtr<StoppableLoop> loop)
+void LoopRunner::addLoop(StoppableLoop::Ptr loop)
 {
 	FastMutex::ScopedLock guard(m_lock);
 
@@ -159,7 +159,7 @@ LoopRunner::Stopper::Stopper():
 {
 }
 
-LoopRunner::Stopper::Stopper(SharedPtr<StoppableLoop> loop):
+LoopRunner::Stopper::Stopper(StoppableLoop::Ptr loop):
 	Loggable(typeid(LoopRunner)),
 	m_loop(loop)
 {

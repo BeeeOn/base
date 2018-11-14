@@ -3,6 +3,7 @@
 #include <list>
 
 #include <Poco/Mutex.h>
+#include <Poco/SharedPtr.h>
 
 #include "loop/StoppableRunnable.h"
 #include "loop/StoppableLoop.h"
@@ -12,11 +13,13 @@ namespace BeeeOn {
 
 class LoopRunner : public StoppableLoop, public Loggable {
 public:
+	typedef Poco::SharedPtr<LoopRunner> Ptr;
+
 	LoopRunner();
 	~LoopRunner();
 
-	void addRunnable(Poco::SharedPtr<StoppableRunnable> runnable);
-	void addLoop(Poco::SharedPtr<StoppableLoop> loop);
+	void addRunnable(StoppableRunnable::Ptr runnable);
+	void addLoop(StoppableLoop::Ptr loop);
 	void setAutoStart(bool enable);
 
 	/**
@@ -36,12 +39,12 @@ protected:
 	class Stopper : public Poco::Runnable, Loggable {
 	public:
 		Stopper();
-		Stopper(Poco::SharedPtr<StoppableLoop> loop);
+		Stopper(StoppableLoop::Ptr loop);
 
 		void run() override;
 
 	private:
-		Poco::SharedPtr<StoppableLoop> m_loop;
+		StoppableLoop::Ptr m_loop;
 	};
 
 	/**
@@ -63,7 +66,7 @@ private:
 	bool m_autoStart;
 	bool m_stopParallel;
 	Poco::FastMutex m_lock;
-	std::list<Poco::SharedPtr<StoppableLoop>> m_loops;
+	std::list<StoppableLoop::Ptr> m_loops;
 	std::list<Stopper> m_started;
 };
 
