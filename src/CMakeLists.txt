@@ -54,6 +54,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/io/AutoClose.cpp
 	${PROJECT_SOURCE_DIR}/io/Console.cpp
 	${PROJECT_SOURCE_DIR}/io/FdStream.cpp
+	${PROJECT_SOURCE_DIR}/io/IOStats.cpp
 	${PROJECT_SOURCE_DIR}/io/Printable.cpp
 	${PROJECT_SOURCE_DIR}/io/SafeWriter.cpp
 	${PROJECT_SOURCE_DIR}/io/SerialPort.cpp
