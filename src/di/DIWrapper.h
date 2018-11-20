@@ -324,17 +324,17 @@ private:
 struct DIWCast {
 	virtual ~DIWCast();
 	virtual bool wouldCast(const std::type_info &info) = 0;
-	virtual bool isSame(DIWrapper &wrapper) = 0;
+	virtual bool isSame(const DIWrapper &wrapper) = 0;
 	virtual void cast(void *raw, void *dest) = 0;
 
 	static void add(DIWCast *cast);
-	static DIWCast *find(const std::type_info &info, DIWrapper &wrapper);
+	static DIWCast *find(const std::type_info &info, const DIWrapper &wrapper);
 };
 
 template <typename From, typename To>
 struct DIWCastImpl final : public DIWCast {
 	bool wouldCast(const std::type_info &info) override;
-	bool isSame(DIWrapper &wrapper) override;
+	bool isSame(const DIWrapper &wrapper) override;
 	void cast(void *raw, void *dest) override;
 
 	static_assert(
@@ -650,7 +650,7 @@ bool DIWCastImpl<From, To>::wouldCast(const std::type_info &info)
  * Test this cast works with the same base type as the given wrapper.
  */
 template <typename From, typename To>
-bool DIWCastImpl<From, To>::isSame(DIWrapper &wrapper)
+bool DIWCastImpl<From, To>::isSame(const DIWrapper &wrapper)
 {
 	return wrapper.type() == typeid(From);
 }
