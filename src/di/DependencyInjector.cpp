@@ -350,9 +350,9 @@ DIWrapper *DependencyInjector::resolveAndCreate(const string &name, bool disown)
 	return createNoAlias(aliasInfo, disown);
 }
 
-DIWrapper *DependencyInjector::create(const string &name, bool disown)
+DIWrapper *DependencyInjector::createImpl(const string &name, bool disown)
 {
-	DIWrapper *existing = find(name);
+	DIWrapper *existing = findImpl(name);
 	if (existing != NULL) {
 		logger().debug("instance " + name + " reused",
 				__FILE__, __LINE__);
@@ -362,13 +362,25 @@ DIWrapper *DependencyInjector::create(const string &name, bool disown)
 	return resolveAndCreate(name, disown);
 }
 
-DIWrapper *DependencyInjector::find(const string &name)
+DIWrapper *DependencyInjector::findImpl(const string &name)
 {
 	WrapperMap::const_iterator it = m_set.find(name);
 	if (it != m_set.end())
 		return it->second;
 
 	return NULL;
+}
+
+void DependencyInjector::castImpl(
+		const type_info &type,
+		const DIWrapper &wrapper,
+		void *target)
+{
+		DIWCast *cast = DIWCast::find(type, wrapper);
+		if (cast == NULL)
+			throw DIWCastException(wrapper.type(), type);
+
+		cast->cast(wrapper.raw(), target);
 }
 
 DIWrapper *DependencyInjector::createNoAlias(
@@ -456,7 +468,7 @@ void DependencyInjector::createAndInjectRef(
 	DIWrapper *ref = NULL;
 
 	try {
-		ref = create(value);
+		ref = createImpl(value, false);
 	} catch (const Exception &e) {
 		logger().error("failed to create ref " + value,
 				__FILE__, __LINE__);

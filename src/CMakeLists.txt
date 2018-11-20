@@ -27,6 +27,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjector.cpp
 	${PROJECT_SOURCE_DIR}/di/DIApplicationConfigurationLoader.cpp
 	${PROJECT_SOURCE_DIR}/di/DIDaemon.cpp
+	${PROJECT_SOURCE_DIR}/di/DIFactory.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapper.cpp
 	${PROJECT_SOURCE_DIR}/di/DIXmlLoader.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWAck.cpp

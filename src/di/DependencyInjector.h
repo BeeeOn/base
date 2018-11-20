@@ -9,6 +9,7 @@
 #include <Poco/Logger.h>
 #include <Poco/Util/AbstractConfiguration.h>
 
+#include "di/DIFactory.h"
 #include "di/DIWrapper.h"
 #include "util/Loggable.h"
 
@@ -106,7 +107,7 @@ class InstanceInfo;
  * Poco::SharedPtr<Main> main = di.create<Main>("main");
  * </pre>
  */
-class DependencyInjector : protected Loggable {
+class DependencyInjector : public DIFactory, protected Loggable {
 public:
 	typedef std::map<std::string, DIWrapper *> WrapperMap;
 	typedef std::vector<DIWrapper *> WrapperVector;
@@ -118,43 +119,30 @@ public:
 
 	~DependencyInjector();
 
-	DIWrapper *create(const std::string &name, bool disown = false);
-
-	template <typename T>
-	Poco::SharedPtr<T> create(const std::string &name, bool disown = false)
-	{
-		DIWrapper *wrapper = create(name, disown);
-		if (wrapper == NULL)
-			return NULL;
-
-		return cast<T>(*wrapper);
-	}
-
-	DIWrapper *find(const std::string &name);
-
-	template <typename T>
-	Poco::SharedPtr<T> find(const std::string &name)
-	{
-		DIWrapper *wrapper = find(name);
-		if (wrapper == NULL)
-			return NULL;
-
-		return cast<T>(*wrapper);
-	}
-
 private:
-	template <typename T>
-	Poco::SharedPtr<T> cast(DIWrapper &wrapper)
-	{
-		DIWCast *cast = DIWCast::find(typeid(T), wrapper);
-		if (cast == NULL)
-			throw DIWCastException(wrapper.type(), typeid(T));
+	/**
+	 * @brief Implement instance lookup by name.
+	 */
+	DIWrapper *findImpl(const std::string &name) override;
 
-		Poco::SharedPtr<T> instance;
-		cast->cast(wrapper.raw(), reinterpret_cast<void *>(&instance));
+	/**
+	 * @brief Create the requested instance by name. If it exist
+	 * it is not recreated. The instance can be created in detached
+	 * mode where the deallocation responsibility is taken off the
+	 * DependencyInjector.
+	 */
+	DIWrapper *createImpl(
+		const std::string &name,
+		bool detach) override;
 
-		return instance;
-	}
+	/**
+	 * @brief Perform unsafe cast of types in runtime according to
+	 * the non-standard casting rules.
+	 */
+	void castImpl(
+		const std::type_info &type,
+		const DIWrapper &wrapper,
+		void *target) override;
 
 	/**
 	 * @brief Compute all defined constants and reinject them back
