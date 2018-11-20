@@ -391,7 +391,7 @@ public:
 	/**
 	 * Return pointer to Poco::SharedPtr<?>
 	 */
-	virtual void *raw() = 0;
+	virtual void *raw() const = 0;
 
 	/**
 	 * Return count of references in the Poco::SharedPtr<?>
@@ -402,7 +402,7 @@ public:
 	 * Return type of the underlying instance.
 	 * This is typeid(?) from Poco::SharedPtr<?>.
 	 */
-	virtual const std::type_info &type() = 0;
+	virtual const std::type_info &type() const = 0;
 
 protected:
 	virtual void injectRef(const std::string &name,
@@ -437,9 +437,9 @@ public:
 	 */
 	Poco::SharedPtr<T> instance();
 
-	void *raw() override;
+	void *raw() const override;
 	int referenceCount() override;
-	const std::type_info &type() override;
+	const std::type_info &type() const override;
 
 protected:
 	void injectRef(const std::string &name, DIWrapper &wrapper) override;
@@ -698,9 +698,10 @@ Poco::SharedPtr<T> AbstractDIWrapper<T>::instance()
 }
 
 template <typename T>
-void *AbstractDIWrapper<T>::raw()
+void *AbstractDIWrapper<T>::raw() const
 {
-	return reinterpret_cast<void *>(&m_instance);
+	auto *self = const_cast<AbstractDIWrapper<T> *>(this);
+	return reinterpret_cast<void *>(&self->m_instance);
 }
 
 template <typename T>
@@ -710,7 +711,7 @@ int AbstractDIWrapper<T>::referenceCount()
 }
 
 template <typename T>
-const std::type_info &AbstractDIWrapper<T>::type()
+const std::type_info &AbstractDIWrapper<T>::type() const
 {
 	return typeid(T);
 }
