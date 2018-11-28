@@ -11,6 +11,7 @@
 
 #include "io/Console.h"
 #include "loop/StoppableLoop.h"
+#include "loop/StopControl.h"
 #include "util/Loggable.h"
 
 namespace BeeeOn {
@@ -104,18 +105,16 @@ protected:
 	std::string command() const;
 
 	/**
-	 * @return event used to signalize wakeup from a long running
-	 * process (I/O), it is used by stop()
+	 * @returns underlying StopControl instance.
 	 */
-	Poco::Event &event();
+	StopControl &stopControl();
 
 private:
 	bool m_terminate;
 	bool m_repeat;
 	std::string m_command;
 	Console::Ptr m_console;
-	Poco::AtomicCounter m_stop;
-	Poco::Event m_event;
+	StopControl m_stopControl;
 	Poco::RunnableAdapter<Tool> m_runner;
 	Poco::Thread m_thread;
 };

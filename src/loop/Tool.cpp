@@ -14,7 +14,6 @@ Tool::Tool(bool terminate, bool repeat):
 	m_terminate(terminate),
 	m_repeat(repeat),
 	m_console(new StdConsole),
-	m_stop(false),
 	m_runner(*this, &Tool::parseAndRun)
 {
 }
@@ -52,14 +51,13 @@ void Tool::start()
 void Tool::stop()
 {
 	m_console->close();
-	m_stop = true;
-	m_event.set();
+	m_stopControl.requestStop();
 	m_thread.join();
 }
 
-Poco::Event &Tool::event()
+StopControl &Tool::stopControl()
 {
-	return m_event;
+	return m_stopControl;
 }
 
 void Tool::startSession(const vector<string> &args)
@@ -74,6 +72,7 @@ void Tool::startSession(const vector<string> &args)
 
 void Tool::parseAndRun()
 {
+	StopControl::Run run(m_stopControl);
 	ArgsParser parser;
 
 	do {
@@ -87,7 +86,7 @@ void Tool::parseAndRun()
 			startSession(args);
 		}
 		BEEEON_CATCH_CHAIN_ACTION(logger(), break)
-	} while (m_repeat && !m_stop);
+	} while (m_repeat && run);
 
 	if (!m_terminate)
 		return;
@@ -105,5 +104,5 @@ void Tool::parseAndRun()
 
 bool Tool::shouldStop() const
 {
-	return m_stop;
+	return m_stopControl.shouldStop();
 }

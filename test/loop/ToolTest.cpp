@@ -66,7 +66,7 @@ public:
 
 	void notify()
 	{
-		event().set();
+		stopControl().requestWakeup();
 	}
 
 protected:
@@ -84,7 +84,7 @@ protected:
 		}
 
 		m_done.set();
-		event().wait();
+		stopControl().waitStoppable(-1);
 	}
 
 public:
