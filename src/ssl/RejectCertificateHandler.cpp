@@ -26,8 +26,13 @@ void BetterRejectCertificateHandler::onInvalidCertificate(
 
 	logger().warning(
 		"rejecting certificate:\n"
-		+ format("Name: %s\nIssuer: %s\nSubject: %s\n"
-			"Valid from: %s\nExpires on: %s\nSHA256: %s\ndue to: %s",
+		+ format("Name: %s\n"
+			"Issuer: %s\n"
+			"Subject: %s\n"
+			"Valid from: %s\n"
+			"Expires on: %s\n"
+			"SHA256: %s\n"
+			"due to: %s",
 			cert.commonName(),
 			cert.issuerName(),
 			cert.subjectName(),
