@@ -27,6 +27,9 @@ void BetterRejectCertificateHandler::onInvalidCertificate(
 	logger().warning(
 		"rejecting certificate:\n"
 		+ format("Name: %s\n"
+#if POCO_VERSION >= 0x01090000
+			"Serial: %s\n"
+#endif
 			"Issuer: %s\n"
 			"Subject: %s\n"
 			"Valid from: %s\n"
@@ -34,6 +37,9 @@ void BetterRejectCertificateHandler::onInvalidCertificate(
 			"SHA256: %s\n"
 			"due to: %s",
 			cert.commonName(),
+#if POCO_VERSION >= 0x01090000
+			cert.serialNumber(),
+#endif
 			cert.issuerName(),
 			cert.subjectName(),
 			DateTimeFormatter::format(cert.validFrom(),
