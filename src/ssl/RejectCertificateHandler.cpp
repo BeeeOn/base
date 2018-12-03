@@ -27,11 +27,13 @@ void BetterRejectCertificateHandler::onInvalidCertificate(
 	logger().warning(
 		"rejecting certificate:\n"
 		+ format("Name: %s\nIssuer: %s\nSubject: %s\n"
-			"Valid from: %s\nSHA256: %s\ndue to: %s",
+			"Valid from: %s\nExpires on: %s\nSHA256: %s\ndue to: %s",
 			cert.commonName(),
 			cert.issuerName(),
 			cert.subjectName(),
 			DateTimeFormatter::format(cert.validFrom(),
+				DateTimeFormat::SORTABLE_FORMAT),
+			DateTimeFormatter::format(cert.expiresOn(),
 				DateTimeFormat::SORTABLE_FORMAT),
 		X509Fingerprint(&cert).digestToHex("SHA256"),
 		error.errorMessage()),
