@@ -124,7 +124,7 @@ void DIWCast::add(DIWCast *cast)
 	g_registry.add(cast);
 }
 
-DIWCast *DIWCast::find(const type_info &info, DIWrapper &wrapper)
+DIWCast *DIWCast::find(const type_info &info, const DIWrapper &wrapper)
 {
 	for (auto cast : g_registry) {
 		if (cast->wouldCast(info) && cast->isSame(wrapper))
