@@ -26,12 +26,25 @@ void BetterRejectCertificateHandler::onInvalidCertificate(
 
 	logger().warning(
 		"rejecting certificate:\n"
-		+ format("Name: %s\nIssuer: %s\nSubject: %s\n"
-			"Valid from: %s\nSHA256: %s\ndue to: %s",
+		+ format("Name: %s\n"
+#if POCO_VERSION >= 0x01090000
+			"Serial: %s\n"
+#endif
+			"Issuer: %s\n"
+			"Subject: %s\n"
+			"Valid from: %s\n"
+			"Expires on: %s\n"
+			"SHA256: %s\n"
+			"due to: %s",
 			cert.commonName(),
+#if POCO_VERSION >= 0x01090000
+			cert.serialNumber(),
+#endif
 			cert.issuerName(),
 			cert.subjectName(),
 			DateTimeFormatter::format(cert.validFrom(),
+				DateTimeFormat::SORTABLE_FORMAT),
+			DateTimeFormatter::format(cert.expiresOn(),
 				DateTimeFormat::SORTABLE_FORMAT),
 		X509Fingerprint(&cert).digestToHex("SHA256"),
 		error.errorMessage()),
