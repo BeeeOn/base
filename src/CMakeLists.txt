@@ -47,6 +47,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWSearchRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataConfirm.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataExport.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSetValueRequest.cpp

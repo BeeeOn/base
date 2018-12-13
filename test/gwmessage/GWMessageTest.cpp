@@ -24,6 +24,7 @@
 #include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWPingRequest.h"
 #include "gwmessage/GWUnpairRequest.h"
+#include "gwmessage/GWSearchRequest.h"
 #include "gwmessage/GWSetValueRequest.h"
 #include "gwmessage/GWDeviceAcceptRequest.h"
 #include "model/GlobalID.h"
@@ -32,6 +33,7 @@
 
 using namespace std;
 using namespace Poco;
+using namespace Poco::Net;
 using namespace Poco::JSON;
 
 namespace BeeeOn {
@@ -65,6 +67,12 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateDeviceListWithValues);
 	CPPUNIT_TEST(testParseListen);
 	CPPUNIT_TEST(testCreateListen);
+	CPPUNIT_TEST(testParseSearchIP);
+	CPPUNIT_TEST(testParseSearchMAC);
+	CPPUNIT_TEST(testParseSearchSerial);
+	CPPUNIT_TEST(testCreateSearchIP);
+	CPPUNIT_TEST(testCreateSearchMAC);
+	CPPUNIT_TEST(testCreateSearchSerial);
 	CPPUNIT_TEST(testParsePing);
 	CPPUNIT_TEST(testCreatePing);
 	CPPUNIT_TEST(testParseUnpair);
@@ -102,6 +110,13 @@ public:
 	void testCreateDeviceListWithValues();
 	void testParseListen();
 	void testCreateListen();
+	void testParseSearchIP();
+	void testParseSearchMAC();
+	void testParseSearchSerial();
+	void testCreateSearch();
+	void testCreateSearchIP();
+	void testCreateSearchMAC();
+	void testCreateSearchSerial();
 	void testParsePing();
 	void testCreatePing();
 	void testParseUnpair();
@@ -1048,6 +1063,135 @@ void GWMessageTest::testCreateListen()
 			"message_type": "listen_request",
 			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
 			"duration": 60
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testParseSearchIP()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+		"message_type" : "search_request",
+		"duration" : 20,
+		"criteria": {
+			"ip_address": "192.168.0.1"
+		}
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SEARCH_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSearchRequest>().isNull());
+
+	GWSearchRequest::Ptr request = message.cast<GWSearchRequest>();
+	CPPUNIT_ASSERT(request->duration() == Timespan(20, 0));
+	CPPUNIT_ASSERT(request->criteria().hasIPAddress());
+	CPPUNIT_ASSERT(!request->criteria().hasMACAddress());
+	CPPUNIT_ASSERT(!request->criteria().hasSerialNumber());
+
+	CPPUNIT_ASSERT_EQUAL("192.168.0.1", request->criteria().ipAddress().toString());
+}
+
+void GWMessageTest::testParseSearchMAC()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+		"message_type" : "search_request",
+		"duration" : 20,
+		"criteria": {
+			"mac_address": "ab:01:bc:02:cd:03"
+		}
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SEARCH_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSearchRequest>().isNull());
+
+	GWSearchRequest::Ptr request = message.cast<GWSearchRequest>();
+	CPPUNIT_ASSERT(request->duration() == Timespan(20, 0));
+	CPPUNIT_ASSERT(!request->criteria().hasIPAddress());
+	CPPUNIT_ASSERT(request->criteria().hasMACAddress());
+	CPPUNIT_ASSERT(!request->criteria().hasSerialNumber());
+
+	CPPUNIT_ASSERT_EQUAL("AB:01:BC:02:CD:03", request->criteria().macAddress().toString(':'));
+}
+
+void GWMessageTest::testParseSearchSerial()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+		"message_type" : "search_request",
+		"duration" : 20,
+		"criteria": {
+			"serial_number": "1234567890"
+		}
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SEARCH_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSearchRequest>().isNull());
+
+	GWSearchRequest::Ptr request = message.cast<GWSearchRequest>();
+	CPPUNIT_ASSERT(request->duration() == Timespan(20, 0));
+	CPPUNIT_ASSERT(!request->criteria().hasIPAddress());
+	CPPUNIT_ASSERT(!request->criteria().hasMACAddress());
+	CPPUNIT_ASSERT(request->criteria().hasSerialNumber());
+
+	CPPUNIT_ASSERT_EQUAL(1234567890UL, request->criteria().serialNumber());
+}
+
+void GWMessageTest::testCreateSearchIP()
+{
+	GWSearchRequest::Ptr request = new GWSearchRequest;
+	request->setID(GlobalID::parse("5a705ebf-aff8-4649-8b81-449f619127bd"));
+	request->setDuration(Timespan(60, 0));
+	request->setCriteria({IPAddress("10.0.0.1")});
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "search_request",
+			"id": "5a705ebf-aff8-4649-8b81-449f619127bd",
+			"duration": 60,
+			"criteria": {
+				"ip_address": "10.0.0.1"
+			}
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testCreateSearchMAC()
+{
+	GWSearchRequest::Ptr request = new GWSearchRequest;
+	request->setID(GlobalID::parse("5a705ebf-aff8-4649-8b81-449f619127bd"));
+	request->setDuration(Timespan(60, 0));
+	request->setCriteria({MACAddress::parse("01:02:03:04:05:06")});
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "search_request",
+			"id": "5a705ebf-aff8-4649-8b81-449f619127bd",
+			"duration": 60,
+			"criteria": {
+				"mac_address": "01:02:03:04:05:06"
+			}
+		})"),
+		request->toString()
+	);
+}
+
+void GWMessageTest::testCreateSearchSerial()
+{
+	GWSearchRequest::Ptr request = new GWSearchRequest;
+	request->setID(GlobalID::parse("5a705ebf-aff8-4649-8b81-449f619127bd"));
+	request->setDuration(Timespan(60, 0));
+	request->setCriteria({1234567890UL});
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type": "search_request",
+			"id": "5a705ebf-aff8-4649-8b81-449f619127bd",
+			"duration": 60,
+			"criteria": {
+				"serial_number": "1234567890"
+			}
 		})"),
 		request->toString()
 	);
