@@ -77,7 +77,9 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreatePing);
 	CPPUNIT_TEST(testParseUnpair);
 	CPPUNIT_TEST(testCreateUnpair);
+	CPPUNIT_TEST(testParseSetValueLegacy);
 	CPPUNIT_TEST(testParseSetValue);
+	CPPUNIT_TEST(testCreateSetValueLegacy);
 	CPPUNIT_TEST(testCreateSetValue);
 	CPPUNIT_TEST(testParseDeviceAccept);
 	CPPUNIT_TEST(testCreateDeviceAccept);
@@ -121,7 +123,9 @@ public:
 	void testCreatePing();
 	void testParseUnpair();
 	void testCreateUnpair();
+	void testParseSetValueLegacy();
 	void testParseSetValue();
+	void testCreateSetValueLegacy();
 	void testCreateSetValue();
 	void testParseDeviceAccept();
 	void testCreateDeviceAccept();
@@ -1272,7 +1276,7 @@ void GWMessageTest::testCreateUnpair()
 	);
 }
 
-void GWMessageTest::testParseSetValue()
+void GWMessageTest::testParseSetValueLegacy()
 {
 	GWMessage::Ptr message = GWMessage::fromJSON(
 	R"({
@@ -1291,11 +1295,37 @@ void GWMessageTest::testParseSetValue()
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
 	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
 	CPPUNIT_ASSERT_EQUAL("0", request->moduleID().toString());
+	CPPUNIT_ASSERT_EQUAL(OpMode::TRY_ONCE, request->mode());
 	CPPUNIT_ASSERT(3.5);
 	CPPUNIT_ASSERT(request->timeout() == Timespan(10, 0));
 }
 
-void GWMessageTest::testCreateSetValue()
+void GWMessageTest::testParseSetValue()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+			"message_type" : "set_value_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"module_id" : 0,
+			"value" : 3.5,
+			"timeout" : 10,
+			"mode": "try_harder"
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::SET_VALUE_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWSetValueRequest>().isNull());
+
+	GWSetValueRequest::Ptr request = message.cast<GWSetValueRequest>();
+	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
+	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT_EQUAL("0", request->moduleID().toString());
+	CPPUNIT_ASSERT_EQUAL(OpMode::TRY_HARDER, request->mode());
+	CPPUNIT_ASSERT(3.5);
+	CPPUNIT_ASSERT(request->timeout() == Timespan(10, 0));
+}
+
+void GWMessageTest::testCreateSetValueLegacy()
 {
 	GWSetValueRequest::Ptr request1(new GWSetValueRequest);
 	request1->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
@@ -1309,6 +1339,34 @@ void GWMessageTest::testCreateSetValue()
 			"message_type" : "set_value_request",
 			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
 			"device_id" : "0xfe01020304050607",
+			"module_id" : 0,
+			"value" : 3.5,
+			"timeout" : 10
+		})"),
+		request1->toString()
+	);
+
+	GWSetValueRequest::Ptr request2(new GWSetValueRequest);
+	CPPUNIT_ASSERT_THROW(request2->setValue(NAN), InvalidArgumentException);
+}
+
+
+void GWMessageTest::testCreateSetValue()
+{
+	GWSetValueRequest::Ptr request1(new GWSetValueRequest);
+	request1->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
+	request1->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+	request1->setModuleID(0);
+	request1->setValue(3.5);
+	request1->setTimeout(Timespan(10, 0));
+	request1->setMode(OpMode::REPEAT_ON_FAIL);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"message_type" : "set_value_request",
+			"id" : "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
+			"device_id" : "0xfe01020304050607",
+			"mode" : "repeat_on_fail",
 			"module_id" : 0,
 			"value" : 3.5,
 			"timeout" : 10
