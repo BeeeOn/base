@@ -84,3 +84,36 @@ map<ModuleID, double> GWDeviceListResponse::modulesValues(
 
 	return result;
 }
+
+void GWDeviceListResponse::setRefreshFor(const DeviceID &id, const RefreshTime &refresh)
+{
+	if (refresh.isNone())
+		return;
+
+	JSON::Object::Ptr config = json()->getObject("config");
+	if (config.isNull()) {
+		config = new JSON::Object;
+		json()->set("config", config);
+	}
+
+	JSON::Object::Ptr device = config->getObject(id.toString());
+	if (device.isNull()) {
+		device = new JSON::Object;
+		config->set(id.toString(), device);
+	}
+
+	device->set("refresh_time", refresh.toString());
+}
+
+RefreshTime GWDeviceListResponse::refreshFor(const DeviceID &id) const
+{
+	JSON::Object::Ptr config = json()->getObject("config");
+	if (config.isNull())
+		return RefreshTime::NONE;
+
+	JSON::Object::Ptr device = config->getObject(id.toString());
+	if (device.isNull())
+		return RefreshTime::NONE;
+
+	return RefreshTime::parse(device->optValue<string>("refresh_time", "none"));
+}
