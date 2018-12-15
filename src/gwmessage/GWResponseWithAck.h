@@ -8,8 +8,10 @@
 namespace BeeeOn {
 
 /**
- * @brief Represents a response to a request message (subclass of a GWRequest),
- * that requires acknowledgement (GWAck).
+ * @brief **Deprecated.** Represents a response to a request message
+ * (subclass of a GWRequest), that requires acknowledgement (GWAck).
+ * In the future, just use a regular GWResponse and set ackRequired
+ * property to true.
  */
 class GWResponseWithAck : public GWResponse {
 public:
