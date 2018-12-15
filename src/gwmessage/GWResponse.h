@@ -7,6 +7,8 @@
 
 namespace BeeeOn {
 
+class GWAck;
+
 /**
  * @brief Represents a response to a request message (subclass of a GWRequest).
  * The GWResponse can be used alone as a generic response or inherited by a more
@@ -48,6 +50,14 @@ public:
 	 * @brief Covert integer value to GWResponse::Status and return it.
 	 */
 	static Status convertStatus(const int value);
+
+	void setAckExpected(bool expected);
+	bool ackExpected() const;
+
+	/**
+	 * @brief Creates and returns a corresponding GWAck message.
+	 */
+	Poco::SharedPtr<GWAck> ack() const;
 };
 
 }

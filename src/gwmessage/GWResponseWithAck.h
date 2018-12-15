@@ -3,7 +3,6 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
 
-#include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponse.h"
 
 namespace BeeeOn {
@@ -21,12 +20,6 @@ public:
 
 protected:
 	GWResponseWithAck(const GWMessageTypeEnum::Raw &type);
-
-public:
-	/**
-	 * @brief Creates and returns a corresponding GWAck message.
-	 */
-	GWAck::Ptr ack() const;
 };
 
 }
