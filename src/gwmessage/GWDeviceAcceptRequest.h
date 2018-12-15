@@ -5,6 +5,7 @@
 
 #include "gwmessage/GWRequest.h"
 #include "model/DeviceID.h"
+#include "model/RefreshTime.h"
 
 namespace BeeeOn {
 
@@ -22,6 +23,9 @@ public:
 
 	void setDeviceID(const DeviceID &deviceID);
 	DeviceID deviceID() const;
+
+	void setRefresh(const RefreshTime &refresh);
+	RefreshTime refresh() const;
 };
 
 }

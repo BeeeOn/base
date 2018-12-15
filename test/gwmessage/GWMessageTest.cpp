@@ -1322,6 +1322,7 @@ void GWMessageTest::testParseDeviceAccept()
 	GWDeviceAcceptRequest::Ptr request = message.cast<GWDeviceAcceptRequest>();
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
 	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT(request->refresh().isNone());
 }
 
 void GWMessageTest::testCreateDeviceAccept()
@@ -1329,12 +1330,14 @@ void GWMessageTest::testCreateDeviceAccept()
 	GWDeviceAcceptRequest::Ptr request(new GWDeviceAcceptRequest);
 	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
 	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+	request->setRefresh(RefreshTime::fromSeconds(56));
 
 	CPPUNIT_ASSERT_EQUAL(
 		jsonReformat(R"({
 			"message_type": "device_accept_request",
 			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
-			"device_id": "0xfe01020304050607"
+			"device_id": "0xfe01020304050607",
+			"refresh_time": "56"
 		})"),
 		request->toString()
 	);
