@@ -11,6 +11,7 @@
 
 using namespace std;
 using namespace Poco;
+using namespace Poco::Net;
 using namespace BeeeOn;
 
 GWNewDeviceGroupRequest::GWNewDeviceGroupRequest():
@@ -54,6 +55,17 @@ void GWNewDeviceGroupRequest::addDeviceDescription(const DeviceDescription& devi
 	newDevice->set("module_types",
 		GWNewDeviceRequest::serializeModuleTypes(deviceDescription.dataTypes()));
 
+	if (!deviceDescription.name().empty())
+		json()->set("name", deviceDescription.name());
+	if (!deviceDescription.firmware().empty())
+		json()->set("firmware", deviceDescription.firmware());
+	if (!deviceDescription.ipAddress().isNull())
+		json()->set("ip_address", deviceDescription.ipAddress().value().toString());
+	if (!deviceDescription.macAddress().isNull())
+		json()->set("mac_address", deviceDescription.macAddress().value().toString());
+	if (!deviceDescription.serialNumber().isNull())
+		json()->set("serial_number", to_string(deviceDescription.serialNumber().value()));
+
 	newDevice->set("refresh_time", deviceDescription.refreshTime().seconds());
 	json()->getArray("devices")->add(Dynamic::Var(newDevice));
 }
@@ -79,6 +91,29 @@ vector<DeviceDescription> GWNewDeviceGroupRequest::deviceDescriptions() const
 			builder.disabledRefreshTime();
 		else
 			builder.refreshTime(time * Timespan::SECONDS);
+
+		if (json()->has("name"))
+			builder.name(json()->getValue<string>("name"));
+		if (json()->has("firmware"))
+			builder.firmware(json()->getValue<string>("firmware"));
+
+		if (json()->has("ip_address")) {
+			builder.ipAddress(
+				IPAddress::parse(
+					json()->getValue<string>("ip_address")));
+		}
+
+		if (json()->has("mac_address")) {
+			builder.macAddress(
+				MACAddress::parse(
+					json()->getValue<string>("mac_address")));
+		}
+
+		if (json()->has("serial_number")) {
+			builder.serialNumber(
+				NumberParser::parseUnsigned(
+					json()->getValue<string>("serial_number")));
+		}
 
 		descriptions.emplace_back(builder.build());
 	}
