@@ -3,14 +3,15 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/JSON/Object.h>
 
-#include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponse.h"
 
 namespace BeeeOn {
 
 /**
- * @brief Represents a response to a request message (subclass of a GWRequest),
- * that requires acknowledgement (GWAck).
+ * @brief **Deprecated.** Represents a response to a request message
+ * (subclass of a GWRequest), that requires acknowledgement (GWAck).
+ * In the future, just use a regular GWResponse and set ackRequired
+ * property to true.
  */
 class GWResponseWithAck : public GWResponse {
 public:
@@ -21,12 +22,6 @@ public:
 
 protected:
 	GWResponseWithAck(const GWMessageTypeEnum::Raw &type);
-
-public:
-	/**
-	 * @brief Creates and returns a corresponding GWAck message.
-	 */
-	GWAck::Ptr ack() const;
 };
 
 }

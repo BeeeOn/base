@@ -2,7 +2,9 @@
 
 #include <Poco/Exception.h>
 
+#include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponse.h"
+#include "gwmessage/GWResponseWithAck.h"
 
 using namespace std;
 using namespace Poco;
@@ -45,3 +47,25 @@ GWResponse::Status GWResponse::convertStatus(const int value)
 	}
 }
 
+void GWResponse::setAckExpected(bool expected)
+{
+	json()->set("ack_expected", expected);
+}
+
+bool GWResponse::ackExpected() const
+{
+	if (!json()->has("ack_expected"))
+		return typeid(*this) == typeid(GWResponseWithAck);
+
+	return json()->optValue<bool>("ack_expected", false);
+}
+
+GWAck::Ptr GWResponse::ack() const
+{
+	GWAck::Ptr ack(new GWAck);
+
+	ack->setID(id());
+	ack->setStatus(status());
+
+	return ack;
+}
