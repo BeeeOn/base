@@ -5,10 +5,12 @@
 
 #include <Poco/Nullable.h>
 #include <Poco/Timespan.h>
+#include <Poco/Net/IPAddress.h>
 
 #include "model/DeviceID.h"
 #include "model/ModuleType.h"
 #include "model/RefreshTime.h"
+#include "net/MACAddress.h"
 
 namespace BeeeOn {
 
@@ -42,6 +44,12 @@ public:
 		Builder &disabledRefreshTime();
 		Builder &noRefreshTime();
 
+		Builder &name(const std::string &name);
+		Builder &firmware(const std::string &firmware);
+		Builder &ipAddress(const Poco::Net::IPAddress &address);
+		Builder &macAddress(const MACAddress &mac);
+		Builder &serialNumber(const uint64_t serial);
+
 		DeviceDescription build() const;
 
 	private:
@@ -50,6 +58,11 @@ public:
 		Poco::Nullable<std::string> m_product;
 		std::list<ModuleType> m_modules;
 		RefreshTime m_refreshTime;
+		std::string m_name;
+		std::string m_firmware;
+		Poco::Nullable<Poco::Net::IPAddress> m_ipAddress;
+		Poco::Nullable<MACAddress> m_macAddress;
+		Poco::Nullable<uint64_t> m_serialNumber;
 	};
 
 	DeviceDescription();
@@ -80,6 +93,21 @@ public:
 	 */
 	RefreshTime refreshTime() const;
 
+	void setName(const std::string &name);
+	std::string name() const;
+
+	void setFirmware(const std::string &firmware);
+	std::string firmware() const;
+
+	void setIPAddress(const Poco::Net::IPAddress &ipAddress);
+	Poco::Nullable<Poco::Net::IPAddress> ipAddress() const;
+
+	void setMACAddress(const MACAddress &macAddress);
+	Poco::Nullable<MACAddress> macAddress() const;
+
+	void setSerialNumber(uint64_t serial);
+	Poco::Nullable<uint64_t> serialNumber() const;
+
 	std::string toString() const;
 	std::string toPrettyString() const;
 
@@ -92,6 +120,11 @@ private:
 	std::string m_productName;
 	std::list<ModuleType> m_dataTypes;
 	RefreshTime m_refreshTime;
+	std::string m_name;
+	std::string m_firmware;
+	Poco::Nullable<Poco::Net::IPAddress> m_ipAddress;
+	Poco::Nullable<MACAddress> m_macAddress;
+	Poco::Nullable<uint64_t> m_serialNumber;
 };
 
 }
