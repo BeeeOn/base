@@ -13,6 +13,7 @@
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponseWithAck.h"
+#include "gwmessage/GWSearchRequest.h"
 #include "gwmessage/GWSensorDataConfirm.h"
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWSetValueRequest.h"
@@ -107,6 +108,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWPingRequest(object);
 	case GWMessageType::RESPONSE_WITH_ACK:
 		return new GWResponseWithAck(object);
+	case GWMessageType::SEARCH_REQUEST:
+		return new GWSearchRequest(object);
 	case GWMessageType::SENSOR_DATA_CONFIRM:
 		return new GWSensorDataConfirm(object);
 	case GWMessageType::SENSOR_DATA_EXPORT:

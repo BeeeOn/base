@@ -47,6 +47,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWSearchRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataConfirm.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSensorDataExport.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWSetValueRequest.cpp
@@ -77,6 +78,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/math/LogicalExpression.cpp
 	${PROJECT_SOURCE_DIR}/math/SimpleCalc.cpp
 	${PROJECT_SOURCE_DIR}/model/CustomTypeID.cpp
+	${PROJECT_SOURCE_DIR}/model/DeviceCriteria.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceDescription.cpp
 	${PROJECT_SOURCE_DIR}/model/DeviceID.cpp
 	${PROJECT_SOURCE_DIR}/model/DevicePrefix.cpp
