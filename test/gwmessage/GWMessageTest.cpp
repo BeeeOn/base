@@ -873,6 +873,11 @@ void GWMessageTest::testParseDeviceList()
 			    "0xa15410132465789" : {
 			      "0" : -54.2
 			    }
+			},
+			"config" : {
+			    "0xa15410132465789" : {
+			      "refresh_time" : "30"
+			    }
 			}
 	})");
 
@@ -882,6 +887,8 @@ void GWMessageTest::testParseDeviceList()
 	GWDeviceListResponse::Ptr response = message.cast<GWDeviceListResponse>();
 	CPPUNIT_ASSERT_EQUAL("495b7a34-d2e7-4cc7-afcc-0690fa5f072a", response->id().toString());
 	CPPUNIT_ASSERT_EQUAL(GWResponse::Status::SUCCESS, response->status());
+	CPPUNIT_ASSERT(response->refreshFor(0xa15410132465788UL).isNone());
+	CPPUNIT_ASSERT_EQUAL(30, response->refreshFor(0xa15410132465789UL).seconds());
 
 	vector<DeviceID> devices = response->devices();
 	CPPUNIT_ASSERT_EQUAL("0xa15410132465788", devices[0].toString());
@@ -1002,6 +1009,7 @@ void GWMessageTest::testCreateDeviceListWithValues()
 	GWDeviceListResponse::Ptr response(new GWDeviceListResponse);
 	response->setID(GlobalID::parse("a08c356b-316d-4690-84d4-b77d95b403fe"));
 	response->setStatus(GWResponse::Status::SUCCESS);
+	response->setRefreshFor(0xa1001234567890a0UL, RefreshTime::fromSeconds(60));
 
 	vector<DeviceID> devices;
 	devices.push_back(DeviceID::parse("0xa1001234567890a0"));
@@ -1018,6 +1026,11 @@ void GWMessageTest::testCreateDeviceListWithValues()
 		jsonReformat(R"({
 			"message_type": "device_list_response",
 			"id": "a08c356b-316d-4690-84d4-b77d95b403fe",
+			"config": {
+				"0xa1001234567890a0": {
+					"refresh_time": "60"
+				}
+			},
 			"status": 1,
 			"devices": [
 				{"device_id": "0xa1001234567890a0"},
@@ -1322,6 +1335,7 @@ void GWMessageTest::testParseDeviceAccept()
 	GWDeviceAcceptRequest::Ptr request = message.cast<GWDeviceAcceptRequest>();
 	CPPUNIT_ASSERT_EQUAL("4a41d041-eb1e-4e9c-9528-1bbe74f54d59", request->id().toString());
 	CPPUNIT_ASSERT_EQUAL("0xfe01020304050607", request->deviceID().toString());
+	CPPUNIT_ASSERT(request->refresh().isNone());
 }
 
 void GWMessageTest::testCreateDeviceAccept()
@@ -1329,12 +1343,14 @@ void GWMessageTest::testCreateDeviceAccept()
 	GWDeviceAcceptRequest::Ptr request(new GWDeviceAcceptRequest);
 	request->setID(GlobalID::parse("4a41d041-eb1e-4e9c-9528-1bbe74f54d59"));
 	request->setDeviceID(DeviceID::parse("0xfe01020304050607"));
+	request->setRefresh(RefreshTime::fromSeconds(56));
 
 	CPPUNIT_ASSERT_EQUAL(
 		jsonReformat(R"({
 			"message_type": "device_accept_request",
 			"id": "4a41d041-eb1e-4e9c-9528-1bbe74f54d59",
-			"device_id": "0xfe01020304050607"
+			"device_id": "0xfe01020304050607",
+			"refresh_time": "56"
 		})"),
 		request->toString()
 	);

@@ -10,6 +10,7 @@
 #include "gwmessage/GWResponse.h"
 #include "model/DeviceID.h"
 #include "model/ModuleID.h"
+#include "model/RefreshTime.h"
 
 namespace BeeeOn {
 
@@ -33,6 +34,9 @@ public:
 		const DeviceID &device,
 		const std::map<ModuleID, double> &values);
 	std::map<ModuleID, double> modulesValues(const DeviceID &device) const;
+
+	void setRefreshFor(const DeviceID &device, const RefreshTime &refresh);
+	RefreshTime refreshFor(const DeviceID &device) const;
 };
 
 }
