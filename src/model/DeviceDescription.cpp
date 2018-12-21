@@ -6,6 +6,7 @@
 
 using namespace BeeeOn;
 using namespace Poco;
+using namespace Poco::Net;
 using namespace std;
 
 static const RegularExpression NAME_PATTERN(
@@ -63,6 +64,41 @@ DeviceDescription::Builder &DeviceDescription::Builder::noRefreshTime()
 	return *this;
 }
 
+DeviceDescription::Builder &DeviceDescription::Builder::name(
+		const string &name)
+{
+	m_name = name;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::firmware(
+		const string &firmware)
+{
+	m_firmware = firmware;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::ipAddress(
+		const IPAddress &address)
+{
+	m_ipAddress = address;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::macAddress(
+		const MACAddress &mac)
+{
+	m_macAddress = mac;
+	return *this;
+}
+
+DeviceDescription::Builder &DeviceDescription::Builder::serialNumber(
+		const uint64_t serial)
+{
+	m_serialNumber = serial;
+	return *this;
+}
+
 template <typename T>
 static T notNull(const Nullable<T> value, const string &label)
 {
@@ -80,6 +116,15 @@ DeviceDescription DeviceDescription::Builder::build() const
 	description.setProductName(notNull(m_product, "product name"));
 	description.setDataTypes(m_modules);
 	description.setRefreshTime(m_refreshTime);
+	description.setFirmware(m_firmware);
+	description.setName(m_name);
+
+	if (!m_ipAddress.isNull())
+		description.setIPAddress(m_ipAddress);
+	if (!m_macAddress.isNull())
+		description.setMACAddress(m_macAddress);
+	if (!m_serialNumber.isNull())
+		description.setSerialNumber(m_serialNumber);
 
 	return description;
 }
@@ -136,6 +181,57 @@ void DeviceDescription::setRefreshTime(const RefreshTime &time)
 RefreshTime DeviceDescription::refreshTime() const
 {
 	return m_refreshTime;
+}
+
+void DeviceDescription::setName(const string &name)
+{
+	m_name = normalizeName(name);
+}
+
+string DeviceDescription::name() const
+{
+	return m_name;
+}
+
+void DeviceDescription::setFirmware(const string &firmware)
+{
+	m_firmware = normalizeName(firmware);
+}
+
+string DeviceDescription::firmware() const
+{
+	return m_firmware;
+}
+
+void DeviceDescription::setIPAddress(const IPAddress &ipAddress)
+{
+	m_ipAddress = ipAddress;
+}
+
+Nullable<IPAddress> DeviceDescription::ipAddress() const
+{
+
+	return m_ipAddress;
+}
+
+void DeviceDescription::setMACAddress(const MACAddress &macAddress)
+{
+	m_macAddress = macAddress;
+}
+
+Nullable<MACAddress> DeviceDescription::macAddress() const
+{
+	return m_macAddress;
+}
+
+void DeviceDescription::setSerialNumber(uint64_t serial)
+{
+	m_serialNumber = serial;
+}
+
+Nullable<uint64_t> DeviceDescription::serialNumber() const
+{
+	return m_serialNumber;
 }
 
 string DeviceDescription::toString() const

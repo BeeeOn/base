@@ -1,7 +1,10 @@
+#include <Poco/NumberParser.h>
+
 #include "gwmessage/GWNewDeviceRequest.h"
 
 using namespace std;
 using namespace Poco;
+using namespace Poco::Net;
 using namespace BeeeOn;
 
 GWNewDeviceRequest::GWNewDeviceRequest():
@@ -76,6 +79,17 @@ void GWNewDeviceRequest::setDeviceDescription(const DeviceDescription &descripti
 	setProductName(description.productName());
 	setModuleTypes(description.dataTypes());
 	setRefreshTime(description.refreshTime());
+
+	if (!description.name().empty())
+		json()->set("name", description.name());
+	if (!description.firmware().empty())
+		json()->set("firmware", description.firmware());
+	if (!description.ipAddress().isNull())
+		json()->set("ip_address", description.ipAddress().value().toString());
+	if (!description.macAddress().isNull())
+		json()->set("mac_address", description.macAddress().value().toString());
+	if (!description.serialNumber().isNull())
+		json()->set("serial_number", to_string(description.serialNumber().value()));
 }
 
 DeviceDescription GWNewDeviceRequest::deviceDescription() const
@@ -92,6 +106,29 @@ DeviceDescription GWNewDeviceRequest::deviceDescription() const
 		builder.disabledRefreshTime();
 	else
 		builder.refreshTime(time * Timespan::SECONDS);
+
+	if (json()->has("name"))
+		builder.name(json()->getValue<string>("name"));
+	if (json()->has("firmware"))
+		builder.firmware(json()->getValue<string>("firmware"));
+
+	if (json()->has("ip_address")) {
+		builder.ipAddress(
+			IPAddress::parse(
+				json()->getValue<string>("ip_address")));
+	}
+
+	if (json()->has("mac_address")) {
+		builder.macAddress(
+			MACAddress::parse(
+				json()->getValue<string>("mac_address")));
+	}
+
+	if (json()->has("serial_number")) {
+		builder.serialNumber(
+			NumberParser::parseUnsigned(
+				json()->getValue<string>("serial_number")));
+	}
 
 	return builder.build();
 }
