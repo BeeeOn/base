@@ -52,6 +52,21 @@ public:
 			formatFallback(def, tmp) : result;
 	}
 
+	/**
+	 * Format the message identified by given key. If the key is not
+	 * found, it returns the given def formatted via formatFallback().
+	 * The method calls formatImpl internally.
+	 */
+	std::string vformat(
+		const std::string &key,
+		const std::string &def,
+		const std::vector<Poco::Dynamic::Var> &args)
+	{
+		const auto &result = formatImpl(key, args);
+		return result.empty() ?
+			formatFallback(def, args) : result;
+	}
+
 protected:
 	void prepareArg(std::vector<Poco::Dynamic::Var> &tmp, const char *first)
 	{
