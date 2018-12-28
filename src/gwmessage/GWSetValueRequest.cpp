@@ -58,3 +58,16 @@ Timespan GWSetValueRequest::timeout() const
 {
 	return json()->getValue<unsigned>("timeout") * Timespan::SECONDS;
 }
+
+void GWSetValueRequest::setMode(const OpMode &mode)
+{
+	json()->set("mode", mode.toString());
+}
+
+OpMode GWSetValueRequest::mode() const
+{
+	if (!json()->has("mode"))
+		return OpMode::TRY_ONCE;
+
+	return OpMode::parse(json()->getValue<string>("mode"));
+}

@@ -86,6 +86,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/GlobalID.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleID.cpp
 	${PROJECT_SOURCE_DIR}/model/ModuleType.cpp
+	${PROJECT_SOURCE_DIR}/model/OpMode.cpp
 	${PROJECT_SOURCE_DIR}/model/RefreshTime.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorValue.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorData.cpp

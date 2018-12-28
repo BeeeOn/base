@@ -7,6 +7,7 @@
 #include "gwmessage/GWRequest.h"
 #include "model/DeviceID.h"
 #include "model/ModuleID.h"
+#include "model/OpMode.h"
 
 namespace BeeeOn {
 
@@ -36,6 +37,9 @@ public:
 
 	void setTimeout(const Poco::Timespan &timeout);
 	Poco::Timespan timeout() const;
+
+	void setMode(const OpMode &mode);
+	OpMode mode() const;
 };
 
 }
