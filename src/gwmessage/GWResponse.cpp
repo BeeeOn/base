@@ -42,9 +42,9 @@ GWResponse::Status GWResponse::convertStatus(const int value)
 	case SUCCESS:
 	case FAILED:
 		return static_cast<Status>(value);
-	default:
-		throw InvalidArgumentException("invalid status: " + to_string(value));
 	}
+
+	throw InvalidArgumentException("invalid status: " + to_string(value));
 }
 
 void GWResponse::setAckExpected(bool expected)
