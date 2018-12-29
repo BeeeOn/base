@@ -47,6 +47,8 @@ GWResponse::Status GWResponse::status() const
 			return SUCCESS;
 		if (value == "failed")
 			return FAILED;
+		if (value == "success_partial")
+			return SUCCESS_PARTIAL;
 
 		throw InvalidArgumentException("unrecognized 'status': " + value);
 	}
@@ -60,6 +62,7 @@ GWResponse::Status GWResponse::convertStatus(const int value)
 	case ACCEPTED:
 	case SUCCESS:
 	case FAILED:
+	case SUCCESS_PARTIAL:
 		return static_cast<Status>(value);
 	}
 

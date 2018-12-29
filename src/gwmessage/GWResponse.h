@@ -34,6 +34,11 @@ public:
 		 * Request failed.
 		 */
 		FAILED,
+		/**
+		 * Request has generally succeeded but there were some
+		 * non-fatal errors or warnings.
+		 */
+		SUCCESS_PARTIAL,
 	};
 
 	GWResponse();

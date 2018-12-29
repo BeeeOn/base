@@ -36,6 +36,7 @@ static string jsonResponseLegacy(const GWResponse::Status &status)
 	case GWResponse::ACCEPTED:
 	case GWResponse::SUCCESS:
 	case GWResponse::FAILED:
+	case GWResponse::SUCCESS_PARTIAL:
 		json += to_string(status) + "}";
 		return json;
 	}
@@ -60,6 +61,9 @@ static string jsonResponse(const GWResponse::Status &status)
 	case GWResponse::FAILED:
 		json += "failed";
 		return json + "\"}";
+	case GWResponse::SUCCESS_PARTIAL:
+		json += "success_partial";
+		return json + "\"}";
 	}
 
 	throw IllegalStateException("invalid status: " + to_string(status));
@@ -78,6 +82,10 @@ void GWResponseTest::testParseStatusLegacy()
 	const auto failed = GWMessage::fromJSON(
 		jsonResponseLegacy(GWResponse::FAILED)).cast<GWResponse>();
 	CPPUNIT_ASSERT_EQUAL(GWResponse::FAILED, failed->status());
+
+	const auto successPartial = GWMessage::fromJSON(
+		jsonResponseLegacy(GWResponse::SUCCESS_PARTIAL)).cast<GWResponse>();
+	CPPUNIT_ASSERT_EQUAL(GWResponse::SUCCESS_PARTIAL, successPartial->status());
 }
 
 void GWResponseTest::testParseStatus()
@@ -93,6 +101,10 @@ void GWResponseTest::testParseStatus()
 	const auto failed = GWMessage::fromJSON(
 		jsonResponse(GWResponse::FAILED)).cast<GWResponse>();
 	CPPUNIT_ASSERT_EQUAL(GWResponse::FAILED, failed->status());
+
+	const auto successPartial = GWMessage::fromJSON(
+		jsonResponse(GWResponse::SUCCESS_PARTIAL)).cast<GWResponse>();
+	CPPUNIT_ASSERT_EQUAL(GWResponse::SUCCESS_PARTIAL, successPartial->status());
 }
 
 }
