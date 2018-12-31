@@ -89,6 +89,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/RefreshTime.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorValue.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorData.cpp
+	${PROJECT_SOURCE_DIR}/model/Severity.cpp
 	${PROJECT_SOURCE_DIR}/model/SimpleID.cpp
 	${PROJECT_SOURCE_DIR}/model/TokenID.cpp
 	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp
