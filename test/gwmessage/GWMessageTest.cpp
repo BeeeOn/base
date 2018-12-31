@@ -17,6 +17,7 @@
 #include "gwmessage/GWSensorDataExport.h"
 #include "gwmessage/GWNewDeviceGroupRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
+#include "gwmessage/GWNoticeRequest.h"
 #include "gwmessage/GWLastValueResponse.h"
 #include "gwmessage/GWLastValueRequest.h"
 #include "gwmessage/GWDeviceListResponse.h"
@@ -58,6 +59,8 @@ class GWMessageTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testCreateNewDevice);
 	CPPUNIT_TEST(testParseNewDeviceGroup);
 	CPPUNIT_TEST(testCreateNewDeviceGroup);
+	CPPUNIT_TEST(testParseNotice);
+	CPPUNIT_TEST(testCreateNotice);
 	CPPUNIT_TEST(testParseLastValue);
 	CPPUNIT_TEST(testCreateLastValue);
 	CPPUNIT_TEST(testParseDeviceList);
@@ -101,6 +104,8 @@ public:
 	void testCreateNewDevice();
 	void testParseNewDeviceGroup();
 	void testCreateNewDeviceGroup();
+	void testParseNotice();
+	void testCreateNotice();
 	void testParseLastValue();
 	void testCreateLastValue();
 	void testParseDeviceList();
@@ -778,6 +783,63 @@ void GWMessageTest::testCreateNewDeviceGroup()
 			]
 		})"),
 		request->toString()
+	);
+}
+
+void GWMessageTest::testParseNotice()
+{
+	GWMessage::Ptr message = GWMessage::fromJSON(
+	R"({
+		"message_type": "notice_request",
+		"id": "dd451efb-a806-4ddf-ae77-d0df4490b96d",
+		"at": 1546274217435091,
+		"severity": "warn",
+		"key": "missing.dongle",
+		"context": {
+			"gateway_id": "1213558016461165",
+			"technology": "zwave"
+		}
+	})");
+
+	CPPUNIT_ASSERT_EQUAL(GWMessageType::NOTICE_REQUEST, message->type().raw());
+	CPPUNIT_ASSERT(!message.cast<GWNoticeRequest>().isNull());
+
+	GWNoticeRequest::Ptr notice = message.cast<GWNoticeRequest>();
+	CPPUNIT_ASSERT_EQUAL("dd451efb-a806-4ddf-ae77-d0df4490b96d", notice->id().toString());
+	CPPUNIT_ASSERT_EQUAL(1546274217435091, notice->at().epochMicroseconds());
+	CPPUNIT_ASSERT_EQUAL("warn", notice->severity().toString());
+	CPPUNIT_ASSERT_EQUAL("missing.dongle", notice->key());
+	CPPUNIT_ASSERT(!notice->context().isNull());
+	CPPUNIT_ASSERT_EQUAL("1213558016461165", notice->context()->getValue<string>("gateway_id"));
+	CPPUNIT_ASSERT_EQUAL("zwave", notice->context()->getValue<string>("technology"));
+}
+
+void GWMessageTest::testCreateNotice()
+{
+	GWNoticeRequest::Ptr notice = new GWNoticeRequest;
+	const Timestamp at(1546274217435091);
+
+	notice->setID(GlobalID::parse("495b7a34-d2e7-4cc7-afcc-0690fa5f072a"));
+	notice->setAt(at);
+	notice->setSeverity(Severity::INFO);
+	notice->setKey("device.dead");
+
+	Object::Ptr context = new Object;
+	context->set("device_id", "0xa801020311223344");
+	notice->setContext(context);
+
+	CPPUNIT_ASSERT_EQUAL(
+		jsonReformat(R"({
+			"at": 1546274217435091,
+			"context": {
+				"device_id": "0xa801020311223344"
+			},
+			"id": "495b7a34-d2e7-4cc7-afcc-0690fa5f072a",
+			"key": "device.dead",
+			"message_type": "notice_request",
+			"severity": "info"
+		})"),
+		notice->toString()
 	);
 }
 

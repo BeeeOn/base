@@ -43,6 +43,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWListenRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceGroupRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceRequest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWNoticeRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp

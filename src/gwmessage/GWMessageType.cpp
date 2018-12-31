@@ -24,6 +24,7 @@ EnumHelper<GWMessageTypeEnum::Raw>::ValueMap &GWMessageTypeEnum::valueMap()
 		{SET_VALUE_REQUEST, "set_value_request"},
 		{UNPAIR_REQUEST, "unpair_request"},
 		{UNPAIR_RESPONSE, "unpair_response"},
+		{NOTICE_REQUEST, "notice_request"},
 	};
 
 	return valueMap;
