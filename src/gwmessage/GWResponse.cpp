@@ -32,7 +32,28 @@ void GWResponse::setStatus(Status status)
 
 GWResponse::Status GWResponse::status() const
 {
-	return convertStatus(json()->getValue<int>("status"));
+	const auto &var = json()->get("status");
+
+	if (var.isEmpty())
+		throw NotFoundException("no such property 'status' in response");
+	if (var.isInteger())
+		return convertStatus(var.convert<int>());
+	if (var.isString()) {
+		const auto &value = var.extract<string>();
+
+		if (value == "accepted")
+			return ACCEPTED;
+		if (value == "success")
+			return SUCCESS;
+		if (value == "failed")
+			return FAILED;
+		if (value == "success_partial")
+			return SUCCESS_PARTIAL;
+
+		throw InvalidArgumentException("unrecognized 'status': " + value);
+	}
+
+	throw InvalidArgumentException("type of 'status' property is unsupported");
 }
 
 GWResponse::Status GWResponse::convertStatus(const int value)
@@ -41,10 +62,11 @@ GWResponse::Status GWResponse::convertStatus(const int value)
 	case ACCEPTED:
 	case SUCCESS:
 	case FAILED:
+	case SUCCESS_PARTIAL:
 		return static_cast<Status>(value);
-	default:
-		throw InvalidArgumentException("invalid status: " + to_string(value));
 	}
+
+	throw InvalidArgumentException("invalid status: " + to_string(value));
 }
 
 void GWResponse::setAckExpected(bool expected)
