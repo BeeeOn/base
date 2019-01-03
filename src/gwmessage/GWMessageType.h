@@ -25,6 +25,7 @@ struct GWMessageTypeEnum {
 		SET_VALUE_REQUEST,
 		UNPAIR_REQUEST,
 		UNPAIR_RESPONSE,
+		NOTICE_REQUEST,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

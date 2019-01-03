@@ -43,6 +43,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/gwmessage/GWListenRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceGroupRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWNewDeviceRequest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWNoticeRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWRequest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponse.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseWithAck.cpp
@@ -89,6 +90,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/model/RefreshTime.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorValue.cpp
 	${PROJECT_SOURCE_DIR}/model/SensorData.cpp
+	${PROJECT_SOURCE_DIR}/model/Severity.cpp
 	${PROJECT_SOURCE_DIR}/model/SimpleID.cpp
 	${PROJECT_SOURCE_DIR}/model/TokenID.cpp
 	${PROJECT_SOURCE_DIR}/net/HTTPEntireResponse.cpp

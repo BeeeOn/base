@@ -9,6 +9,7 @@
 #include "gwmessage/GWListenRequest.h"
 #include "gwmessage/GWNewDeviceGroupRequest.h"
 #include "gwmessage/GWNewDeviceRequest.h"
+#include "gwmessage/GWNoticeRequest.h"
 #include "gwmessage/GWResponse.h"
 #include "gwmessage/GWAck.h"
 #include "gwmessage/GWResponseWithAck.h"
@@ -117,6 +118,8 @@ GWMessage::Ptr GWMessage::fromJSON(Poco::JSON::Object::Ptr object)
 		return new GWUnpairRequest(object);
 	case GWMessageType::UNPAIR_RESPONSE:
 		return new GWUnpairResponse(object);
+	case GWMessageType::NOTICE_REQUEST:
+		return new GWNoticeRequest(object);
 	}
 
 	throw InvalidArgumentException(
