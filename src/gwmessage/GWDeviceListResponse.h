@@ -11,6 +11,7 @@
 #include "model/DeviceID.h"
 #include "model/ModuleID.h"
 #include "model/RefreshTime.h"
+#include "util/Loggable.h"
 
 namespace BeeeOn {
 
@@ -20,7 +21,7 @@ namespace BeeeOn {
  *
  * The message contains a list of paired devices with a specific prefix.
  */
-class GWDeviceListResponse : public GWResponse {
+class GWDeviceListResponse : public GWResponse, Loggable {
 public:
 	typedef Poco::SharedPtr<GWDeviceListResponse> Ptr;
 
@@ -37,6 +38,12 @@ public:
 
 	void setRefreshFor(const DeviceID &device, const RefreshTime &refresh);
 	RefreshTime refreshFor(const DeviceID &device) const;
+
+	void setProperties(
+		const DeviceID &device,
+		const std::map<std::string, std::string> &properties);
+	std::map<std::string, std::string> properties(
+		const DeviceID &device) const;
 };
 
 }

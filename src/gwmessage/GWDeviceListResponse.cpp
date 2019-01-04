@@ -1,3 +1,5 @@
+#include <Poco/Logger.h>
+
 #include "gwmessage/GWDeviceListResponse.h"
 
 using namespace std;
@@ -116,4 +118,67 @@ RefreshTime GWDeviceListResponse::refreshFor(const DeviceID &id) const
 		return RefreshTime::NONE;
 
 	return RefreshTime::parse(device->optValue<string>("refresh_time", "none"));
+}
+
+void GWDeviceListResponse::setProperties(
+	const DeviceID &id,
+	const map<string, string> &properties)
+{
+	JSON::Object::Ptr config = json()->getObject("config");
+	if (config.isNull()) {
+		if (properties.empty())
+			return;
+
+		config = new JSON::Object;
+		json()->set("config", config);
+	}
+
+	JSON::Object::Ptr device = config->getObject(id.toString());
+	if (device.isNull()) {
+		if (properties.empty())
+			return;
+
+		device = new JSON::Object;
+		config->set(id.toString(), device);
+	}
+
+	// first delete all, then set new
+	const auto refresh = device->optValue<string>("refresh_time", "none");
+	device->clear();
+
+	if (refresh != "none")
+		device->set("refresh_time", refresh);
+
+	for (const auto &property : properties)
+		device->set(property.first, property.second);
+}
+
+map<string, string> GWDeviceListResponse::properties(
+	const DeviceID &id) const
+{
+	JSON::Object::Ptr config = json()->getObject("config");
+	if (config.isNull())
+		return {};
+
+	JSON::Object::Ptr device = config->getObject(id.toString());
+	if (device.isNull())
+		return {};
+
+	map<string, string> properties;
+
+	for (const auto &pair : *device) {
+		if (pair.first == "refresh_time")
+			continue;
+
+		string value;
+
+		try {
+			value = pair.second.convert<string>();
+		}
+		BEEEON_CATCH_CHAIN(logger())
+
+		properties.emplace(pair.first, value);
+	}
+
+	return properties;
 }
