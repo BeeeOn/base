@@ -24,6 +24,7 @@ file(GLOB TEST_SOURCES
 	${PROJECT_SOURCE_DIR}/di/DependencyInjectorTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIDaemonTest.cpp
 	${PROJECT_SOURCE_DIR}/di/DIWrapperTest.cpp
+	${PROJECT_SOURCE_DIR}/gwmessage/GWDeviceAcceptRequestTest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWDeviceListResponseTest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWMessageTest.cpp
 	${PROJECT_SOURCE_DIR}/gwmessage/GWResponseTest.cpp

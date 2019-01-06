@@ -1,3 +1,5 @@
+#include <Poco/Logger.h>
+
 #include "gwmessage/GWDeviceAcceptRequest.h"
 
 using namespace std;
@@ -35,4 +37,44 @@ void GWDeviceAcceptRequest::setRefresh(const RefreshTime &refresh)
 RefreshTime GWDeviceAcceptRequest::refresh() const
 {
 	return RefreshTime::parse(json()->optValue<string>("refresh_time", "none"));
+}
+
+void GWDeviceAcceptRequest::setProperties(
+	const map<string, string> &properties)
+{
+	JSON::Object::Ptr config = json()->getObject("config");
+	if (config.isNull()) {
+		if (properties.empty())
+			return;
+
+		config = new JSON::Object;
+		json()->set("config", config);
+	}
+
+	config->clear();
+
+	for (const auto &pair : properties)
+		config->set(pair.first, pair.second);
+}
+
+map<string, string> GWDeviceAcceptRequest::properties() const
+{
+	JSON::Object::Ptr config = json()->getObject("config");
+	if (config.isNull())
+		return {};
+
+	map<string, string> properties;
+
+	for (const auto &pair : *config) {
+		string value;
+
+		try {
+			value = pair.second.convert<string>();
+		}
+		BEEEON_CATCH_CHAIN(logger())
+
+		properties.emplace(pair.first, value);
+	}
+
+	return properties;
 }
