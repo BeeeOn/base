@@ -42,7 +42,7 @@ namespace BeeeOn {
  */
 class Tool :
 	public StoppableLoop,
-	protected Loggable {
+	protected virtual Loggable {
 public:
 	typedef Poco::SharedPtr<Tool> Ptr;
 
