@@ -10,7 +10,7 @@
 namespace BeeeOn {
 
 /**
- * @brief Represents a message sent by the gateway to the server, intended
+ * @brief **Deprecated.** Represents a message sent by the gateway to the server, intended
  * to requests a last known value of a device module.
  *
  * GWLastValueResponse represents response to this request.

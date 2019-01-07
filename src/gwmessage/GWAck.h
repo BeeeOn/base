@@ -14,6 +14,15 @@ namespace BeeeOn {
  *
  * There can be more responses with the same id, so status is also needed
  * to identify and confirm proper response.
+ *
+ * An example of an ack message:
+ * <pre>
+ * {
+ *   "message_type": "generic_ack",
+ *   "id": "4c42288f-d592-4d6a-b401-0c2ef47c6d6d",
+ *   "status": 0
+ * }
+ * </pre>
  */
 class GWAck : public GWMessage {
 public:

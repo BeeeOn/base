@@ -16,6 +16,15 @@ class GWAck;
  *
  * The GWResponse contains unique identifier intended to match
  * a response to a proper request.
+ *
+ * An example (generic) response:
+ * <pre>
+ * {
+ *   "id": "b036b7f7-47a1-4bea-9fa3-6024e8263dcd",
+ *   "message_type": "generic_response",
+ *   "status": 1
+ * }
+ * </pre>
  */
 class GWResponse : public GWMessage {
 public:

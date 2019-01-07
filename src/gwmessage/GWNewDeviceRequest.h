@@ -21,7 +21,45 @@ namespace BeeeOn {
  * The message contains unique device identification, its product name along
  * with vendor, refresh time and types of device modules.
  *
+ * There are some optional properties each device can report about itself.
+ * These are currently: "name" (name of the device instance, not product name),
+ * "firmware" (string that informs about firmware version), "ip_address",
+ * "mac_address", "serial_number".
+ *
  * Response to this request is the generic response GWResponse.
+ *
+ * An example message:
+ * <pre>
+ * {
+ *   "id": "87e63e94-4954-4600-9c37-348c7626d469",
+ *   "message_type": "new_device_request",
+ *   "device_id": "0xa100000000000001",
+ *   "product_name": "Temperature Sensor",
+ *   "vendor": "Brno University of Technology",
+ *   "refresh_time": 30,
+ *   "serial_number": "1234567",
+ *   "firmware": "v125667",
+ *   "module_types": [
+ *      {
+ *        "type": "temperature",
+ *        "attributes": ["inner"]
+ *      },
+ *      {
+ *        "type": "temperature",
+ *        "attributes": ["outer"]
+ *      },
+ *      {
+ *        "type": "battery",
+ *        "attributes": []
+ *      },
+ *      {
+ *        "type": "enum",
+ *        "subtype": "BLINK_MODE",
+ *        "attributes": ["controllable"]
+ *      }
+ *   ]
+ * }
+ * </pre>
  */
 class GWNewDeviceRequest : public GWRequest {
 public:

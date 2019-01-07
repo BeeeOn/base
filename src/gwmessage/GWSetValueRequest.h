@@ -18,6 +18,18 @@ namespace BeeeOn {
  * The message contains an identification of the device and its module,
  * a value to be set and a timeout for which the value must be set
  * or the operation end with failed.
+ *
+ * An example message:
+ * <pre>
+ * {
+ *   "id": "a507755f-793f-4067-89bf-533fb73b6a41",
+ *   "message_type": "set_value_request",
+ *   "device_id": "0xa300000000000001",
+ *   "module_id": "0",
+ *   "timeout": 30,
+ *   "value": 1.0
+ * }
+ * </pre>
  */
 class GWSetValueRequest : public GWRequest {
 public:

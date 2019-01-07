@@ -23,6 +23,22 @@ namespace BeeeOn {
  * All message should be designed with multi-locale environment in mind.
  * Thus, the key and context are kept separately and should be tranformed
  * to the appropriate user message on the presentation layer.
+ *
+ * An example message:
+ * <pre>
+ * {
+ *   "id": "603a5085-1b00-4c5e-ac70-dde674a49b0c",
+ *   "message_type": "notice_request",
+ *   "at": 1546882536019124,
+ *   "severity": "info",
+ *   "key": "press_button_on_device",
+ *   "context": {
+ *     "device_id": "0xa3123456abcd01234",
+ *     "gateway_id": "12437773180129",
+ *     "button": "red"
+ *   }
+ * }
+ * </pre>
  */
 class GWNoticeRequest : public GWRequest {
 public:

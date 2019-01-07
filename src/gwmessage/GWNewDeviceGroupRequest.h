@@ -18,6 +18,48 @@ namespace BeeeOn {
  * for all devices.
  *
  * Response to this request is the generic response GWResponse.
+ *
+ * An example message:
+ * <pre>
+ * {
+ *   "message_type": "new_device_group_request",
+ *   "id": "bddc7e1d-2578-40c0-8d42-43f818fef401",
+ *   "group_name": "Control Center",
+ *   "vendor": "Example Control Company",
+ *   "devices": [
+ *     {
+ *       "device_id": "0xa100000000000001",
+ *       "product_name": "Control Panel"
+ *       "module_types": [
+ *         {
+ *           "type": "on_off",
+ *           "attributes": ["controllable"]
+ *         },
+ *         {
+ *           "type": "on_off",
+ *           "attributes": ["controllable"]
+ *         }
+ *       ],
+ *       "refresh_time": -1
+ *     },
+ *     {
+ *       "device_id": "0xa100000000000002",
+ *       "product_name": "Probe",
+ *       "module_types": [
+ *         {
+ *           "type": "temperature",
+ *           "attributes": ["inner"]
+ *         },
+ *         {
+ *           "type": "humidity",
+ *           "attributes": ["inner"]
+ *         }
+ *       ],
+ *       "refresh_time": 120
+ *     }
+ *   ]
+ * }
+ * </pre>
  */
 class GWNewDeviceGroupRequest : public GWRequest {
 public:
