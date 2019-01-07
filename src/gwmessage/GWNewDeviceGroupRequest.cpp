@@ -111,7 +111,7 @@ vector<DeviceDescription> GWNewDeviceGroupRequest::deviceDescriptions() const
 
 		if (json()->has("serial_number")) {
 			builder.serialNumber(
-				NumberParser::parseUnsigned(
+				NumberParser::parseUnsigned64(
 					json()->getValue<string>("serial_number")));
 		}
 
