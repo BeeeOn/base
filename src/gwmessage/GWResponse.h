@@ -28,12 +28,27 @@ class GWAck;
  * The string representation should be preferred over numbers. The integer representation
  * is treated as obsolete.
  *
+ * Each response can have an optional entry "ack_expected" of type bool. If its value
+ * is true then the response is expected to be acknowladged explicitly by a GWAck message.
+ * Unless it is acknowladged this way, the client considers such response to be undelivered
+ * and may decide to retransmit the response.
+ *
  * An example (generic) response:
  * <pre>
  * {
  *   "id": "b036b7f7-47a1-4bea-9fa3-6024e8263dcd",
  *   "message_type": "generic_response",
  *   "status": "success"
+ * }
+ * </pre>
+ *
+ * An example (generic) response requiring acknowladge:
+ * <pre>
+ * {
+ *   "id": "b036b7f7-47a1-4bea-9fa3-6024e8263dcd",
+ *   "message_type": "generic_response",
+ *   "status": "failed",
+ *   "ack_expected": true
  * }
  * </pre>
  */
