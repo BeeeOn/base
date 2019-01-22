@@ -87,7 +87,7 @@ void GWNewDeviceRequest::setDeviceDescription(const DeviceDescription &descripti
 	if (!description.ipAddress().isNull())
 		json()->set("ip_address", description.ipAddress().value().toString());
 	if (!description.macAddress().isNull())
-		json()->set("mac_address", description.macAddress().value().toString());
+		json()->set("mac_address", description.macAddress().value().toString(':'));
 	if (!description.serialNumber().isNull())
 		json()->set("serial_number", to_string(description.serialNumber().value()));
 }
