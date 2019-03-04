@@ -25,6 +25,7 @@ public:
 		PREFIX_LEDS = 0xaa,
 		PREFIX_PHILIPS_HUE = 0xab,
 		PREFIX_BLE_SMART = 0xac,
+		PREFIX_VEKTIVA = 0xad,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();
