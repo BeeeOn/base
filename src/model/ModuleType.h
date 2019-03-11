@@ -184,6 +184,10 @@ public:
 			 * Particulate matter with diameter up to 2.5 um.
 			 */
 			TYPE_PM25 = 29,
+			/**
+			 * Open ratio in percent.
+			 */
+			TYPE_OPEN_RATIO = 30,
 		};
 
 		static EnumHelper<Raw>::ValueMap &valueMap();
