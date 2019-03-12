@@ -55,6 +55,7 @@ EnumHelper<ModuleType::TypeEnum::Raw>::ValueMap &ModuleType::TypeEnum::valueMap(
 		{ModuleType::TypeEnum::TYPE_SMOKE, "smoke"},
 		{ModuleType::TypeEnum::TYPE_HEAT, "heat"},
 		{ModuleType::TypeEnum::TYPE_PM25, "pm25"},
+		{ModuleType::TypeEnum::TYPE_OPEN_RATIO, "open_ratio"},
 	};
 
 	return valueMap;
@@ -252,6 +253,7 @@ ModuleType::Unit ModuleType::baseUnit() const
 	case Type::TYPE_BATTERY:
 	case Type::TYPE_BRIGHTNESS:
 	case Type::TYPE_HUMIDITY:
+	case Type::TYPE_OPEN_RATIO:
 	case Type::TYPE_PERFORMANCE:
 	case Type::TYPE_RSSI:
 		return Unit::PERCENT;
