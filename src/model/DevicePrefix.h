@@ -26,6 +26,7 @@ public:
 		PREFIX_PHILIPS_HUE = 0xab,
 		PREFIX_BLE_SMART = 0xac,
 		PREFIX_VEKTIVA = 0xad,
+		PREFIX_SONOFF = 0xae,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();

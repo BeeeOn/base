@@ -28,6 +28,7 @@ DevicePrefixNamesInitializer::NamesMap DevicePrefixNamesInitializer::customNames
 	namesMap.emplace("Philips Hue", map.find(DevicePrefix::PREFIX_PHILIPS_HUE));
 	namesMap.emplace("BeeWi", map.find(DevicePrefix::PREFIX_BLE_SMART));
 	namesMap.emplace("Vektiva", map.find(DevicePrefix::PREFIX_VEKTIVA));
+	namesMap.emplace("Sonoff", map.find(DevicePrefix::PREFIX_SONOFF));
 
 	return namesMap;
 }
@@ -51,6 +52,7 @@ EnumHelper<DevicePrefixEnum::Raw>::ValueMap
 		{DevicePrefixEnum::PREFIX_PHILIPS_HUE, "philips_hue"},
 		{DevicePrefixEnum::PREFIX_BLE_SMART, "ble_smart"},
 		{DevicePrefixEnum::PREFIX_VEKTIVA, "vektiva"},
+		{DevicePrefixEnum::PREFIX_SONOFF, "sonoff"},
 	};
 
 	return valueMap;
