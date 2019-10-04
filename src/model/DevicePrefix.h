@@ -27,6 +27,7 @@ public:
 		PREFIX_BLE_SMART = 0xac,
 		PREFIX_VEKTIVA = 0xad,
 		PREFIX_SONOFF = 0xae,
+		PREFIX_CONRAD = 0xaf,
 	};
 
 	static EnumHelper<Raw>::ValueMap &valueMap();
